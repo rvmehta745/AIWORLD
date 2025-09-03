@@ -1,0 +1,5 @@
+#!/bin/bash
+args="$@"
+command="php artisan $args"
+echo "$command"
+docker-compose exec investormaxxapiapp bash -c "/bin/bash -c \"$command\""

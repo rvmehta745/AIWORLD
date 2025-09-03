@@ -1,0 +1,3228 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Integration Swagger in Project",
+        "description": "Implementation of Swagger with in Project",
+        "contact": {
+            "email": "admin@admin.com"
+        },
+        "license": {
+            "name": "Nginx",
+            "url": "https://www.nginx.com/"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://192.168.1.244:8000/v1/",
+            "description": "API Server"
+        }
+    ],
+    "paths": {
+        "/admin/register": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Register a new user",
+                "operationId": "register",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login",
+                "operationId": "login",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/forgot-password": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Request link for forgot password",
+                "operationId": "link for forgot password",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/{otp}/verify-otp": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Verify OTP for password reset",
+                "operationId": "verify-otp",
+                "parameters": [
+                    {
+                        "name": "otp",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/{otp}/reset-password": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Reset forgot password link for user.",
+                "operationId": "reset-password",
+                "parameters": [
+                    {
+                        "name": "otp",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/change-password": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Change user password with token after login.",
+                "operationId": "change-password",
+                "parameters": [
+                    {
+                        "name": "current_password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password_confirmation",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/user/{id}/update-profile": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "To update profile",
+                "operationId": "To update profile for web user",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "for updating the selected profile",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "mobile_no"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "description": "Validation: min=2,max=50",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Validation: min=2,max=50",
+                                        "type": "string"
+                                    },
+                                    "mobile_no": {
+                                        "description": "Validation: min=4,max=20",
+                                        "type": "string"
+                                    },
+                                    "zipcode": {
+                                        "description": "Optional. Validation: max=20",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Optional. Validation: max=255",
+                                        "type": "string"
+                                    },
+                                    "photo": {
+                                        "description": "Optional. Profile photo. Validation: image, mimes:jpg,jpeg,png,gif,heif,heic, max:1024KB",
+                                        "type": "file",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/me": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Get user profile base details after login.",
+                "operationId": "my PRofile",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/profile-details": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Get detailed user profile information",
+                "operationId": "profileDetails",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/logout": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Logout.",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/verify-email/{token}": {
+            "get": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Verify user email address",
+                "operationId": "verifyEmail",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Email verified successfully",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/add-credit-card": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Add a credit card to the user's account",
+                "description": "Adds a new credit card to the user's Stripe account",
+                "operationId": "add-credit-card",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "card"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "tok_visa"
+                                    },
+                                    "card": {
+                                        "type": "string",
+                                        "example": "card_1234567890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/get-credit-cards": {
+            "get": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Get user's saved credit cards",
+                "description": "Retrieves the list of saved credit cards for the authenticated user",
+                "operationId": "get-credit-cards",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles": {
+            "post": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "To get the list of roles",
+                "operationId": "To get the list of roles",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles/create": {
+            "post": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "To add Role",
+                "operationId": "To add Roles",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "roles_name"
+                                ],
+                                "properties": {
+                                    "roles_name": {
+                                        "description": "Validations: min=3, max=50",
+                                        "type": "string"
+                                    },
+                                    "privileges": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles/{id}/details": {
+            "get": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "to get roles detail",
+                "operationId": "roles-details",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles/{id}/update": {
+            "post": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "To update roles detail",
+                "operationId": "To update roles details",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "roles_name": {
+                                        "description": "Validations: min=3, max=50",
+                                        "type": "string"
+                                    },
+                                    "privileges": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "To delete role",
+                "operationId": "To delete roles",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/roles/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Roles Managment"
+                ],
+                "summary": "To change status of roles",
+                "operationId": "To change status of roles",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Validations:0,1",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "To get the list of user",
+                "operationId": "user-list",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "filter_data": {
+                                        "properties": {
+                                            "name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "email": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "mobile_no": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "updated_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "is_active": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "sort_data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "colId": {
+                                                    "type": "string"
+                                                },
+                                                "sort": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/create": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "To create user",
+                "operationId": "user-add",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "mobile_no",
+                                    "password",
+                                    "email",
+                                    "role_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Validations: min=3, max=50",
+                                        "type": "string"
+                                    },
+                                    "mobile_no": {
+                                        "description": "Validations: min=4, max=20 regex:/^[0-9]+$/",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Validations: min=3, max=70",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "Validations: ",
+                                        "type": "integer"
+                                    },
+                                    "password": {
+                                        "description": "Validations: min=8, max=20",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User Create Successfully",
+                        "content": {
+                            "multipart/form-data": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/{id}/details": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "User Details",
+                "operationId": "user-details",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/{id}/update": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "To update user",
+                "operationId": "To update user",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "mobile_no",
+                                    "email",
+                                    "role_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Validations: min=3, max=50",
+                                        "type": "string"
+                                    },
+                                    "mobile_no": {
+                                        "description": "Validations: min=4, max=20",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Validations: min=3, max=70",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "Validations: ",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Delete user",
+                "operationId": "user-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "To change status user",
+                "operationId": "user-change-status",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Validations: 0,1",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/total-count": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get total number of users",
+                "operationId": "user-total-count",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/user/active-count": {
+            "get": {
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Get total number of active users",
+                "operationId": "user-active-count",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/cms-page/{page}": {
+            "get": {
+                "tags": [
+                    "CMS Pages"
+                ],
+                "summary": "Get CMS page content by page name",
+                "description": "Returns the content of a specific CMS page",
+                "operationId": "cms-page-by-name",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Page name (e.g., 'Terms of Use', 'Privacy Policy', 'Refund Policy')",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/cms-page/slug/{slug}": {
+            "get": {
+                "tags": [
+                    "CMS Pages"
+                ],
+                "summary": "Get CMS page content by slug",
+                "description": "Returns the content of a specific CMS page using its slug",
+                "operationId": "cms-page-by-slug",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "URL-friendly page slug (e.g., 'terms-of-use', 'privacy-policy', 'refund-policy')",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/cms-pages": {
+            "get": {
+                "tags": [
+                    "CMS Pages"
+                ],
+                "summary": "Get all active CMS pages",
+                "description": "Returns a list of all active CMS pages",
+                "operationId": "cms-pages-list",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/sync": {
+            "post": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Sync Data",
+                "operationId": "common-sync-data",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/language/{local_key}": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Language translation Data for web",
+                "operationId": "common-language-translation-data-for-web",
+                "parameters": [
+                    {
+                        "name": "local_key",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/roles-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the roles dropdown data",
+                "operationId": "To get the roles category dropdown data",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search role name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/user-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the user dropdown data",
+                "operationId": "To get the user category dropdown data",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search role name, email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_type",
+                        "in": "query",
+                        "description": "pass the value role_type= 1(Admin)  or role_type = 2(Web)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/privileges-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the list of privileges",
+                "operationId": "To get the list of privileges",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/industries-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the industries dropdown data",
+                "operationId": "To get the industries dropdown data",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/categories-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the categories dropdown data",
+                "operationId": "To get the categories dropdown data",
+                "parameters": [
+                    {
+                        "name": "industry_id",
+                        "in": "query",
+                        "description": "Filter categories by industry ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/countries-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the countries dropdown data",
+                "operationId": "To get the countries dropdown data",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/states-list": {
+            "post": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the states dropdown data by country",
+                "operationId": "To get the states dropdown data by country",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "country_id"
+                                ],
+                                "properties": {
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/cities-list": {
+            "post": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get the cities dropdown data by state",
+                "operationId": "To get the cities dropdown data by state",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "state_id"
+                                ],
+                                "properties": {
+                                    "state_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/counts": {
+            "get": {
+                "tags": [
+                    "Dashboard"
+                ],
+                "summary": "Get combined counts for dashboard",
+                "description": "Returns total users count, active users count, and total purchase lists count",
+                "operationId": "dashboard-counts",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/cities-dropdown": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "To get all cities for dropdown (only id and name)",
+                "operationId": "To get all cities for dropdown (only id and name)",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/contact": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get paginated list of contacts",
+                "description": "Returns paginated list of contacts with optional filters",
+                "operationId": "contact-list",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "page": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "per_page": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "search": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "industry_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sort_by": {
+                                        "type": "string",
+                                        "example": "created_at"
+                                    },
+                                    "sort_order": {
+                                        "type": "string",
+                                        "example": "desc"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/create": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Create new contact",
+                "description": "Creates a new contact with the provided data",
+                "operationId": "contact-create",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "business_name",
+                                    "business_website",
+                                    "industry_id",
+                                    "category_id",
+                                    "job_title",
+                                    "no_of_emp",
+                                    "sales_volume",
+                                    "phone_no",
+                                    "address_line_1",
+                                    "city_id",
+                                    "state_id",
+                                    "country_id"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Acme Inc"
+                                    },
+                                    "business_website": {
+                                        "type": "string",
+                                        "example": "https://acme.example.com"
+                                    },
+                                    "industry_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "job_title": {
+                                        "type": "string",
+                                        "example": "CEO"
+                                    },
+                                    "no_of_emp": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "sales_volume": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1000000
+                                    },
+                                    "phone_no": {
+                                        "type": "string",
+                                        "example": "+1-555-123-4567"
+                                    },
+                                    "address_line_1": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "address_line_2": {
+                                        "type": "string",
+                                        "example": "Suite 100"
+                                    },
+                                    "city_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "state_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "additional_note": {
+                                        "type": "string",
+                                        "example": "Important client, handle with care"
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/{id}/details": {
+            "get": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Get contact details",
+                "description": "Returns details of a specific contact",
+                "operationId": "contact-details",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/{id}/update": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Update contact",
+                "description": "Updates an existing contact with the provided data",
+                "operationId": "contact-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "business_name",
+                                    "business_website",
+                                    "industry_id",
+                                    "category_id",
+                                    "job_title",
+                                    "no_of_emp",
+                                    "sales_volume",
+                                    "phone_no",
+                                    "address_line_1",
+                                    "city_id",
+                                    "state_id",
+                                    "country_id"
+                                ],
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Acme Inc"
+                                    },
+                                    "business_website": {
+                                        "type": "string",
+                                        "example": "https://acme.example.com"
+                                    },
+                                    "industry_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "job_title": {
+                                        "type": "string",
+                                        "example": "CEO"
+                                    },
+                                    "no_of_emp": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "sales_volume": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1000000
+                                    },
+                                    "phone_no": {
+                                        "type": "string",
+                                        "example": "+1-555-123-4567"
+                                    },
+                                    "address_line_1": {
+                                        "type": "string",
+                                        "example": "123 Main St"
+                                    },
+                                    "address_line_2": {
+                                        "type": "string",
+                                        "example": "Suite 100"
+                                    },
+                                    "city_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "state_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "country_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "additional_note": {
+                                        "type": "string",
+                                        "example": "Important client, handle with care"
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Delete contact",
+                "description": "Deletes a specific contact",
+                "operationId": "contact-delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Change contact status",
+                "description": "Changes the status of a specific contact",
+                "operationId": "contact-change-status",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/contact/search-count": {
+            "post": {
+                "tags": [
+                    "Contact"
+                ],
+                "summary": "Search contacts and get count",
+                "description": "Search contacts based on multiple criteria and return count of matching records",
+                "operationId": "contact-search-count",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "city_id": {
+                                        "type": "string",
+                                        "example": "#1#2#3#"
+                                    },
+                                    "industries_id": {
+                                        "type": "string",
+                                        "example": "#1#2#"
+                                    },
+                                    "num_of_emp": {
+                                        "type": "string",
+                                        "example": "#1#"
+                                    },
+                                    "job_title": {
+                                        "type": "string",
+                                        "example": "#1#2#"
+                                    },
+                                    "sales_volume_min": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 10
+                                    },
+                                    "sales_volume_max": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 333394.01
+                                    },
+                                    "sales_volume": {
+                                        "description": "Legacy parameter, use sales_volume_min and sales_volume_max instead",
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1477830
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/emp-ranges-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Get employee ranges dropdown data",
+                "description": "Returns a list of all active employee ranges for dropdown",
+                "operationId": "emp-ranges-list",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/job-titles": {
+            "post": {
+                "tags": [
+                    "Job Titles"
+                ],
+                "summary": "Get paginated list of job titles",
+                "description": "Returns paginated list of job titles with optional filters",
+                "operationId": "job-titles-list",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "page": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "per_page": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "search": {
+                                        "type": "string",
+                                        "example": "CEO"
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sort_by": {
+                                        "type": "string",
+                                        "example": "name"
+                                    },
+                                    "sort_order": {
+                                        "type": "string",
+                                        "example": "asc"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/job-titles/create": {
+            "post": {
+                "tags": [
+                    "Job Titles"
+                ],
+                "summary": "Create a new job title",
+                "description": "Creates a new job title with the provided data",
+                "operationId": "job-titles-create",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Project Manager"
+                                    },
+                                    "status": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/sales-volumes-list": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Get sales volumes dropdown data",
+                "description": "Returns a list of all active sales volumes for dropdown",
+                "operationId": "sales-volumes-list",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/setting/details": {
+            "get": {
+                "tags": [
+                    "Setting"
+                ],
+                "summary": "Get all active settings",
+                "description": "Returns all active settings",
+                "operationId": "setting-details",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/setting/{id}/update": {
+            "post": {
+                "tags": [
+                    "Setting"
+                ],
+                "summary": "Update setting",
+                "description": "Updates an existing setting with the provided data",
+                "operationId": "setting-update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "type": "string",
+                                        "example": "InvestorMaxx"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/setting/batch-update": {
+            "post": {
+                "tags": [
+                    "Setting"
+                ],
+                "summary": "Update multiple settings",
+                "description": "Updates multiple settings with the provided key-value pairs",
+                "operationId": "setting-batch-update",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "per_record_price": {
+                                        "type": "string",
+                                        "example": "$5"
+                                    },
+                                    "other_setting_key": {
+                                        "type": "string",
+                                        "example": "value"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/upload-csv-contact": {
+            "post": {
+                "tags": [
+                    "Contact Import"
+                ],
+                "summary": "Upload CSV file for contact import",
+                "description": "Uploads a CSV file and returns the upload ID for further processing",
+                "operationId": "upload-csv-contact",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "file": {
+                                        "description": "CSV file to upload",
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/import-csv-contact/{id}": {
+            "post": {
+                "tags": [
+                    "Contact Import"
+                ],
+                "summary": "Import contacts from uploaded CSV file",
+                "description": "Imports contacts from a previously uploaded CSV file into the manage_contact table",
+                "operationId": "import-csv-contact",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "source_field": {
+                                        "description": "JSON string of source field names from the file",
+                                        "type": "string"
+                                    },
+                                    "destination_field": {
+                                        "description": "JSON string of destination field names in the database",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/admin/import-status/{id}": {
+            "get": {
+                "tags": [
+                    "Contact Import"
+                ],
+                "summary": "Get import status",
+                "description": "Get the status of a CSV import job",
+                "operationId": "import-status",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Login"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
+            "name": "Roles Managment",
+            "description": "Roles Managment"
+        },
+        {
+            "name": "User Management",
+            "description": "User Management"
+        },
+        {
+            "name": "CMS Pages",
+            "description": "CMS Pages"
+        },
+        {
+            "name": "Common",
+            "description": "Common"
+        },
+        {
+            "name": "Dashboard",
+            "description": "Dashboard"
+        },
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
+        {
+            "name": "Job Titles",
+            "description": "Job Titles"
+        },
+        {
+            "name": "Setting",
+            "description": "Setting"
+        },
+        {
+            "name": "Contact Import",
+            "description": "Contact Import"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "http",
+                "description": "Enter bearer token",
+                "name": "Authorization",
+                "scheme": "bearer",
+                "in": "header",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

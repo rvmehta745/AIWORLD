@@ -1,0 +1,102 @@
+version: "3.7"
+services:
+    investormaxxapiapp:
+        build:
+          args:
+            user: investormaxxapi
+            uid: 1000
+          context: ./
+          dockerfile: ./Dockerfile
+        image: investormaxxapi-backend
+        container_name: investormaxxapi-backend
+        restart: unless-stopped
+        env_file: ./.env
+        environment:
+          APP_ENV : ${APP_ENV}
+        working_dir: /var/www/
+        volumes:
+          - ./:/var/www
+        networks:
+          - machineinvestormaxxapi
+    db:
+        image: mysql
+        container_name: investormaxxapi-mysql
+        restart: always
+        env_file: ./.env
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+            - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+        ports:
+            - "7001:3306"
+        networks:
+            - machineinvestormaxxapi
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: investormaxxapi-pmadmin
+        restart: always
+        env_file: ./.env
+        environment:
+            # PMA_HOST: db
+            # PMA_USER: root
+            # PMA_PASSWORD: root
+            PMA_ARBITRARY: 1
+            MYSQL_USER: ${PMA_USER}
+            MYSQL_PASSWORD: ${PMA_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${PMA_ROOT_PASSWORD}
+            MAX_EXECUTION_TIME: ${PMA_MAX_EXECUTION_TIME}
+            MEMORY_LIMIT: ${PMA_MEMORY_LIMIT}
+            UPLOAD_LIMIT: ${PMA_UPLOAD_LIMIT}
+        ports:
+            - "7002:80"
+        depends_on:
+            - "${PMA_DB_ENGINE}"
+        networks:
+            - machineinvestormaxxapi
+
+    nginx:
+        image: nginx:1.17-alpine
+        container_name: investormaxxapi-nginx
+        restart: unless-stopped
+        ports:
+          - 7000:80
+        depends_on:
+          - investormaxxapiapp
+        volumes:
+          - ./:/var/www
+          - ./docker-compose/nginx:/etc/nginx/conf.d
+        networks:
+          - machineinvestormaxxapi
+
+    worker-parse:
+        image: investormaxxapi-backend
+        container_name: investormaxxapi-worker-parse
+        restart: unless-stopped
+        entrypoint: "php artisan queue:work --sleep=3 --tries=3"
+        volumes:
+          - ./:/var/www
+        networks:
+          - machineinvestormaxxapi
+
+    schedule-parse:
+        image: investormaxxapi-backend
+        container_name: investormaxxapi-schedule-parse
+        restart: unless-stopped
+        entrypoint: "php artisan schedule:work"
+        volumes:
+          - ./:/var/www
+        networks:
+          - machineinvestormaxxapi
+
+volumes:
+  mysql:
+    driver: local
+
+networks:
+  machineinvestormaxxapi:
+    driver: bridge
