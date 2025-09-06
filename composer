@@ -2,4 +2,4 @@
 args="$@"
 command="COMPOSER_MEMORY_LIMIT=-1 composer $args"
 echo "$command"
-docker-compose exec investormaxxapiapp bash -c "/bin/bash -c \"$command\""
+docker-compose exec aiworldapiapp bash -c "/bin/bash -c \"$command\""

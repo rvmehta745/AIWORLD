@@ -15,10 +15,10 @@
 -- #     docker-compose exec mysql bash
 -- #     mysql -u root -p < /docker-entrypoint-initdb.d/createdb.sql
 
-CREATE DATABASE IF NOT EXISTS `investormaxx_db` COLLATE 'utf8_general_ci';
+CREATE DATABASE IF NOT EXISTS `aiworld_db` COLLATE 'utf8_general_ci';
 SET GLOBAL log_bin_trust_function_creators = 1;
 -- GRANT ALL ON `databaseName`.* TO 'userName'@'%';
-GRANT ALL ON `investormaxx_db`.* TO 'investormaxx_db'@'%';
+GRANT ALL ON `aiworld_db`.* TO 'aiworld_db'@'%';
 
 
 FLUSH PRIVILEGES ;

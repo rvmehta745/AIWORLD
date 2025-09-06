@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CmsPage extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Sluggable;
 
     /**
      * The table associated with the model.
@@ -23,14 +24,20 @@ class CmsPage extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'page',
-        'slug',
-        'description',
+        'title',
+        'contant_html',
         'status',
         'created_by',
         'updated_by',
     ];
-
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+            ]
+        ];
+    }
     /**
      * The attributes that should be cast.
      *

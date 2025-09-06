@@ -36,8 +36,7 @@ class CmsPageRepository extends BaseRepository
      */
     public function getBySlug($slug)
     {
-        return $this->model->select('id','title','slug','content_html')->where('slug', $slug)
-            ->where('status', 'published')
+        return $this->model->select('id','title','slug','status','content_html')->where('slug', $slug)
             ->first();
     }
 

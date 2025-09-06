@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 Route::get('/', function () {
-    echo 'Welcome to our InvestorMaxx - API';
+    echo 'Welcome to our AI World - API';
 });
 
 

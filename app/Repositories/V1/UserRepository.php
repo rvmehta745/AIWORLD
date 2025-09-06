@@ -329,13 +329,13 @@ class UserRepository extends BaseRepository
         $user          = User::where('email', $postData['email'])->first();
         $templateData  = [
             'name'    => $user->first_name . ' ' . $user->last_name,
-            'url' => env('WEB_URL') . "verify-otp/" . base64_encode($user->email),
+            'url' => env('APP_URL') . "verify-otp/" . base64_encode($user->email),
             'otp'     => $otp,
             'email'   => $user->email,
         ];
         
         // dispatch(new \App\Jobs\SendTemplateEmailJob("FORGOT_PASSWORD", $templateData));
-        \Mail::to($templateData['email'])->send(new SendResetPasswordEmail($templateData));
+        Mail::to($templateData['email'])->send(new SendResetPasswordEmail($templateData));
     }
 
     /**
