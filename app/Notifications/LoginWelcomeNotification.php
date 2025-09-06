@@ -44,13 +44,13 @@ class LoginWelcomeNotification extends Notification
        
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Your InvestorMaxx Account Has Been Created')
+            ->subject('Your AI World Account Has Been Created')
             ->greeting('Hello ' . $userName . ',')
-            ->line('A SuperAdmin has created your account in the InvestorMaxx System.')
+            ->line('A SuperAdmin has created your account in the AI World System.')
             ->line('You can now access your account by logging in to the website.')
-            ->action('Login to InvestorMaxx', $websiteUrl)
+            ->action('Login to AI World', $websiteUrl)
             ->line('If you have any questions, please contact your system administrator.')
-            ->line('Thank you for using InvestorMaxx!');
+            ->line('Thank you for using AI World!');
     }
 
     /**

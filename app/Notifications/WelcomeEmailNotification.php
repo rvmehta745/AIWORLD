@@ -30,7 +30,7 @@ class WelcomeEmailNotification extends Notification
             ->view('email.register_mail', [
                 'userName' => $userName,
                 'verificationUrl' => $verificationUrl,
-                'appName' => 'InvestorMaxx',
+                'appName' => 'AI World',
             ])
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Welcome to ' . config('app.name') . ' - Verify Your Email');

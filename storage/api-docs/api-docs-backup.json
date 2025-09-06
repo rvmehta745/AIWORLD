@@ -2921,7 +2921,7 @@
                                 "properties": {
                                     "value": {
                                         "type": "string",
-                                        "example": "InvestorMaxx"
+                                        "example": "AI World"
                                     }
                                 },
                                 "type": "object"

@@ -1,10 +1,10 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "InvestorMaxx API",
-        "description": "API documentation for InvestorMaxx application",
+        "title": "AI World API",
+        "description": "API documentation for AI World application",
         "contact": {
-            "email": "support@investormaxx.com"
+            "email": "support@aiworld.com"
         },
         "version": "1.0.0"
     },

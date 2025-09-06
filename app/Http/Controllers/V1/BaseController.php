@@ -8,11 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Info(
- *     title="InvestorMaxx API",
+ *     title="AI World API",
  *     version="1.0.0",
- *     description="API documentation for InvestorMaxx application",
+ *     description="API documentation for AI World application",
  *     @OA\Contact(
- *         email="support@investormaxx.com"
+ *         email="support@aiworld.com"
  *     )
  * )
  * @OA\Server(

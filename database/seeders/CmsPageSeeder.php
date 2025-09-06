@@ -25,46 +25,46 @@ class CmsPageSeeder extends Seeder
                     
 <p><strong>Effective Date:</strong> 8/01/2025</p>
 
-<p>Welcome to InvestorMaxx. These Terms and Conditions ("Terms") govern your access to and use of InvestorMaxx ("Site," "we," "us," or "our"), including any content, functionality, and services offered on or through the Site. By accessing or using this Site, you agree to be bound by these Terms. If you do not agree, do not access or use the Site.</p>
+<p>Welcome to AI World. These Terms and Conditions ("Terms") govern your access to and use of AI World ("Site," "we," "us," or "our"), including any content, functionality, and services offered on or through the Site. By accessing or using this Site, you agree to be bound by these Terms. If you do not agree, do not access or use the Site.</p>
 
 <h2>1. Use of the Site</h2>
-<p>InvestorMaxx provides access to curated business data for research, marketing, and informational purposes. You may use the Site only for lawful purposes and in accordance with these Terms.</p>
+<p>AI World provides access to curated business data for research, marketing, and informational purposes. You may use the Site only for lawful purposes and in accordance with these Terms.</p>
 
 <h2>2. Eligibility</h2>
 <p>You must be at least 18 years old or the age of majority in your jurisdiction to use this Site.</p>
 
 <h2>3. Intellectual Property</h2>
-<p>All content, trademarks, logos, and data on this Site are the property of InvestorMaxx or its licensors. You may not reproduce, distribute, modify, or create derivative works without written permission.</p>
+<p>All content, trademarks, logos, and data on this Site are the property of AI World or its licensors. You may not reproduce, distribute, modify, or create derivative works without written permission.</p>
 
 <h2>4. Data Use and Restrictions</h2>
 <p>Users may not:</p>
 <ul>
-  <li>Use data from InvestorMaxx for unlawful purposes, including spam or harassment.</li>
+  <li>Use data from AI World for unlawful purposes, including spam or harassment.</li>
   <li>Resell or republish our data without express written consent.</li>
   <li>Attempt to reverse-engineer or scrape our proprietary datasets.</li>
 </ul>
-<p>Users are solely responsible for ensuring their use of any data obtained from InvestorMaxx complies with all applicable laws and regulations, including but not limited to the Telephone Consumer Protection Act (TCPA), the CAN-SPAM Act, and all Do Not Call (DNC) rules enforced by the Federal Trade Commission (FTC) and the Federal Communications Commission (FCC). InvestorMaxx assumes no responsibility for any misuse or illegal use of its data by end users.</p>
+<p>Users are solely responsible for ensuring their use of any data obtained from AI World complies with all applicable laws and regulations, including but not limited to the Telephone Consumer Protection Act (TCPA), the CAN-SPAM Act, and all Do Not Call (DNC) rules enforced by the Federal Trade Commission (FTC) and the Federal Communications Commission (FCC). AI World assumes no responsibility for any misuse or illegal use of its data by end users.</p>
 
 <h2>5. Data Sourcing Compliance</h2>
-<p>All business data provided through InvestorMaxx is collected solely from publicly accessible and legally permissible sources in accordance with applicable U.S. laws. InvestorMaxx does not knowingly collect or distribute data in violation of any applicable website`s terms of service or federal, state, or local laws. We make reasonable efforts to comply with all relevant laws, including but not limited to the Computer Fraud and Abuse Act (CFAA), CAN-SPAM Act, and applicable privacy regulations.We respect robots.txt directives and refrain from circumventing technical access controls.</p>
+<p>All business data provided through AI World is collected solely from publicly accessible and legally permissible sources in accordance with applicable U.S. laws. AI World does not knowingly collect or distribute data in violation of any applicable website`s terms of service or federal, state, or local laws. We make reasonable efforts to comply with all relevant laws, including but not limited to the Computer Fraud and Abuse Act (CFAA), CAN-SPAM Act, and applicable privacy regulations.We respect robots.txt directives and refrain from circumventing technical access controls.</p>
 
 <h2>6. Accuracy of Information</h2>
 <p>We strive for accuracy but do not guarantee that all data is current, complete, or error-free. Any reliance on the data is at the user`s own risk. We disclaim all liability arising from such use.</p>
 
 <h2>7. Removal Requests</h2>
-<p>If a business finds its information listed and wishes to request removal, they may contact us at <a href="mailto:info@investormaxx.io">info@investormaxx.io</a>. We review and evaluate all such requests in good faith and will remove data that cannot be lawfully displayed.</p>
+<p>If a business finds its information listed and wishes to request removal, they may contact us at <a href="mailto:info@AI World.io">info@AI World.io</a>. We review and evaluate all such requests in good faith and will remove data that cannot be lawfully displayed.</p>
 
 <h2>8. Disclaimers</h2>
 <p>The Site and all content are provided "as is" and "as available," without warranties of any kind. We disclaim all warranties, express or implied, including but not limited to merchantability, fitness for a particular purpose, and non-infringement. We do not guarantee uninterrupted access to the Site or that the Site will be free from errors or harmful components.</p>
 
 <h2>9. Limitation of Liability</h2>
-<p>To the fullest extent permitted by law, InvestorMaxx shall not be liable for any direct, indirect, incidental, special, or consequential damages, including but not limited to loss of revenue, profits, or data, arising out of or in connection with your access to or use of the Site or any data obtained therefrom. In the event of a claim or dispute, our total liability shall not exceed the amount paid, if any, by the user to access the Site.</p>
+<p>To the fullest extent permitted by law, AI World shall not be liable for any direct, indirect, incidental, special, or consequential damages, including but not limited to loss of revenue, profits, or data, arising out of or in connection with your access to or use of the Site or any data obtained therefrom. In the event of a claim or dispute, our total liability shall not exceed the amount paid, if any, by the user to access the Site.</p>
 
 <h2>10. Indemnification</h2>
-<p>You agree to indemnify, defend, and hold harmless InvestorMaxx, its owners, officers, directors, employees, and agents from and against any and all claims, demands, losses, liabilities, damages, judgments, costs, and expenses (including reasonable attorneys fees) arising out of or relating to your use of the Site, your violation of these Terms, or your violation of any rights of a third party.</p>
+<p>You agree to indemnify, defend, and hold harmless AI World, its owners, officers, directors, employees, and agents from and against any and all claims, demands, losses, liabilities, damages, judgments, costs, and expenses (including reasonable attorneys fees) arising out of or relating to your use of the Site, your violation of these Terms, or your violation of any rights of a third party.</p>
 
 <h2>11. Legal Notice</h2>
-<p>InvestorMaxx operates in accordance with U.S. federal and state law. All information presented is believed to be legally sourced and publicly accessible at the time of collection. If you believe your rights have been infringed, you agree to notify us at <a href="mailto:info@investormaxx.io">info@investormaxx.io</a> prior to initiating legal action, allowing us a reasonable opportunity to address the matter. Any legal claims must be brought in the state or federal courts located in Maricopa County, Arizona.</p>
+<p>AI World operates in accordance with U.S. federal and state law. All information presented is believed to be legally sourced and publicly accessible at the time of collection. If you believe your rights have been infringed, you agree to notify us at <a href="mailto:info@AI World.io">info@AI World.io</a> prior to initiating legal action, allowing us a reasonable opportunity to address the matter. Any legal claims must be brought in the state or federal courts located in Maricopa County, Arizona.</p>
 
 <h2>12. Modifications to Terms</h2>
 <p>We reserve the right to modify these Terms at any time. Updated versions will be posted on the Site and are effective upon posting.</p>
@@ -76,13 +76,13 @@ class CmsPageSeeder extends Seeder
 <p>Any dispute, claim, or controversy arising out of or relating to these Terms, your use of the Site, or the services provided shall be resolved exclusively through binding arbitration conducted in Maricopa County, Arizona, in accordance with the rules of the American Arbitration Association (AAA). By using the Site, you waive any right to a trial by jury or to participate in a class action. Judgment on the arbitration award may be entered in any court having jurisdiction.</p>
 
 <h2>15. Chargebacks and Collections</h2>
-<p>By using InvestorMaxx, you agree not to initiate chargebacks or payment disputes without first contacting us to attempt a resolution. In the event of an unauthorized chargeback, we reserve the right to:</p>
+<p>By using AI World, you agree not to initiate chargebacks or payment disputes without first contacting us to attempt a resolution. In the event of an unauthorized chargeback, we reserve the right to:</p>
 <ul>
-  <li>Immediately suspend or terminate your access to InvestorMaxx and any associated services;</li>
+  <li>Immediately suspend or terminate your access to AI World and any associated services;</li>
   <li>Submit your account to a third-party collections agency for the outstanding balance plus any applicable collection fees;</li>
   <li>Report the delinquency to credit reporting agencies if permitted by law.</li>
 </ul>
-<p>All fees and payments are considered final and non-refundable unless otherwise stated in writing by InvestorMaxx.</p>
+<p>All fees and payments are considered final and non-refundable unless otherwise stated in writing by AI World.</p>
 
                 ',
                 'status' => 'published',
@@ -94,7 +94,7 @@ class CmsPageSeeder extends Seeder
                 'slug' => 'privacy-policy',
                 'content_html' => '
                     <p><strong>Effective Date:</strong> 8/01/2025</p>
-                    <p>This Privacy Policy describes how InvestorMaxx collects, uses, and shares information when you use our Site.</p>
+                    <p>This Privacy Policy describes how AI World collects, uses, and shares information when you use our Site.</p>
 
                     <h2>1. Information We Collect</h2>
                     <h3>Directly from Users</h3>
@@ -117,7 +117,7 @@ class CmsPageSeeder extends Seeder
                     <p>We may disclose information if required by law or in response to legal requests.</p>
 
                     <h2>4. Data Removal</h2>
-                    <p>Businesses may request removal of their data by emailing <a href="mailto:info@investormaxx.io">info@investormaxx.io</a>.</p>
+                    <p>Businesses may request removal of their data by emailing <a href="mailto:info@AI World.io">info@AI World.io</a>.</p>
                     <p>We evaluate and honor valid requests as appropriate.</p>
 
                     <h2>5. Data Security</h2>
@@ -128,11 +128,11 @@ class CmsPageSeeder extends Seeder
                     <p><strong>Notice:</strong> No mobile information will be shared with third parties/affiliates for marketing/promotional purposes. All the above categories exclude text messaging originator opt-in data and consent; this information will not be shared with any third parties.</p>
 
                     <h2>7. Removal Requests</h2>
-                    <p>If a business finds its information listed and wishes to request removal, they may contact us at <a href="mailto:info@investormaxx.io">info@investormaxx.io</a>.</p>
+                    <p>If a business finds its information listed and wishes to request removal, they may contact us at <a href="mailto:info@AI World.io">info@AI World.io</a>.</p>
                     <p>We review and evaluate all such requests in good faith and will remove data that cannot be lawfully displayed.</p>
 
                     <h2>Product Description</h2>
-                    <p>By providing your mobile phone number, you consent to receive SMS messages from InvestorMaxx related to offers, account notifications, and similar communications.</p>
+                    <p>By providing your mobile phone number, you consent to receive SMS messages from AI World related to offers, account notifications, and similar communications.</p>
 
                     <h3>Message Frequency</h3>
                     <p>Message frequency may vary.</p>
@@ -141,13 +141,13 @@ class CmsPageSeeder extends Seeder
                     <p>Standard message and data rates may apply depending on your carrier.</p>
 
                     <h3>SMS Consent Disclosure</h3>
-                    <p>By providing your number, you agree to receive communications via SMS from InvestorMaxx LLC. You may opt out by replying “STOP” or get help by replying “HELP.”</p>
+                    <p>By providing your number, you agree to receive communications via SMS from AI World LLC. You may opt out by replying “STOP” or get help by replying “HELP.”</p>
 
                     <h3>Opting Out</h3>
                     <p>You may opt out at any time by replying “STOP” to any message. A confirmation will follow, and no further SMS will be sent.</p>
 
                     <h3>Help and Support</h3>
-                    <p>For help, reply “HELP” to any SMS, or email our support team at <a href="mailto:info@investormaxx.com">info@investormaxx.com</a>.</p>
+                    <p>For help, reply “HELP” to any SMS, or email our support team at <a href="mailto:info@AI World.com">info@AI World.com</a>.</p>
 
                     <h3>Privacy</h3>
                     <p>Your phone number will be handled in accordance with our Privacy Policy. We do not sell or share your phone number with third parties except as required by law.</p>',
@@ -161,13 +161,13 @@ class CmsPageSeeder extends Seeder
                 'content_html' => '
                     <p><strong>Effective Date:</strong> 8/01/2025</p>
 
-                    <p>At InvestorMaxx, we provide instant access to digital business data products upon successful payment. This Fulfillment Policy outlines how purchases are delivered and how we handle any fulfillment-related issues.</p>
+                    <p>At AI World, we provide instant access to digital business data products upon successful payment. This Fulfillment Policy outlines how purchases are delivered and how we handle any fulfillment-related issues.</p>
 
                     <h2>1. Delivery Method</h2>
-                    <p>All products sold on InvestorMaxx are digital. Once your payment is processed, your purchased data lists are <strong>immediately available</strong> under the “My Purchased Lists” section of your InvestorMaxx account. No physical products will be shipped.</p>
+                    <p>All products sold on AI World are digital. Once your payment is processed, your purchased data lists are <strong>immediately available</strong> under the “My Purchased Lists” section of your AI World account. No physical products will be shipped.</p>
 
                     <h2>2. Delivery Timeline</h2>
-                    <p>Access is granted instantly after checkout. If your list does not appear right away, please contact <a href="mailto:info@investormaxx.io">info@investormaxx.io</a> with your order ID.</p>
+                    <p>Access is granted instantly after checkout. If your list does not appear right away, please contact <a href="mailto:info@AI World.io">info@AI World.io</a> with your order ID.</p>
 
                     <h2>3. Refunds</h2>
                     <p>Due to the digital nature of our products and the instant access provided, <strong>all sales are final</strong>. Refunds will only be considered in cases of technical failure or duplicate billing, and must be requested within 7 days of purchase.</p>
@@ -175,13 +175,13 @@ class CmsPageSeeder extends Seeder
                     <h2>4. Chargebacks</h2>
                     <p>Initiating a chargeback without contacting us first is a violation of our Terms. In such cases, we reserve the right to:</p>
                     <ul>
-                    <li>Suspend or ban your account from using InvestorMaxx,</li>
+                    <li>Suspend or ban your account from using AI World,</li>
                     <li>Submit your account to collections for the original amount plus fees,</li>
                     <li>Deny access to future purchases.</li>
                     </ul>
 
                     <h2>5. Contact</h2>
-                    <p>If you experience any delivery issues, please email us at <a href="mailto:info@investormaxx.io">info@investormaxx.io</a>. We`re here to help.</p>
+                    <p>If you experience any delivery issues, please email us at <a href="mailto:info@AI World.io">info@AI World.io</a>. We`re here to help.</p>
                     ',
                 'status' => 'published',
                 'created_at' => now(),
