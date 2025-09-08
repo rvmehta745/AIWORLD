@@ -33,7 +33,7 @@ class UserRepository extends BaseRepository
 
         if (!empty($postData['filter_data'])) {
             foreach ($postData['filter_data'] as $key => $value) {
-                if (in_array($key, ["first_name", "last_name", "email", "phone_number", "display_status",'role'])) {
+                if (in_array($key, ["first_name", "last_name", "email", "phone_number", "display_status", 'role'])) {
                     switch ($key) {
                         case "display_status":
                             $key = \DB::raw('IF(mst_users.is_active=1,"' . __('labels.active') . '","' . __('labels.inactive') . '")');
@@ -52,9 +52,9 @@ class UserRepository extends BaseRepository
                 }
 
                 if (in_array($key, ["is_active"])) {
-                    if($value['values'][0] == 'Active'){
+                    if ($value['values'][0] == 'Active') {
                         $value['values'][0] = 1;
-                    }else{
+                    } else {
                         $value['values'][0] = 0;
                     }
                     $key   = 'mst_users.' . $key;
@@ -64,16 +64,16 @@ class UserRepository extends BaseRepository
         }
 
         $query     = $query->select(
-                'mst_users.id',
-                'mst_users.first_name',
-                'mst_users.last_name',
-                'mst_users.email',
-                'mst_users.phone_number',
-                'mst_users.country_code',
-                'mst_users.role',
-                'mst_users.is_active',
-                'mst_users.created_at',
-            );
+            'mst_users.id',
+            'mst_users.first_name',
+            'mst_users.last_name',
+            'mst_users.email',
+            'mst_users.phone_number',
+            'mst_users.country_code',
+            'mst_users.role',
+            'mst_users.is_active',
+            'mst_users.created_at',
+        );
         $orderBy   = 'mst_users.updated_at';
         $orderType = (isset($postData['order_by']) && $postData['order_by'] == 1) ? 'asc' : 'desc';
         if (!empty($postData['sort_data'])) {
@@ -91,9 +91,9 @@ class UserRepository extends BaseRepository
      */
     public function store($request)
     {
-       
+
         // Split name into first_name and last_name
-        
+
         $storeData = [
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
@@ -108,12 +108,11 @@ class UserRepository extends BaseRepository
             'updated_by'  => \Auth::user()->id,
         ];
         $user = User::create($storeData);
-        
+
         // Send welcome email notification
         $user->notify(new LoginWelcomeNotification());
-        
+
         return $user;
-        
     }
 
     /**
@@ -133,30 +132,35 @@ class UserRepository extends BaseRepository
         }
 
         $user = (object)$me;
-        
+
         $rolePrivilegeData = $me->role()->select(['id', 'name', 'privileges'])->first();
-          
+
         if (empty($user->privileges)) {
             $userPrivileges = array_unique(array_filter(explode('#', $rolePrivilegeData->privileges)));
         } else {
             $userPrivileges = array_unique(array_filter(explode('#', $user->privileges)));
         }
-        
+
         $userPrivilegesKey = [];
         $temp              = [];
         if ($userPrivileges) {
-                
-                $lovPrivileges = LovPrivileges::select('id', 'parent_id', 'group_id', 'name as label', 'path', 'permission_key')
+
+            $lovPrivileges = LovPrivileges::select('id', 'parent_id', 'group_id', 'name as label', 'path', 'permission_key')
                 ->whereIn('id', $userPrivileges)
                 ->where('is_active', 1)
                 ->orderBy('sequence')
                 ->get();
-            
+
 
             foreach ($lovPrivileges as $privileges) {
                 $userPrivilegesKey[] = $privileges->permission_key;
+
+                // Exclude unwanted privilege labels from the menu
+                if (in_array($privileges->permission_key, ['PROFILE', 'PROFILE_INDEX', 'PROFILE_UPDATE', 'TERMS_CONDITIONS', 'TERMS_CONDITIONS_INDEX'])) {
+                    continue;
+                }
+
                 if ($privileges->parent_id == 0) {
-                    // unset($privileges->permission_key);
                     $groupId = $privileges->group_id;
                     if (empty($groupId)) {
                         $menu[$privileges->id]['id']        = $privileges->id;
@@ -177,6 +181,7 @@ class UserRepository extends BaseRepository
                     }
                 }
             }
+
             sort($userPrivilegesKey);
         }
 
@@ -185,7 +190,7 @@ class UserRepository extends BaseRepository
         $user->role           = $rolePrivilegeData;
         $menu                 = array_values($menu);
         $user->menu           = collect($menu)->sortBy('name')->values();
-        
+
         //        $user->utilities_menu = $this->utilities_menu($userPrivileges);
         return $user;
     }
@@ -203,7 +208,7 @@ class UserRepository extends BaseRepository
             return null;
         }
 
-     
+
         return $me;
     }
 
@@ -213,7 +218,7 @@ class UserRepository extends BaseRepository
     public function update($id, $request)
     {
         $data = $this->user->find($id);
-        
+
         $updateData = [
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
@@ -222,7 +227,7 @@ class UserRepository extends BaseRepository
             'email'      => $request['email'],
             'updated_by' => \Auth::user()->id,
         ];
-        
+
         $data->update($updateData);
         return $data;
     }
@@ -232,55 +237,55 @@ class UserRepository extends BaseRepository
      * */
     public function updateProfile($id, $request)
     {
-        
+
         // Try to find the user by ID
         $data = $this->user->find($id);
-        
+
         // If user not found, try to find by authenticated user
         if (!$data && \Auth::check()) {
             $data = \Auth::user();
         }
-        
+
         // If still no user found, return null
         if (!$data) {
             return null;
         }
-        
+
         // Update basic info
         $data->first_name = $request->first_name;
         $data->last_name = $request->last_name;
         $data->updated_by = $id;
-        
+
         // Update address
         if ($request->has('address')) {
             $data->address = $request->address;
         }
-        
+
         // // Handle photo upload
         // if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
         //     // Delete old photo if exists
         //     if ($data->photo && file_exists(storage_path('app/public/profile_photos/' . $data->photo))) {
         //         unlink(storage_path('app/public/profile_photos/' . $data->photo));
         //     }
-            
+
         //     // Generate unique filename
         //     $fileName = time() . '_' . $request->file('photo')->getClientOriginalName();
-            
+
         //     // Store the file
         //     $request->file('photo')->storeAs('public/profile_photos', $fileName);
-            
+
         //     // Save filename to database
         //     $data->photo = $fileName;
-            
+
         // }
-       
+
         $data->save();
-        
+
         // Add photo URL to response if photo exists
         // if ($data->photo) {
         //     $data->photo_url = asset('storage/profile_photos/' . $data->photo);
         // }
-        
+
         return $data;
     }
 
@@ -333,7 +338,7 @@ class UserRepository extends BaseRepository
             'otp'     => $otp,
             'email'   => $user->email,
         ];
-        
+
         // dispatch(new \App\Jobs\SendTemplateEmailJob("FORGOT_PASSWORD", $templateData));
         Mail::to($templateData['email'])->send(new SendResetPasswordEmail($templateData));
     }
@@ -404,11 +409,11 @@ class UserRepository extends BaseRepository
     public function getUserProfileDetails($userId)
     {
         $user = $this->user->find($userId);
-        
+
         if (!$user) {
             return null;
         }
-        
+
         // Get only the profile-related information
         return [
             'id' => $user->id,

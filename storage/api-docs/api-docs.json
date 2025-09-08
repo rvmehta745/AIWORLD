@@ -15,7 +15,7 @@
         }
     ],
     "paths": {
-        "/admin/login": {
+        "/login": {
             "post": {
                 "tags": [
                     "Login"
@@ -65,7 +65,7 @@
                 }
             }
         },
-        "/admin/forgot-password": {
+        "/forgot-password": {
             "post": {
                 "tags": [
                     "Login"
@@ -107,7 +107,7 @@
                 }
             }
         },
-        "/admin/verify-otp": {
+        "/verify-otp": {
             "post": {
                 "tags": [
                     "Login"
@@ -157,7 +157,7 @@
                 }
             }
         },
-        "/admin/reset-password": {
+        "/reset-password": {
             "post": {
                 "tags": [
                     "Login"
@@ -215,7 +215,7 @@
                 }
             }
         },
-        "/admin/change-password": {
+        "/change-password": {
             "post": {
                 "tags": [
                     "Login"
@@ -270,7 +270,7 @@
                 ]
             }
         },
-        "/admin/update-profile": {
+        "/update-profile": {
             "post": {
                 "tags": [
                     "Profile"
@@ -371,7 +371,7 @@
                 ]
             }
         },
-        "/admin/me": {
+        "/me": {
             "get": {
                 "tags": [
                     "Login"
@@ -408,7 +408,7 @@
                 ]
             }
         },
-        "/admin/logout": {
+        "/logout": {
             "get": {
                 "tags": [
                     "Login"
@@ -448,7 +448,7 @@
                 ]
             }
         },
-        "/admin/verify-email": {
+        "/verify-email": {
             "post": {
                 "tags": [
                     "Login"
@@ -481,7 +481,7 @@
                 }
             }
         },
-        "/admin/cms-page/{slug}": {
+        "/cms-page/{slug}": {
             "get": {
                 "tags": [
                     "CMS Pages"
@@ -670,14 +670,14 @@
                 ]
             }
         },
-        "/admin/api-logs": {
+        "/api-logs": {
             "get": {
                 "tags": [
-                    "Admin API logs"
+                    "API logs"
                 ],
                 "summary": "View API logs",
                 "description": "Retrieve API logs with filtering options",
-                "operationId": "6185077e7dc5d5162194132c96cf3026",
+                "operationId": "44276c1e7387f3935c7792dcf5cb139e",
                 "parameters": [
                     {
                         "name": "user_id",
@@ -823,12 +823,12 @@
                 ]
             }
         },
-        "/admin/disposition-managers": {
+        "/admin/admin-users": {
             "post": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
-                "summary": "Get list of Disposition Managers",
+                "summary": "Get list of Admin Users Management",
                 "operationId": "user-list",
                 "requestBody": {
                     "content": {
@@ -986,13 +986,13 @@
                 ]
             }
         },
-        "/admin/disposition-managers/create": {
+        "/admin/admin-users/create": {
             "post": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
                 "summary": "Create new Disposition Manager",
-                "operationId": "90a997221c1773c92416de7f3cde344c",
+                "operationId": "8887d6a8be04b3a7ba403dfffd7501d2",
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -1053,13 +1053,13 @@
                 ]
             }
         },
-        "/admin/disposition-managers/{id}/details": {
+        "/admin/admin-users/{id}/details": {
             "get": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
                 "summary": "Get Disposition Manager details",
-                "operationId": "44b7c2edf008a2c2bc02889d6803f6ed",
+                "operationId": "e16fe5debcccf7e09c5fb36c9332e69f",
                 "parameters": [
                     {
                         "name": "id",
@@ -1103,13 +1103,13 @@
                 ]
             }
         },
-        "/admin/disposition-managers/{id}/update": {
+        "/admin/admin-users/{id}/update": {
             "post": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
                 "summary": "Update Disposition Manager",
-                "operationId": "827a03c356f85e4709ac2167cce8de03",
+                "operationId": "f80e74a10695489f59d26c7351a80792",
                 "parameters": [
                     {
                         "name": "id",
@@ -1181,13 +1181,13 @@
                 ]
             }
         },
-        "/admin/disposition-managers/{id}/delete": {
+        "/admin/admin-users/{id}/delete": {
             "delete": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
                 "summary": "Delete Disposition Manager",
-                "operationId": "914a7cd4946301879b12e609e9283f4b",
+                "operationId": "9dc54158f657fd0e602980eb0cafa5bc",
                 "parameters": [
                     {
                         "name": "id",
@@ -1231,13 +1231,13 @@
                 ]
             }
         },
-        "/admin/disposition-managers/{id}/change-status": {
+        "/admin/admin-users/{id}/change-status": {
             "post": {
                 "tags": [
-                    "Disposition Managers"
+                    "Admin Users Management"
                 ],
                 "summary": "To change status Disposition Manager",
-                "operationId": "86532e9a246657dc2f1a8c42e421ad59",
+                "operationId": "6509180afb2295f1450c71affc6783f8",
                 "parameters": [
                     {
                         "name": "id",
@@ -1305,8 +1305,8 @@
     },
     "tags": [
         {
-            "name": "Disposition Managers",
-            "description": "API endpoints for managing Disposition Manager users"
+            "name": "Admin Users Management",
+            "description": "API endpoints for managing Admin Users Management"
         },
         {
             "name": "Login",
@@ -1325,8 +1325,8 @@
             "description": "Common"
         },
         {
-            "name": "Admin API logs",
-            "description": "Admin API logs"
+            "name": "API logs",
+            "description": "API logs"
         }
     ]
 }

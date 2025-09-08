@@ -11,8 +11,8 @@ use Throwable;
 
 /**
  * @OA\Tag(
- *     name="Disposition Managers",
- *     description="API endpoints for managing Disposition Manager users"
+ *     name="Admin Users Management",
+ *     description="API endpoints for managing Admin Users Management"
  * )
  */
 class UserController extends BaseController
@@ -26,9 +26,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin/disposition-managers",
-     * tags = {"Disposition Managers"},
-     * summary = "Get list of Disposition Managers",
+     * path="/admin/admin-users",
+     * tags = {"Admin Users Management"},
+     * summary = "Get list of Admin Users Management",
      * operationId = "user-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
@@ -132,8 +132,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/admin/disposition-managers/create",
-     *    tags={"Disposition Managers"},
+     *    path="/admin/admin-users/create",
+     *    tags={"Admin Users Management"},
      *    summary = "Create new Disposition Manager",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
@@ -202,8 +202,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/admin/disposition-managers/{id}/details",
-     *   tags={"Disposition Managers"},
+     ** path="/admin/admin-users/{id}/details",
+     *   tags={"Admin Users Management"},
      *   summary="Get Disposition Manager details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
@@ -258,8 +258,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin/disposition-managers/{id}/update",
-     * tags = {"Disposition Managers"},
+     * path="/admin/admin-users/{id}/update",
+     * tags = {"Admin Users Management"},
      * summary = "Update Disposition Manager",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
@@ -344,8 +344,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Delete(
-     ** path="/admin/disposition-managers/{id}/delete",
-     *   tags={"Disposition Managers"},
+     ** path="/admin/admin-users/{id}/delete",
+     *   tags={"Admin Users Management"},
      *   summary="Delete Disposition Manager",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
@@ -405,8 +405,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin/disposition-managers/{id}/change-status",
-     * tags = {"Disposition Managers"},
+     * path="/admin/admin-users/{id}/change-status",
+     * tags = {"Admin Users Management"},
      * summary = "To change status Disposition Manager",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *

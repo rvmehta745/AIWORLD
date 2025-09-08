@@ -36,7 +36,7 @@ class CmsPageController extends BaseController
 
     /**
      * @OA\Get(
-     * path="/admin/cms-page/{slug}",
+     * path="/cms-page/{slug}",
      * tags={"CMS Pages"},
      * summary="Get CMS page content by slug",
      * description="Returns the content of a specific CMS page using its slug",
