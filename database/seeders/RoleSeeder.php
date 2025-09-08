@@ -21,9 +21,6 @@ class RoleSeeder extends Seeder
 
         // User-specific limited privileges
         $userPrivilegeIds = LovPrivileges::whereIn('permission_key', [
-            // Properties
-            'PROPERTIES',
-            'PROPERTIES_INDEX',
 
             // Edit Profile
             'PROFILE',
@@ -34,7 +31,11 @@ class RoleSeeder extends Seeder
             // Change Password
             'CHANGE_PASSWORD',
             'CHANGE_PASSWORD_INDEX',
-            'CHANGE_PASSWORD_UPDATE'
+            'CHANGE_PASSWORD_UPDATE',
+
+            // Terms & Conditions
+            'TERMS_CONDITIONS',
+            'TERMS_CONDITIONS_INDEX'
         ])->pluck('id')->toArray();
 
         $rolesInsert = [

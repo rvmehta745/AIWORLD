@@ -336,8 +336,8 @@ class CommonController extends BaseController
 
     /**
      * @OA\Get(
-     *     path="/admin/api-logs",
-     *     tags={"Admin API logs"},
+     *     path="/api-logs",
+     *     tags={"API logs"},
      *     summary="View API logs",
      *     description="Retrieve API logs with filtering options",
      *     security={{"bearer_token":{}}},

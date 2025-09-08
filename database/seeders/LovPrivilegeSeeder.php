@@ -28,8 +28,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 1,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Dashboard', 'path' => '/', 'permission_key' => 'DASHBOARD',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Dashboard',
+            'path' => '/',
+            'permission_key' => 'DASHBOARD',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'Dashboard', 'path' => '/', 'permission_key' => 'DASHBOARD_INDEX', 'is_active' => 1],
@@ -44,8 +47,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 5,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Products', 'path' => '/products', 'permission_key' => 'PRODUCTS',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Products',
+            'path' => '/products',
+            'permission_key' => 'PRODUCTS',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/products', 'permission_key' => 'PRODUCTS_INDEX', 'is_active' => 1],
@@ -59,8 +65,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 6,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Product Types', 'path' => '/product-types', 'permission_key' => 'PRODUCT_TYPES',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Product Types',
+            'path' => '/product-types',
+            'permission_key' => 'PRODUCT_TYPES',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/product-types', 'permission_key' => 'PRODUCT_TYPES_INDEX', 'is_active' => 1],
@@ -74,8 +83,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 7,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Categories', 'path' => '/categories', 'permission_key' => 'CATEGORIES',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Categories',
+            'path' => '/categories',
+            'permission_key' => 'CATEGORIES',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/categories', 'permission_key' => 'CATEGORIES_INDEX', 'is_active' => 1],
@@ -89,8 +101,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 8,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Pricing Types', 'path' => '/pricing-types', 'permission_key' => 'PRICING_TYPES',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Pricing Types',
+            'path' => '/pricing-types',
+            'permission_key' => 'PRICING_TYPES',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/pricing-types', 'permission_key' => 'PRICING_TYPES_INDEX', 'is_active' => 1],
@@ -102,8 +117,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 9,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Featured', 'path' => '/featured', 'permission_key' => 'FEATURED',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Featured',
+            'path' => '/featured',
+            'permission_key' => 'FEATURED',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/featured', 'permission_key' => 'FEATURED_INDEX', 'is_active' => 1],
@@ -114,8 +132,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 10,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Subscriptions', 'path' => '/subscriptions', 'permission_key' => 'SUBSCRIPTIONS',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Subscriptions',
+            'path' => '/subscriptions',
+            'permission_key' => 'SUBSCRIPTIONS',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/subscriptions', 'permission_key' => 'SUBSCRIPTIONS_INDEX', 'is_active' => 1],
@@ -126,8 +147,11 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 11,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Users', 'path' => '/users', 'permission_key' => 'USERS',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Users',
+            'path' => '/users',
+            'permission_key' => 'USERS',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/users', 'permission_key' => 'USERS_INDEX', 'is_active' => 1],
@@ -141,13 +165,23 @@ class LovPrivilegeSeeder extends Seeder
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 12,
-            'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Settings', 'path' => '/settings', 'permission_key' => 'SETTINGS',
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Settings',
+            'path' => '/settings',
+            'permission_key' => 'SETTINGS',
             'is_active' => 1,
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'View', 'path' => '/settings', 'permission_key' => 'SETTINGS_INDEX', 'is_active' => 1],
                 ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Update', 'path' => '/settings/update', 'permission_key' => 'SETTINGS_UPDATE', 'is_active' => 1],
             ]
+        ];
+        $extraPrivileges = [
+            ['name' => 'Profile', 'path' => '', 'permission_key' => 'PROFILE', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 100, 'is_active' => 1],
+            ['name' => 'Profile View', 'path' => '', 'permission_key' => 'PROFILE_INDEX', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 101, 'is_active' => 1],
+            ['name' => 'Profile Update', 'path' => '', 'permission_key' => 'PROFILE_UPDATE', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 102, 'is_active' => 1],
+            ['name' => 'Terms & Conditions', 'path' => '', 'permission_key' => 'TERMS_CONDITIONS', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 103, 'is_active' => 1],
+            ['name' => 'Terms & Conditions View', 'path' => '', 'permission_key' => 'TERMS_CONDITIONS_INDEX', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 104, 'is_active' => 1],
         ];
 
         // --------------------------
@@ -179,6 +213,20 @@ class LovPrivilegeSeeder extends Seeder
                     ]);
                 }
             }
+        }
+
+        // Save extra privileges
+        foreach ($extraPrivileges as $privilege) {
+            LovPrivileges::create([
+                'id'             => $id += 1,
+                'sequence'       => $privilege['sequence'],
+                'group_id'       => $privilege['group_id'],
+                'parent_id'      => $privilege['parent_id'],
+                'name'           => $privilege['name'],
+                'path'           => $privilege['path'],
+                'permission_key' => $privilege['permission_key'],
+                'is_active'      => $privilege['is_active'],
+            ]);
         }
 
         $this->call(RoleSeeder::class);

@@ -112,7 +112,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/login",
+     ** path="/login",
      *   tags={"Login"},
      *   summary="Login",
      *   operationId="login",
@@ -206,7 +206,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/forgot-password",
+     ** path="/forgot-password",
      *   tags={"Login"},
      *   summary="Request link for forgot password",
      *   operationId="link for forgot password",
@@ -265,7 +265,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/verify-otp",
+     ** path="/verify-otp",
      *   tags={"Login"},
      *   summary="Verify OTP for password reset",
      *   operationId="verify-otp",
@@ -349,7 +349,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/reset-password",
+     ** path="/reset-password",
      *   tags={"Login"},
      *   summary="Reset forgot password link for user.",
      *   operationId="reset-password",
@@ -442,7 +442,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/change-password",
+     ** path="/change-password",
      *   tags={"Login"},
      *   summary="Change user password with token after login.",
      *   operationId="change-password",
@@ -520,7 +520,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     *   path="/admin/update-profile",
+     *   path="/update-profile",
      *   tags={"Profile"},
      *   summary="Update user profile",
      *   operationId="updateProfile",
@@ -567,7 +567,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/admin/me",
+     ** path="/me",
      *   tags={"Login"},
      *   summary="Get user profile base details after login.",
      *   operationId="my PRofile",
@@ -619,7 +619,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/admin/logout",
+     ** path="/logout",
      *   tags={"Login"},
      *   summary="Logout.",
      *   operationId="logout",
@@ -666,7 +666,7 @@ class LoginController extends BaseController
 
     /**
      * @OA\Post(
-     ** path="/admin/verify-email",
+     ** path="/verify-email",
      *   tags={"Login"},
      *   summary="Verify user email address",
      *   operationId="verifyEmail",
