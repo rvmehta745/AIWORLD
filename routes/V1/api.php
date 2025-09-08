@@ -60,7 +60,7 @@ Route::group(['middleware' => ['api']], function () {
     Route::group(['prefix' => ''], function () {
         Route::post('/sync', [CommonController::class, 'sync']);
         Route::get('/language/{local_key}', [CommonController::class, 'languageTranslationData']);
-
+        Route::get('/privileges-list', [CommonController::class, 'privilegesList']);
         Route::get('/roles-list', [CommonController::class, 'rolesList']);
     });
 });
