@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\LovPrivilegeGroups;
 use App\Models\LovPrivileges;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
@@ -21,7 +20,9 @@ class LovPrivilegeSeeder extends Seeder
 
         LovPrivileges::truncate();
         Schema::disableForeignKeyConstraints();
-        $id         = 10000;
+        $id = 10000;
+
+        $parentData = [];
 
         // Dashboard
         $parentData[] = [
@@ -34,74 +35,124 @@ class LovPrivilegeSeeder extends Seeder
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'Dashboard', 'path' => '/', 'permission_key' => 'DASHBOARD_INDEX', 'is_active' => 1],
             ]
         ];
-        // Properties
+
+        // --------------------------
+        // NEW MENU ITEMS (from sidebar)
+        // --------------------------
+
+        // Products
         $parentData[] = [
             'id'        => $id += 1,
-            'sequence'  => 2,
+            'sequence'  => 5,
             'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Properties', 'path' => '/', 'permission_key' => 'PROPERTIES',
+            'name'      => 'Products', 'path' => '/products', 'permission_key' => 'PRODUCTS',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'Properties', 'path' => '/', 'permission_key' => 'PROPERTIES_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/products', 'permission_key' => 'PRODUCTS_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/products/create', 'permission_key' => 'PRODUCTS_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/products/{id}/edit', 'permission_key' => 'PRODUCTS_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/products/{id}/delete', 'permission_key' => 'PRODUCTS_DELETE', 'is_active' => 1],
             ]
         ];
-        // Property Inquiries
+
+        // Product Types
         $parentData[] = [
             'id'        => $id += 1,
-            'sequence'  => 3,
+            'sequence'  => 6,
             'group_id'  => 0, 'parent_id' => 0,
-            'name'      => 'Property Inquiries', 'path' => '/', 'permission_key' => 'PROPERTY_INQUIRIES',
+            'name'      => 'Product Types', 'path' => '/product-types', 'permission_key' => 'PRODUCT_TYPES',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'Property Inquiries', 'path' => '/', 'permission_key' => 'PROPERTY_INQUIRIES_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/product-types', 'permission_key' => 'PRODUCT_TYPES_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/product-types/create', 'permission_key' => 'PRODUCT_TYPES_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/product-types/{id}/edit', 'permission_key' => 'PRODUCT_TYPES_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/product-types/{id}/delete', 'permission_key' => 'PRODUCT_TYPES_DELETE', 'is_active' => 1],
             ]
         ];
 
-        // Disposition Manager
-        $usersManagementGroupId = 0;
+        // Categories
         $parentData[] = [
             'id'        => $id += 1,
-            'sequence'  => 4,
-            'group_id'  => $usersManagementGroupId, 'parent_id' => 0,
-            'name'      => 'Disposition Manager Management', 'path' => '/disposition-managers', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT',
+            'sequence'  => 7,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Categories', 'path' => '/categories', 'permission_key' => 'CATEGORIES',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/disposition-managers', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_INDEX', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 2, 'name' => 'New', 'path' => '/disposition-managers/create', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_CREATE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 3, 'name' => 'Detail View', 'path' => '/disposition-managers/{id}/details', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_DETAILS', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 4, 'name' => 'Edit', 'path' => '/disposition-managers/{id}/update', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_UPDATE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 5, 'name' => 'Delete', 'path' => '/disposition-managers/{id}/delete', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_DELETE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/disposition-managers/{id}/change-status', 'permission_key' => 'DISPOSITION_MANAGER_MANAGEMENT_CHANGE_STATUS', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/categories', 'permission_key' => 'CATEGORIES_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/categories/create', 'permission_key' => 'CATEGORIES_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/categories/{id}/edit', 'permission_key' => 'CATEGORIES_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/categories/{id}/delete', 'permission_key' => 'CATEGORIES_DELETE', 'is_active' => 1],
             ]
         ];
-        
 
-        // // Edit Profile
-        // $parentData[] = [
-        //     'id'        => $id += 1,
-        //     'sequence'  => 5,
-        //     'group_id'  => $usersManagementGroupId, 'parent_id' => 0,
-        //     'name'      => 'Edit Profile', 'path' => '/profile', 'permission_key' => 'PROFILE',
-        //     'is_active' => 1,
-        //     'childData' => [
-        //         ['id' => $id += 1, 'sequence' => 7, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 1, 'name' => 'View', 'path' => '/profile', 'permission_key' => 'PROFILE_INDEX', 'is_active' => 1],
-        //         ['id' => $id += 1, 'sequence' => 7, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 2, 'name' => 'Update', 'path' => '/profile/update', 'permission_key' => 'PROFILE_UPDATE', 'is_active' => 1],
-        //     ]
-        // ];
+        // Pricing Types
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 8,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Pricing Types', 'path' => '/pricing-types', 'permission_key' => 'PRICING_TYPES',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/pricing-types', 'permission_key' => 'PRICING_TYPES_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/pricing-types/create', 'permission_key' => 'PRICING_TYPES_CREATE', 'is_active' => 1],
+            ]
+        ];
 
-        // // Change Password
-        // $parentData[] = [
-        //     'id'        => $id += 1,
-        //     'sequence'  => 6,
-        //     'group_id'  => $usersManagementGroupId, 'parent_id' => 0,
-        //     'name'      => 'Change Password', 'path' => '/change-password', 'permission_key' => 'CHANGE_PASSWORD',
-        //     'is_active' => 1,
-        //     'childData' => [
-        //         ['id' => $id += 1, 'sequence' => 8, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 1, 'name' => 'View', 'path' => '/change-password', 'permission_key' => 'CHANGE_PASSWORD_INDEX', 'is_active' => 1],
-        //         ['id' => $id += 1, 'sequence' => 8, 'group_id' => $usersManagementGroupId, 'parent_id' => $id - 2, 'name' => 'Update', 'path' => '/change-password/update', 'permission_key' => 'CHANGE_PASSWORD_UPDATE', 'is_active' => 1],
-        //     ]
-        // ];
+        // Featured
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 9,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Featured', 'path' => '/featured', 'permission_key' => 'FEATURED',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/featured', 'permission_key' => 'FEATURED_INDEX', 'is_active' => 1],
+            ]
+        ];
 
+        // Subscriptions
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 10,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Subscriptions', 'path' => '/subscriptions', 'permission_key' => 'SUBSCRIPTIONS',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/subscriptions', 'permission_key' => 'SUBSCRIPTIONS_INDEX', 'is_active' => 1],
+            ]
+        ];
+
+        // Users
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 11,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Users', 'path' => '/users', 'permission_key' => 'USERS',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/users', 'permission_key' => 'USERS_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/users/create', 'permission_key' => 'USERS_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/users/{id}/edit', 'permission_key' => 'USERS_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/users/{id}/delete', 'permission_key' => 'USERS_DELETE', 'is_active' => 1],
+            ]
+        ];
+
+        // Settings
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 12,
+            'group_id'  => 0, 'parent_id' => 0,
+            'name'      => 'Settings', 'path' => '/settings', 'permission_key' => 'SETTINGS',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'View', 'path' => '/settings', 'permission_key' => 'SETTINGS_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Update', 'path' => '/settings/update', 'permission_key' => 'SETTINGS_UPDATE', 'is_active' => 1],
+            ]
+        ];
+
+        // --------------------------
+        // Save into DB
+        // --------------------------
         foreach ($parentData as $value) {
             LovPrivileges::create([
                 'id'             => $value['id'],
