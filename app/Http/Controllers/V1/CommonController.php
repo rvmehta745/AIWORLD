@@ -208,83 +208,6 @@ class CommonController extends BaseController
 
     /**
      * @OA\Get(
-     * path="/user-list",
-     * tags = {"Common"},
-     * summary = "To get the user dropdown data",
-     * operationId = "To get the user category dropdown data",
-     *
-     *      @OA\Parameter(
-     *      name="search",
-     *      description="search role name, email",
-     *      in="query",
-     *      required=false,
-     *      @OA\Schema(
-     *           type="string"
-     *      )
-     *     ),
-     *      @OA\Parameter(
-     *      name="user_type",
-     *      description="pass the value role_type= 1(Admin)  or role_type = 2(Web)",
-     *      in="query",
-     *      required=false,
-     *      @OA\Schema(
-     *           type="string"
-     *      )
-     *     ),
-     *      @OA\Response(
-     *          response = 200,
-     *          description="Success",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated"
-     *      ),
-     *      @OA\Response(
-     *          response=400,
-     *          description="Bad Request"
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="not found"
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden"
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Server Error"
-     *      ),
-     * )
-     */
-    public function users(Request $request)
-    {
-        try {
-            \DB::beginTransaction();
-            $pageData          = $request->all();
-            $pageNumber        = !empty($pageData['page']) ? $pageData['page'] : 1;
-            $pageLimit         = !empty($pageData['per_page']) ? $pageData['per_page'] : 100;
-            $skip              = ($pageNumber - 1) * $pageLimit;
-            $listData          = $this->commonService->user($pageData, $skip, $pageLimit);
-            $count             = 0;
-            $rows              = [];
-            $downloadExportUrl = "";
-            if (!empty($listData) && isset($listData['data']) && isset($listData['count'])) {
-                list($rows, $count) = array_values($listData);
-            }
-            \DB::commit();
-            return General::setResponse("SUCCESS", [], compact('count', 'rows', 'downloadExportUrl'));
-        } catch (Throwable $e) {
-            \DB::rollback();
-            return General::setResponse("EXCEPTION", $e->getMessage());
-        }
-    }
-
-    /**
-     * @OA\Get(
      * path="/privileges-list",
      * tags = {"Common"},
      * summary = "To get the list of privileges",
@@ -331,8 +254,55 @@ class CommonController extends BaseController
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
+    /**
+     * @OA\Get(
+     * path="/roles-list",
+     * tags = {"Common"},
+     * summary = "To get the list of roles",
+     * operationId = "To get the list of roles",
+     * security={{"bearer_token":{}}, {"x_localization":{}}},
+     *      @OA\Response(
+     *          response = 200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated"
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found"
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Server Error"
+     *      ),
+     * )
+     */
+    public function rolesList(Request $request)
+    {
+        try {
+            \DB::beginTransaction();
+            $data = $this->commonService->roles($request);
+            \DB::commit();
+            return General::setResponse("SUCCESS", [], compact('data'));
+        } catch (Throwable $e) {
+            \DB::rollback();
+            return General::setResponse("EXCEPTION", $e->getMessage());
+        }
+    }
 
-    
     /**
      * This Method Use for Developer purpose for run command manually
      */
@@ -486,5 +456,4 @@ class CommonController extends BaseController
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
-
 }

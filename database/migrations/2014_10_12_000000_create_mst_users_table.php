@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('country_code', 20)->nullable()->comment('Country code of phone number (optional)');
             $table->text('address')->nullable()->comment('User\'s address(optional)');
             $table->string('password', 255)->comment('Hashed password for security');
-            $table->enum('role', ['Admin', 'Disposition Manager', 'Buyer'])->default('Buyer')->comment('User role within the system');
+            $table->string('role')->default('Users')->comment('User role within the system');
             $table->boolean('is_active')->default(true)->comment('Indicates if the user account is active');
             $table->integer('created_by')->nullable()->comment('ID of the user who created this record (if applicable)');
             $table->integer('updated_by')->nullable()->comment('ID of the user who last updated this record (if applicable)');

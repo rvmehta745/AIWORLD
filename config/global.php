@@ -8,9 +8,9 @@ return [
     ],
 
     'ROLES'        => [
+        'SUPER_ADMIN' => 'Super Admin',
         'ADMIN' => 'Admin',
-        'DISPOSITION_MANAGER' => 'Disposition Manager',
-        'BUYER' => 'Buyer',
+        'USERS' => 'Users',
     ],
 
     'STATUS' => [
@@ -23,5 +23,5 @@ return [
     ],
     
     // Default role ID for newly registered users
-    'default_role_id' => env('DEFAULT_ROLE_ID', 'Buyer'), // Assuming Buyer is a basic user role
+    'default_role_id' => env('DEFAULT_ROLE_ID', 'Users'), // Assuming Users is a basic user role
 ];

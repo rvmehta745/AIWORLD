@@ -28,26 +28,23 @@ class UpdateProfileRequest extends FormRequest
         $id = $this->route()->parameter('id') ?? null;
       
         return [
-            'first_name' => "required|min:" . General::$firstnameMin . "|max:" . General::$firstnameMax,
-            'last_name'  => "required|min:" . General::$lastnameMin . "|max:" . General::$lastnameMax,
-            // 'email'      => "required|email|unique:mst_users,email,$id,id,deleted_at,NULL|min:" . General::$emailMin . "|max:" . General::$emailMax,
-            // 'phone_number'  => "nullable|min:" . General::$mobMin . "|max:" . General::$mobMax,
-            // 'country_code'  => "nullable|string|max:20",
-            // 'address'    => "nullable|string|max:255",
-            // 'photo'      => "nullable|image|mimes:" . General::$imageMimes . "|max:" . General::$imageSize,
+            'first_name' => "nullable|min:" . General::$firstnameMin . "|max:" . General::$firstnameMax,
+            'last_name'  => "nullable|min:" . General::$lastnameMin . "|max:" . General::$lastnameMax,
+            'email'      => "nullable|email|unique:mst_users,email,$id,id,deleted_at,NULL|min:" . General::$emailMin . "|max:" . General::$emailMax,
+            'phone_number'  => "nullable|min:" . General::$mobMin . "|max:" . General::$mobMax,
+            'country_code'  => "nullable|string|max:20",
+            'address'    => "nullable|string|max:255",
+            'photo'      => "nullable|image|mimes:" . General::$imageMimes . "|max:" . General::$imageSize,
         ];
     }
 
     public function messages()
     {
         return [
-            'first_name.required' => __('validation.required.text', ['attribute' => __('labels.first_name')]),
             'first_name.min'      => __('validation.min.string', ['attribute' => __('labels.first_name')]),
             'first_name.max'      => __('validation.max.string', ['attribute' => __('labels.first_name')]),
-            'last_name.required'  => __('validation.required.text', ['attribute' => __('labels.last_name')]),
             'last_name.min'       => __('validation.min.string', ['attribute' => __('labels.last_name')]),
             'last_name.max'       => __('validation.max.string', ['attribute' => __('labels.last_name')]),
-            'email.required'      => __('validation.required.text', ['attribute' => __('labels.email')]),
             'email.email'         => __('validation.email', ['attribute' => __('labels.email')]),
             'email.unique'        => __('validation.unique', ['attribute' => __('labels.email')]),
             'email.min'           => __('validation.min.string', ['attribute' => __('labels.email')]),
