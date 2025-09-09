@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\Admin\LoginController;
 use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\CommonController;
 use App\Http\Controllers\V1\CmsPageController;
+use App\Http\Controllers\V1\RoleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -54,6 +55,21 @@ Route::group(['middleware' => ['api']], function () {
             Route::post('{id}/update', [UserController::class, 'update'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_UPDATE');
             Route::delete('{id}/delete', [UserController::class, 'destroy'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_DELETE');
             Route::post('{id}/change-status', [UserController::class, 'changeStatus'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_CHANGE_STATUS');
+        });
+
+    });
+
+    // Role Management routes - Direct access at api/v1/roles
+    Route::group(['middleware' => ['authenticateUser']], function () {
+        Route::group(['prefix' => 'roles'], function () {
+            Route::post('/', [RoleController::class, 'index'])->middleware('checkUserPermission:ROLE_MANAGEMENT_INDEX');
+            Route::post('/create', [RoleController::class, 'store'])->middleware('checkUserPermission:ROLE_MANAGEMENT_CREATE');
+            Route::get('{id}/details', [RoleController::class, 'show'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DETAILS');
+            Route::get('{slug}', [RoleController::class, 'getBySlug'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DETAILS');
+            Route::post('{id}/update', [RoleController::class, 'update'])->middleware('checkUserPermission:ROLE_MANAGEMENT_UPDATE');
+            Route::delete('{id}/delete', [RoleController::class, 'destroy'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DELETE');
+            Route::post('{id}/change-status', [RoleController::class, 'changeStatus'])->middleware('checkUserPermission:ROLE_MANAGEMENT_CHANGE_STATUS');
+            Route::get('/active/list', [RoleController::class, 'getActiveRoles'])->middleware('checkUserPermission:ROLE_MANAGEMENT_INDEX');
         });
     });
 

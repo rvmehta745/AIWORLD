@@ -69,7 +69,10 @@ class RoleSeeder extends Seeder
         ];
 
         foreach ($rolesInsert as $value) {
-            Role::upsert($value, ['id'], ['name', 'privileges', 'is_editable', 'is_active', 'updated_at']);
+            Role::updateOrCreate(
+                ['id' => $value['id']],
+                $value
+            );
         }
 
         Schema::enableForeignKeyConstraints();

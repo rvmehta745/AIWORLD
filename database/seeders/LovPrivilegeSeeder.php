@@ -176,6 +176,26 @@ class LovPrivilegeSeeder extends Seeder
                 ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Update', 'path' => '/settings/update', 'permission_key' => 'SETTINGS_UPDATE', 'is_active' => 1],
             ]
         ];
+
+        // Role Management
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 13,
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Role Management',
+            'path' => '/roles',
+            'permission_key' => 'ROLE_MANAGEMENT',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/roles', 'permission_key' => 'ROLE_MANAGEMENT_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/roles/create', 'permission_key' => 'ROLE_MANAGEMENT_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Details', 'path' => '/roles/{id}/details', 'permission_key' => 'ROLE_MANAGEMENT_DETAILS', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Update', 'path' => '/roles/{id}/update', 'permission_key' => 'ROLE_MANAGEMENT_UPDATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 5, 'group_id' => 0, 'parent_id' => $id - 5, 'name' => 'Delete', 'path' => '/roles/{id}/delete', 'permission_key' => 'ROLE_MANAGEMENT_DELETE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 6, 'group_id' => 0, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/roles/{id}/change-status', 'permission_key' => 'ROLE_MANAGEMENT_CHANGE_STATUS', 'is_active' => 1],
+            ]
+        ];
         $extraPrivileges = [
             ['name' => 'Profile', 'path' => '', 'permission_key' => 'PROFILE', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 100, 'is_active' => 1],
             ['name' => 'Profile View', 'path' => '', 'permission_key' => 'PROFILE_INDEX', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 101, 'is_active' => 1],

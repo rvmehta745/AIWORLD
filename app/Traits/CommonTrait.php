@@ -66,6 +66,11 @@ trait CommonTrait
      */
     public function createWhere($type, $key, $filterArray, $query)
     {
+        // Handle non-array inputs
+        if (!is_array($filterArray)) {
+            return $query;
+        }
+        
         if (empty($filterArray)) {
             return $query;
         }
@@ -76,10 +81,10 @@ trait CommonTrait
         }
 
         if (isset($filterArray['filterType']) && $filterArray['filterType'] == "set") {
-            $filterArray['filter'] = $filterArray['values'];
+            $filterArray['filter'] = isset($filterArray['values']) ? $filterArray['values'] : [];
         }
 
-        $value = (!empty($filterArray['filter']) || $filterArray['filter'] == 0) ? $filterArray['filter'] : (is_array($filterArray['filter']) ? $filterArray['filter'] : "");
+        $value = (!empty($filterArray['filter']) || (isset($filterArray['filter']) && $filterArray['filter'] == 0)) ? $filterArray['filter'] : (isset($filterArray['filter']) && is_array($filterArray['filter']) ? $filterArray['filter'] : "");
 
         switch ($type) {
             case "text": //if filter type will be text so it goes here
@@ -137,6 +142,15 @@ trait CommonTrait
                 break;
 
             case "set":
+                // Ensure $value is an array for whereIn
+                if (!is_array($value)) {
+                    if (is_string($value)) {
+                        // Try to convert string to array
+                        $value = explode(',', $value);
+                    } else {
+                        $value = [$value];
+                    }
+                }
                 $query = $query->whereIn($key, $value);
                 break;
         }
