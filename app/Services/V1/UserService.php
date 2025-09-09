@@ -164,4 +164,14 @@ class UserService extends BaseService
     {
         return $this->userRepository->getActiveUserCount();
     }
+
+    /**
+     * Get all active users for dropdown
+     *
+     * @return mixed
+     */
+    public function getAllActiveUsers()
+    {
+        return $this->userRepository->getAllActiveUsers();
+    }
 }

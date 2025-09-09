@@ -526,13 +526,20 @@ class LoginController extends BaseController
      *   operationId="updateProfile",
      *   security={{"bearer_token":{}}},
      *
-     *   @OA\Parameter(name="first_name", in="query", required=false, description="min=2, max=50", @OA\Schema(type="string")),
-     *   @OA\Parameter(name="last_name", in="query", required=false, description="min=2, max=50", @OA\Schema(type="string")),
-     *   @OA\Parameter(name="email", in="query", required=false, description="email, unique, min=6, max=100", @OA\Schema(type="string", format="email")),
-     *   @OA\Parameter(name="phone_number", in="query", required=false, description="nullable, min=10, max=15", @OA\Schema(type="string")),
-     *   @OA\Parameter(name="country_code", in="query", required=false, description="nullable, max=20", @OA\Schema(type="string")),
-     *   @OA\Parameter(name="address", in="query", required=false, description="nullable, max=255", @OA\Schema(type="string")),
-     *   @OA\Parameter(name="photo", in="query", required=false, description="nullable, image file (jpg,png,jpeg), stored in profile_image", @OA\Schema(type="string", format="binary")),
+     *   @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *         @OA\Property(property="first_name", type="string", description="min=2, max=50"),
+     *         @OA\Property(property="last_name", type="string", description="min=2, max=50"),
+     *         @OA\Property(property="email", type="string", format="email", description="email, unique, min=6, max=100"),
+     *         @OA\Property(property="phone_number", type="string", description="nullable, min=10, max=15"),
+     *         @OA\Property(property="country_code", type="string", description="nullable, max=20"),
+     *         @OA\Property(property="address", type="string", description="nullable, max=255"),
+     *         @OA\Property(property="photo", type="string", format="binary", description="nullable, image file (jpg,png,jpeg), stored in profile_photos")
+     *       )
+     *     )
+     *   ),
      *
      *   @OA\Response(response=200, description="Success"),
      *   @OA\Response(response=401, description="Unauthenticated"),

@@ -28,8 +28,7 @@ class UserRepository extends BaseRepository
     public function list($postData, $page, $perPage)
     {
         $query = \DB::table('mst_users')
-            ->whereNull('mst_users.deleted_at')
-            ->where('mst_users.role', 'Disposition Manager');
+            ->whereNull('mst_users.deleted_at');
 
         if (!empty($postData['filter_data'])) {
             foreach ($postData['filter_data'] as $key => $value) {
@@ -52,10 +51,16 @@ class UserRepository extends BaseRepository
                 }
 
                 if (in_array($key, ["is_active"])) {
-                    if ($value['values'][0] == 'Active') {
-                        $value['values'][0] = 1;
+                    // Handle the filter structure properly
+                    if (isset($value['filter'])) {
+                        if ($value['filter'] == 'Active') {
+                            $value['values'] = [1];
+                        } else {
+                            $value['values'] = [0];
+                        }
                     } else {
-                        $value['values'][0] = 0;
+                        // Default to empty values if no filter provided
+                        $value['values'] = [];
                     }
                     $key   = 'mst_users.' . $key;
                     $query = $this->createWhere('set', $key, $value, $query);
@@ -101,7 +106,7 @@ class UserRepository extends BaseRepository
             'country_code'  => $request->country_code ?? null,
             'email'      => $request->email,
             'password'   => bcrypt($request->password),
-            'role'       => $request->role ?? 'Buyer',
+            'role'       => $request->role,
             'email_verified_at' => now(),
             'is_active'  => true,
             'created_by'  => \Auth::user()->id,
@@ -123,7 +128,7 @@ class UserRepository extends BaseRepository
         $menu = [];
         // $me   = $this->user->find($id);
         $me = $this->user
-            ->select('id', 'first_name', 'last_name', 'email', 'phone_number', 'country_code', 'address', 'role')
+            ->select('id', 'first_name', 'last_name', 'email', 'phone_number', 'country_code', 'address', 'photo', 'role')
             ->where('id', $id)
             ->first();
 
@@ -192,6 +197,12 @@ class UserRepository extends BaseRepository
         $user->menu           = collect($menu)->sortBy('name')->values();
 
         //        $user->utilities_menu = $this->utilities_menu($userPrivileges);
+        
+        // Add photo URL if photo exists
+        if ($user->photo) {
+            $user->photo_url = asset('storage/profile_photos/' . $user->photo);
+        }
+        
         return $user;
     }
     /**
@@ -261,30 +272,29 @@ class UserRepository extends BaseRepository
             $data->address = $request->address;
         }
 
-        // // Handle photo upload
-        // if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
-        //     // Delete old photo if exists
-        //     if ($data->photo && file_exists(storage_path('app/public/profile_photos/' . $data->photo))) {
-        //         unlink(storage_path('app/public/profile_photos/' . $data->photo));
-        //     }
+        // Handle photo upload
+        if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+            // Delete old photo if exists
+            if ($data->photo && file_exists(storage_path('app/public/profile_photos/' . $data->photo))) {
+                unlink(storage_path('app/public/profile_photos/' . $data->photo));
+            }
 
-        //     // Generate unique filename
-        //     $fileName = time() . '_' . $request->file('photo')->getClientOriginalName();
+            // Generate unique filename
+            $fileName = time() . '_' . $request->file('photo')->getClientOriginalName();
 
-        //     // Store the file
-        //     $request->file('photo')->storeAs('public/profile_photos', $fileName);
+            // Store the file
+            $request->file('photo')->storeAs('public/profile_photos', $fileName);
 
-        //     // Save filename to database
-        //     $data->photo = $fileName;
-
-        // }
+            // Save filename to database
+            $data->photo = $fileName;
+        }
 
         $data->save();
 
         // Add photo URL to response if photo exists
-        // if ($data->photo) {
-        //     $data->photo_url = asset('storage/profile_photos/' . $data->photo);
-        // }
+        if ($data->photo) {
+            $data->photo_url = asset('storage/profile_photos/' . $data->photo);
+        }
 
         return $data;
     }
@@ -415,7 +425,7 @@ class UserRepository extends BaseRepository
         }
 
         // Get only the profile-related information
-        return [
+        $profileData = [
             'id' => $user->id,
             'first_name' => $user->first_name,
             'last_name' => $user->last_name,
@@ -423,11 +433,19 @@ class UserRepository extends BaseRepository
             'phone_number' => $user->phone_number,
             'country_code' => $user->country_code,
             'address' => $user->address,
+            'photo' => $user->photo,
             'role' => $user->role,
             'is_active' => $user->is_active,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at
         ];
+
+        // Add photo URL if photo exists
+        if ($user->photo) {
+            $profileData['photo_url'] = asset('storage/profile_photos/' . $user->photo);
+        }
+
+        return $profileData;
     }
 
     /**
@@ -448,5 +466,20 @@ class UserRepository extends BaseRepository
     public function getActiveUserCount()
     {
         return $this->user->whereNull('deleted_at')->where('is_active', true)->count();
+    }
+
+    /**
+     * Get all active users for dropdown
+     *
+     * @return mixed
+     */
+    public function getAllActiveUsers()
+    {
+        return $this->user
+            ->select('id', 'first_name', 'last_name', 'email', 'role')
+            ->whereNull('deleted_at')
+            ->where('is_active', true)
+            ->orderBy('first_name', 'asc')
+            ->get();
     }
 }

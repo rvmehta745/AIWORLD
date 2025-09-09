@@ -18,6 +18,7 @@ class StoreDispositionManagerRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:mst_users,email',
             'password' => 'required|string|min:8',
+            'role' => 'required|string|in:Super Admin,Admin,Users',
             'phone_number' => 'nullable|string|max:20',
             'country_code' => 'nullable|string|max:5',
         ];
