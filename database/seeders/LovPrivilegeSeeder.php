@@ -143,21 +143,23 @@ class LovPrivilegeSeeder extends Seeder
             ]
         ];
 
-        // Users
+        // Admin Users Management
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 11,
             'group_id'  => 0,
             'parent_id' => 0,
-            'name'      => 'Users',
-            'path' => '/users',
-            'permission_key' => 'USERS',
+            'name'      => 'Admin Users Management',
+            'path' => '/admin-users',
+            'permission_key' => 'ADMIN_USER_MANAGEMENT',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/users', 'permission_key' => 'USERS_INDEX', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/users/create', 'permission_key' => 'USERS_CREATE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/users/{id}/edit', 'permission_key' => 'USERS_EDIT', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/users/{id}/delete', 'permission_key' => 'USERS_DELETE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/admin-users', 'permission_key' => 'ADMIN_USER_MANAGEMENT_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/admin-users/create', 'permission_key' => 'ADMIN_USER_MANAGEMENT_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Details', 'path' => '/admin-users/{id}/details', 'permission_key' => 'ADMIN_USER_MANAGEMENT_DETAILS', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Update', 'path' => '/admin-users/{id}/update', 'permission_key' => 'ADMIN_USER_MANAGEMENT_UPDATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 5, 'group_id' => 0, 'parent_id' => $id - 5, 'name' => 'Delete', 'path' => '/admin-users/{id}/delete', 'permission_key' => 'ADMIN_USER_MANAGEMENT_DELETE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 6, 'group_id' => 0, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/admin-users/{id}/change-status', 'permission_key' => 'ADMIN_USER_MANAGEMENT_CHANGE_STATUS', 'is_active' => 1],
             ]
         ];
 
@@ -196,12 +198,32 @@ class LovPrivilegeSeeder extends Seeder
                 ['id' => $id += 1, 'sequence' => 6, 'group_id' => 0, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/roles/{id}/change-status', 'permission_key' => 'ROLE_MANAGEMENT_CHANGE_STATUS', 'is_active' => 1],
             ]
         ];
-        $extraPrivileges = [
-            ['name' => 'Profile', 'path' => '', 'permission_key' => 'PROFILE', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 100, 'is_active' => 1],
-            ['name' => 'Profile View', 'path' => '', 'permission_key' => 'PROFILE_INDEX', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 101, 'is_active' => 1],
-            ['name' => 'Profile Update', 'path' => '', 'permission_key' => 'PROFILE_UPDATE', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 102, 'is_active' => 1],
-            ['name' => 'Terms & Conditions', 'path' => '', 'permission_key' => 'TERMS_CONDITIONS', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 103, 'is_active' => 1],
-            ['name' => 'Terms & Conditions View', 'path' => '', 'permission_key' => 'TERMS_CONDITIONS_INDEX', 'group_id' => 0, 'parent_id' => 0, 'sequence' => 104, 'is_active' => 1],
+        // Profile Management
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 14,
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Profile',
+            'path' => '/profile',
+            'permission_key' => 'PROFILE',
+            'is_active' => 1,
+            'childData' => [
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'Update', 'path' => '/profile/update', 'permission_key' => 'PROFILE_UPDATE', 'is_active' => 1],
+            ]
+        ];
+
+        // Terms & Conditions
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 15,
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Terms & Conditions',
+            'path' => '/terms-conditions',
+            'permission_key' => 'TERMS_CONDITIONS',
+            'is_active' => 1,
+            'childData' => []
         ];
 
         // --------------------------
@@ -235,19 +257,6 @@ class LovPrivilegeSeeder extends Seeder
             }
         }
 
-        // Save extra privileges
-        foreach ($extraPrivileges as $privilege) {
-            LovPrivileges::create([
-                'id'             => $id += 1,
-                'sequence'       => $privilege['sequence'],
-                'group_id'       => $privilege['group_id'],
-                'parent_id'      => $privilege['parent_id'],
-                'name'           => $privilege['name'],
-                'path'           => $privilege['path'],
-                'permission_key' => $privilege['permission_key'],
-                'is_active'      => $privilege['is_active'],
-            ]);
-        }
 
         $this->call(RoleSeeder::class);
         Schema::enableForeignKeyConstraints();

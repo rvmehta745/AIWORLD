@@ -7,12 +7,13 @@ use App\Http\Requests\V1\User\UpdateDispositionManagerRequest;
 use App\Services\V1\UserService;
 use Illuminate\Http\Request;
 use App\Library\General;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 /**
  * @OA\Tag(
  *     name="Admin Users Management",
- *     description="API endpoints for managing Admin Users Management"
+ *     description="API endpoints for managing Admin Users"
  * )
  */
 class UserController extends BaseController
@@ -26,9 +27,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin/admin-users",
+     * path="/admin-users",
      * tags = {"Admin Users Management"},
-     * summary = "Get list of Admin Users Management",
+     * summary = "Get list of Admin Users",
      * operationId = "user-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
@@ -133,15 +134,15 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/admin/admin-users/create",
+     *    path="/admin-users/create",
      *    tags={"Admin Users Management"},
-     *    summary = "Create new Disposition Manager",
+     *    summary = "Create new User",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *              required={"first_name","last_name","password","email"},
+     *              required={"first_name","last_name","password","email","role"},
      *             @OA\Property(
      *                property="first_name",
      *                type="string",
@@ -162,12 +163,27 @@ class UserController extends BaseController
      *                type="string",
      *                description="Validations: min=8, max=20",
      *             ),
+     *           @OA\Property(
+     *                property="role",
+     *                type="string",
+     *                description="User role - Valid values: Super Admin, Admin, Users",
+     *             ),
+     *           @OA\Property(
+     *                property="phone_number",
+     *                type="string",
+     *                description="Phone number (optional)",
+     *             ),
+     *           @OA\Property(
+     *                property="country_code",
+     *                type="string",
+     *                description="Country code (optional)",
+     *             ),
      *         ),
      *      ),
      *   ),
      *  @OA\Response(
      *        response=200,
-     *        description="Disposition Manager Create Successfully",
+     *        description="User created successfully",
      *        @OA\MediaType(
      *            mediaType="multipart/form-data",
      *        )
@@ -189,23 +205,22 @@ class UserController extends BaseController
     public function store(StoreDispositionManagerRequest $request)
     {
         try {
-            \DB::beginTransaction();
-            $request['role'] = config('global.ROLES.DISPOSITION_MANAGER');
+            DB::beginTransaction();
             $this->userService->store($request);
 
-            \DB::commit();
-            return General::setResponse("SUCCESS",'Disposition Manager created successfully');
+            DB::commit();
+            return General::setResponse("SUCCESS",'User created successfully');
         } catch (Throwable $e) {
-            \DB::rollBack();
+            DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
 
     /**
      * @OA\Get(
-     ** path="/admin/admin-users/{id}/details",
+     ** path="/admin-users/{id}/details",
      *   tags={"Admin Users Management"},
-     *   summary="Get Disposition Manager details",
+     *   summary="Get Admin User details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -249,7 +264,7 @@ class UserController extends BaseController
         try {
             $data = $this->userService->detailsByID($id);
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.disposition_managers')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
@@ -259,9 +274,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin/admin-users/{id}/update",
+     * path="/admin-users/{id}/update",
      * tags = {"Admin Users Management"},
-     * summary = "Update Disposition Manager",
+     * summary = "Update User",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -276,7 +291,7 @@ class UserController extends BaseController
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *              required={"first_name","last_name","email"},
+     *              required={"first_name","last_name","email","role"},
      *             @OA\Property(
      *                property="first_name",
      *                type="string",
@@ -291,6 +306,21 @@ class UserController extends BaseController
      *                property="email",
      *                type="string",
      *                description="Validations: min=3, max=70",
+     *             ),
+     *           @OA\Property(
+     *                property="role",
+     *                type="string",
+     *                description="User role - Valid values: Super Admin, Admin, Users",
+     *             ),
+     *           @OA\Property(
+     *                property="phone_number",
+     *                type="string",
+     *                description="Phone number (optional)",
+     *             ),
+     *           @OA\Property(
+     *                property="country_code",
+     *                type="string",
+     *                description="Country code (optional)",
      *             ),
      *         ),
      *      ),
@@ -330,24 +360,24 @@ class UserController extends BaseController
             $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.disposition_managers')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
 
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $data = $this->userService->update($id, $request);
-            \DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.disposition_managers')]));
+            DB::commit();
+            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.user')]));
         } catch (Throwable $e) {
-            \DB::rollBack();
+            DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
 
     /**
      * @OA\Delete(
-     ** path="/admin/admin-users/{id}/delete",
+     ** path="/admin-users/{id}/delete",
      *   tags={"Admin Users Management"},
-     *   summary="Delete Disposition Manager",
+     *   summary="Delete Admin User",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -392,23 +422,23 @@ class UserController extends BaseController
             $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.disposition_managers')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $data = $this->userService->destory($id);
-            \DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.disposition_managers')]));
+            DB::commit();
+            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.user')]));
         } catch (Throwable $e) {
-            \DB::rollBack();
+            DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
 
     /**
      * @OA\Post(
-     * path="/admin/admin-users/{id}/change-status",
+     * path="/admin-users/{id}/change-status",
      * tags = {"Admin Users Management"},
-     * summary = "To change status Disposition Manager",
+     * summary = "Change Admin User status",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -460,11 +490,11 @@ class UserController extends BaseController
     public function changeStatus(Request $request, $id)
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.disposition_managers')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
 
             $data = $this->userService->changeStatus($id, $request);
@@ -473,10 +503,55 @@ class UserController extends BaseController
             } else {
                 $is_active = 'deactivated';
             }
-            \DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.disposition_managers'), 'moduleName' => $is_active]));
+            DB::commit();
+            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.user'), 'moduleName' => $is_active]));
         } catch (Throwable $e) {
-            \DB::rollBack();
+            DB::rollBack();
+            return General::setResponse("EXCEPTION", $e->getMessage());
+        }
+    }
+
+    /**
+     * @OA\Get(
+     ** path="/admin-users/active/list",
+     *   tags={"Admin Users Management"},
+     *   summary="Get all active admin users for dropdown",
+     *  security={{"bearer_token":{}}, {"x_localization":{}}},
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *   @OA\Response(
+     *      response=403,
+     *      description="Forbidden"
+     *   ),
+     *   @OA\Response(
+     *      response=500,
+     *      description="Server Error"
+     *   )
+     *)
+     **/
+    public function getActiveUsers()
+    {
+        try {
+            $data = $this->userService->getAllActiveUsers();
+            return General::setResponse("SUCCESS", [], compact('data'));
+        } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }

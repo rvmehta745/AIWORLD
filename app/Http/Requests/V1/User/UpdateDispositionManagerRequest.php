@@ -19,6 +19,7 @@ class UpdateDispositionManagerRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:mst_users,email,' . $userId,
+            'role' => 'required|string|in:Super Admin,Admin,Users',
             'phone_number' => 'nullable|string|max:20',
             'country_code' => 'nullable|string|max:5',
         ];

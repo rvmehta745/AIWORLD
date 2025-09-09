@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number', 20)->nullable()->comment('User\'s phone number (optional)');
             $table->string('country_code', 20)->nullable()->comment('Country code of phone number (optional)');
             $table->text('address')->nullable()->comment('User\'s address(optional)');
+            $table->string('photo')->nullable();
             $table->string('password', 255)->comment('Hashed password for security');
             $table->string('role')->default('Users')->comment('User role within the system');
             $table->boolean('is_active')->default(true)->comment('Indicates if the user account is active');
