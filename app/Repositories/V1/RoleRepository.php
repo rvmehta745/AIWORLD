@@ -21,69 +21,6 @@ class RoleRepository extends BaseRepository
     }
 
     /**
-     * List Roles
-     */
-    public function list($postData, $page, $perPage)
-    {
-        $query = DB::table('mst_roles')
-            ->whereNull('mst_roles.deleted_at');
-
-        if (!empty($postData['filter_data'])) {
-            foreach ($postData['filter_data'] as $key => $value) {
-                if (in_array($key, ["name", "is_editable", "is_active"])) {
-                    switch ($key) {
-                        case "is_editable":
-                        case "is_active":
-                            $key = 'mst_roles.' . $key;
-                            $query = $this->createWhere('set', $key, $value, $query);
-                            break;
-                        default:
-                            $key = 'mst_roles.' . $key;
-                            $query = $this->createWhere('text', $key, $value, $query);
-                            break;
-                    }
-                }
-
-                if (in_array($key, ["created_at", "updated_at"])) {
-                    $key   = 'mst_roles.' . $key;
-                    $query = $this->createWhere('date', $key, $value, $query);
-                }
-            }
-        }
-
-        $query = $query->select(
-            'mst_roles.id',
-            'mst_roles.name',
-            'mst_roles.slug',
-            'mst_roles.privileges',
-            'mst_roles.is_editable',
-            'mst_roles.is_active',
-            'mst_roles.created_at',
-            'mst_roles.updated_at'
-        );
-
-        $orderBy   = 'mst_roles.updated_at';
-        $orderType = (isset($postData['order_by']) && $postData['order_by'] == 1) ? 'asc' : 'desc';
-        if (!empty($postData['sort_data'])) {
-            $orderBy   = $postData['sort_data'][0]['colId'];
-            $orderType = $postData['sort_data'][0]['sort'];
-        }
-        $query       = $query->orderBy($orderBy, $orderType);
-        $count       = $query->count();
-        $query = Role::query()->whereNull('deleted_at');
-
-        $dataPerPage = $query->skip($page)->take($perPage)->get();
-
-        foreach ($dataPerPage as $role) {
-            if ($role->privileges) {
-                $role->privileges_list = $this->getPrivilegesDetails($role->privileges);
-            }
-        }
-
-        return ['data' => $dataPerPage, 'count' => $count];
-    }
-
-    /**
      * Store Role
      */
     public function store($request)

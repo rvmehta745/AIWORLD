@@ -296,10 +296,15 @@ class CommonController extends BaseController
             \DB::beginTransaction();
             $data = $this->commonService->roles($request);
             \DB::commit();
-            return General::setResponse("SUCCESS", [], compact('data'));
+
+            return General::setResponse(
+                "SUCCESS",
+                ["Roles fetched successfully"],
+                ['data' => $data] // ✅ wrap in "data"
+            );
         } catch (Throwable $e) {
             \DB::rollback();
-            return General::setResponse("EXCEPTION", $e->getMessage());
+            return General::setResponse("EXCEPTION", [$e->getMessage()]);
         }
     }
 

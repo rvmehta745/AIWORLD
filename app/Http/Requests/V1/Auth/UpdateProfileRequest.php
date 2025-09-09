@@ -24,9 +24,8 @@ class UpdateProfileRequest extends FormRequest
      */
     public function rules()
     {
-        
-        $id = $this->route()->parameter('id') ?? null;
-      
+        $id = \Auth::id(); // get logged-in user id
+
         return [
             'first_name' => "nullable|min:" . General::$firstnameMin . "|max:" . General::$firstnameMax,
             'last_name'  => "nullable|min:" . General::$lastnameMin . "|max:" . General::$lastnameMax,
@@ -37,6 +36,7 @@ class UpdateProfileRequest extends FormRequest
             'photo'      => "nullable|image|mimes:" . General::$imageMimes . "|max:" . General::$imageSize,
         ];
     }
+
 
     public function messages()
     {

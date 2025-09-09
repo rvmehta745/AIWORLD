@@ -61,7 +61,6 @@ Route::group(['middleware' => ['api']], function () {
             Route::post('/', [RoleController::class, 'index'])->middleware('checkUserPermission:ROLE_MANAGEMENT_INDEX');
             Route::post('/create', [RoleController::class, 'store'])->middleware('checkUserPermission:ROLE_MANAGEMENT_CREATE');
             Route::get('{id}/details', [RoleController::class, 'show'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DETAILS');
-            Route::get('{slug}', [RoleController::class, 'getBySlug'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DETAILS');
             Route::post('{id}/update', [RoleController::class, 'update'])->middleware('checkUserPermission:ROLE_MANAGEMENT_UPDATE');
             Route::delete('{id}/delete', [RoleController::class, 'destroy'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DELETE');
             Route::post('{id}/change-status', [RoleController::class, 'changeStatus'])->middleware('checkUserPermission:ROLE_MANAGEMENT_CHANGE_STATUS');
