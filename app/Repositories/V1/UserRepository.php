@@ -197,12 +197,12 @@ class UserRepository extends BaseRepository
         $user->menu           = collect($menu)->sortBy('name')->values();
 
         //        $user->utilities_menu = $this->utilities_menu($userPrivileges);
-        
+
         // Add photo URL if photo exists
         if ($user->photo) {
-            $user->photo_url = asset('storage/profile_photos/' . $user->photo);
+            $user->photo = asset('storage/profile_photos/' . $user->photo);
         }
-        
+
         return $user;
     }
     /**

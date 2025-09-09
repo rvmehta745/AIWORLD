@@ -9,6 +9,7 @@ use App\Models\EmpRange;
 use App\Models\Industry;
 use App\Models\JobTitle;
 use App\Models\LovPrivileges;
+use App\Models\Role;
 use App\Models\SalesVolume;
 use App\Models\State;
 use App\Repositories\BaseRepository;
@@ -18,9 +19,7 @@ class CommonRepository extends BaseRepository
 {
     use CommonTrait;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     /**
      * Extract IDs from a string formatted as "#1#2#3#"
      *
@@ -43,10 +42,11 @@ class CommonRepository extends BaseRepository
 
     public function roles($postData)
     {
-        $query = \DB::table('mst_roles')
-            ->select('mst_roles.id', 'mst_roles.name')
+        $query = Role::query()
+            ->select('mst_roles.*') // ✅ includes slug
             ->where('mst_roles.is_active', 1)
             ->whereNull('mst_roles.deleted_at');
+
         if ($postData->role_type == 1) {
             $query->where('mst_roles.role_type', $postData->role_type);
         }
@@ -56,7 +56,8 @@ class CommonRepository extends BaseRepository
         if ($postData->has('search') && !empty($postData->search)) {
             $query->where('mst_roles.name', 'like', '%' . $postData->search . '%');
         }
-        return $query->orderBy('mst_roles.name')->get()->toArray();
+
+        return $query->orderBy('mst_roles.id', 'ASC')->get()->toArray();
     }
 
     public function user($postData, $page = 1, $perPage = 10)
@@ -118,16 +119,16 @@ class CommonRepository extends BaseRepository
     public function categories($industryId = null)
     {
         $query = Category::select('id', 'name', 'industry_id');
-        
+
         if ($industryId) {
             $query->where('industry_id', $industryId);
         }
-        
+
         return $query->orderBy('name')
             ->get()
             ->toArray();
     }
-    
+
     public function getCategories($industryId = null)
     {
         $query = Category::select('id', 'name');
@@ -151,7 +152,7 @@ class CommonRepository extends BaseRepository
         // if ($industryId) {
         //     $query->where('industry_id', $industryId);
         // }
-        
+
         return $query->orderBy('name')
             ->get()
             ->toArray();
@@ -199,7 +200,7 @@ class CommonRepository extends BaseRepository
             ->get()
             ->toArray();
     }
-    
+
     /**
      * Get all cities for dropdown (only id and name)
      *
@@ -212,7 +213,7 @@ class CommonRepository extends BaseRepository
             ->get()
             ->toArray();
     }
-    
+
     /**
      * Get all employee range for dropdown (only id and name)
      *
@@ -226,7 +227,7 @@ class CommonRepository extends BaseRepository
             ->get()
             ->toArray();
     }
-    
+
     /**
      * Get all sales volumes for dropdown (only id and name)
      *
@@ -240,7 +241,7 @@ class CommonRepository extends BaseRepository
             ->get()
             ->toArray();
     }
-    
+
     /**
      * Get all job titles for dropdown (only id and name)
      *

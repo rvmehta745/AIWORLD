@@ -15,14 +15,6 @@ class RoleService extends BaseService
     }
 
     /**
-     * List Roles
-     */
-    public function list($postData, $page, $perPage)
-    {
-        return $this->roleRepository->list($postData, $page, $perPage);
-    }
-
-    /**
      * Store Role
      */
     public function store($request)
@@ -41,14 +33,6 @@ class RoleService extends BaseService
     public function details($id)
     {
         return $this->roleRepository->details($id);
-    }
-
-    /**
-     * Get Role Details by Slug
-     */
-    public function detailsBySlug($slug)
-    {
-        return $this->roleRepository->detailsBySlug($slug);
     }
 
     /**
