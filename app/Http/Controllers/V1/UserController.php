@@ -12,8 +12,8 @@ use Throwable;
 
 /**
  * @OA\Tag(
- *     name="Admin Users Management",
- *     description="API endpoints for managing Admin Users"
+ *     name="Users",
+ *     description="API endpoints for managing Users"
  * )
  */
 class UserController extends BaseController
@@ -27,8 +27,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin-users",
-     * tags = {"Admin Users Management"},
+     * path="/users",
+     * tags = {"Users"},
      * summary = "Get list of Admin Users",
      * operationId = "user-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
@@ -134,8 +134,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/admin-users/create",
-     *    tags={"Admin Users Management"},
+     *    path="/users/create",
+     *    tags={"Users"},
      *    summary = "Create new User",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
@@ -218,8 +218,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/admin-users/{id}/details",
-     *   tags={"Admin Users Management"},
+     ** path="/users/{id}/details",
+     *   tags={"Users"},
      *   summary="Get Admin User details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
@@ -274,8 +274,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin-users/{id}/update",
-     * tags = {"Admin Users Management"},
+     * path="/users/{id}/update",
+     * tags = {"Users"},
      * summary = "Update User",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
@@ -375,8 +375,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Delete(
-     ** path="/admin-users/{id}/delete",
-     *   tags={"Admin Users Management"},
+     ** path="/users/{id}/delete",
+     *   tags={"Users"},
      *   summary="Delete Admin User",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
@@ -436,8 +436,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/admin-users/{id}/change-status",
-     * tags = {"Admin Users Management"},
+     * path="/users/{id}/change-status",
+     * tags = {"Users"},
      * summary = "Change Admin User status",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
@@ -513,8 +513,8 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/admin-users/active/list",
-     *   tags={"Admin Users Management"},
+     ** path="/users/active/list",
+     *   tags={"Users"},
      *   summary="Get all active admin users for dropdown",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Response(

@@ -47,15 +47,15 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('/view-log', [CommonController::class, 'viewLog']);
         Route::get('/api-logs', [CommonController::class, 'viewApiLogs']);
 
-        // Admin User routes
-        Route::group(['prefix' => 'admin-users'], function () {
-            Route::post('/', [UserController::class, 'index'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_INDEX');
-            Route::post('/create', [UserController::class, 'store'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_CREATE');
-            Route::get('{id}/details', [UserController::class, 'show'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_DETAILS');
-            Route::post('{id}/update', [UserController::class, 'update'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_UPDATE');
-            Route::delete('{id}/delete', [UserController::class, 'destroy'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_DELETE');
-            Route::post('{id}/change-status', [UserController::class, 'changeStatus'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_CHANGE_STATUS');
-            Route::get('/active/list', [UserController::class, 'getActiveUsers'])->middleware('checkUserPermission:ADMIN_USER_MANAGEMENT_INDEX');
+        // User routes
+        Route::group(['prefix' => 'users'], function () {
+            Route::post('/', [UserController::class, 'index'])->middleware('checkUserPermission:USER_INDEX');
+            Route::post('/create', [UserController::class, 'store'])->middleware('checkUserPermission:USER_CREATE');
+            Route::get('{id}/details', [UserController::class, 'show'])->middleware('checkUserPermission:USER_DETAILS');
+            Route::post('{id}/update', [UserController::class, 'update'])->middleware('checkUserPermission:USER_UPDATE');
+            Route::delete('{id}/delete', [UserController::class, 'destroy'])->middleware('checkUserPermission:USER_DELETE');
+            Route::post('{id}/change-status', [UserController::class, 'changeStatus'])->middleware('checkUserPermission:USER_CHANGE_STATUS');
+            Route::get('/active/list', [UserController::class, 'getActiveUsers'])->middleware('checkUserPermission:USER_INDEX');
         });
         Route::group(['prefix' => 'roles'], function () {
             Route::post('/', [RoleController::class, 'index'])->middleware('checkUserPermission:ROLE_MANAGEMENT_INDEX');

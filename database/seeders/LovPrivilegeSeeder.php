@@ -143,23 +143,23 @@ class LovPrivilegeSeeder extends Seeder
             ]
         ];
 
-        // Admin Users Management
+        // Users
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 11,
             'group_id'  => 0,
             'parent_id' => 0,
-            'name'      => 'Admin Users Management',
-            'path' => '/admin-users',
-            'permission_key' => 'ADMIN_USER_MANAGEMENT',
+            'name'      => 'Users',
+            'path' => '/users',
+            'permission_key' => 'USER_MANAGEMENT',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/admin-users', 'permission_key' => 'ADMIN_USER_MANAGEMENT_INDEX', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/admin-users/create', 'permission_key' => 'ADMIN_USER_MANAGEMENT_CREATE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Details', 'path' => '/admin-users/{id}/details', 'permission_key' => 'ADMIN_USER_MANAGEMENT_DETAILS', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Update', 'path' => '/admin-users/{id}/update', 'permission_key' => 'ADMIN_USER_MANAGEMENT_UPDATE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 5, 'group_id' => 0, 'parent_id' => $id - 5, 'name' => 'Delete', 'path' => '/admin-users/{id}/delete', 'permission_key' => 'ADMIN_USER_MANAGEMENT_DELETE', 'is_active' => 1],
-                ['id' => $id += 1, 'sequence' => 6, 'group_id' => 0, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/admin-users/{id}/change-status', 'permission_key' => 'ADMIN_USER_MANAGEMENT_CHANGE_STATUS', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/users', 'permission_key' => 'USER_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/users/create', 'permission_key' => 'USER_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Details', 'path' => '/users/{id}/details', 'permission_key' => 'USER_DETAILS', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Update', 'path' => '/users/{id}/update', 'permission_key' => 'USER_UPDATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 5, 'group_id' => 0, 'parent_id' => $id - 5, 'name' => 'Delete', 'path' => '/users/{id}/delete', 'permission_key' => 'USER_DELETE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 6, 'group_id' => 0, 'parent_id' => $id - 6, 'name' => 'Change Status', 'path' => '/users/{id}/change-status', 'permission_key' => 'USER_CHANGE_STATUS', 'is_active' => 1],
             ]
         ];
 
