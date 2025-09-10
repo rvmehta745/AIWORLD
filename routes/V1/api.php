@@ -8,6 +8,7 @@ use App\Http\Controllers\V1\CommonController;
 use App\Http\Controllers\V1\CmsPageController;
 use App\Http\Controllers\V1\RoleController;
 use App\Http\Controllers\V1\ProductTypeController;
+use App\Http\Controllers\V1\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -75,6 +76,15 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [ProductTypeController::class, 'destroy'])->middleware('checkUserPermission:PRODUCT_TYPES_DELETE');
             Route::post('{id}/change-status', [ProductTypeController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCT_TYPES_EDIT');
             Route::get('/active/list', [ProductTypeController::class, 'getActiveProductTypes'])->middleware('checkUserPermission:PRODUCT_TYPES_INDEX');
+        });
+        Route::group(['prefix' => 'categories'], function () {
+            Route::post('/', [CategoryController::class, 'index'])->middleware('checkUserPermission:CATEGORIES_INDEX');
+            Route::post('/create', [CategoryController::class, 'store'])->middleware('checkUserPermission:CATEGORIES_CREATE');
+            Route::get('{id}/details', [CategoryController::class, 'show'])->middleware('checkUserPermission:CATEGORIES_INDEX');
+            Route::post('{id}/update', [CategoryController::class, 'update'])->middleware('checkUserPermission:CATEGORIES_EDIT');
+            Route::delete('{id}/delete', [CategoryController::class, 'destroy'])->middleware('checkUserPermission:CATEGORIES_DELETE');
+            Route::post('{id}/change-status', [CategoryController::class, 'changeStatus'])->middleware('checkUserPermission:CATEGORIES_EDIT');
+            Route::get('/active/list', [CategoryController::class, 'getActiveCategories'])->middleware('checkUserPermission:CATEGORIES_INDEX');
         });
     });
 

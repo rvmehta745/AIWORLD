@@ -161,7 +161,7 @@ class UserRepository extends BaseRepository
                 $userPrivilegesKey[] = $privileges->permission_key;
 
                 // Exclude unwanted privilege labels from the menu
-                if (in_array($privileges->permission_key, ['PROFILE', 'PROFILE_INDEX', 'PROFILE_UPDATE', 'TERMS_CONDITIONS', 'TERMS_CONDITIONS_INDEX', 'ROLE_MANAGEMENT', 'ROLE_MANAGEMENT_INDEX', 'ROLE_MANAGEMENT_CREATE', 'ROLE_MANAGEMENT_DETAILS', 'ROLE_MANAGEMENT_UPDATE', 'ROLE_MANAGEMENT_DELETE', 'ROLE_MANAGEMENT_CHANGE_STATUS'])) {
+                if (in_array($privileges->permission_key, ['PROFILE', 'PROFILE_INDEX', 'PROFILE_UPDATE', 'TERMS_CONDITIONS', 'TERMS_CONDITIONS_INDEX'])) {
                     continue;
                 }
 
