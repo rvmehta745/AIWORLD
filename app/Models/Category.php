@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory, SoftDeletes, Sluggable;
     protected $fillable = [
         'product_type_id',
-        'parent_category_id',
+        'parent_id',
         'name',
         'slug',
         'logo',
