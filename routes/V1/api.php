@@ -7,6 +7,7 @@ use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\CommonController;
 use App\Http\Controllers\V1\CmsPageController;
 use App\Http\Controllers\V1\RoleController;
+use App\Http\Controllers\V1\ProductTypeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -65,6 +66,15 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [RoleController::class, 'destroy'])->middleware('checkUserPermission:ROLE_MANAGEMENT_DELETE');
             Route::post('{id}/change-status', [RoleController::class, 'changeStatus'])->middleware('checkUserPermission:ROLE_MANAGEMENT_CHANGE_STATUS');
             Route::get('/active/list', [RoleController::class, 'getActiveRoles'])->middleware('checkUserPermission:ROLE_MANAGEMENT_INDEX');
+        });
+        Route::group(['prefix' => 'product-types'], function () {
+            Route::post('/', [ProductTypeController::class, 'index'])->middleware('checkUserPermission:PRODUCT_TYPES_INDEX');
+            Route::post('/create', [ProductTypeController::class, 'store'])->middleware('checkUserPermission:PRODUCT_TYPES_CREATE');
+            Route::get('{id}/details', [ProductTypeController::class, 'show'])->middleware('checkUserPermission:PRODUCT_TYPES_INDEX');
+            Route::post('{id}/update', [ProductTypeController::class, 'update'])->middleware('checkUserPermission:PRODUCT_TYPES_EDIT');
+            Route::delete('{id}/delete', [ProductTypeController::class, 'destroy'])->middleware('checkUserPermission:PRODUCT_TYPES_DELETE');
+            Route::post('{id}/change-status', [ProductTypeController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCT_TYPES_EDIT');
+            Route::get('/active/list', [ProductTypeController::class, 'getActiveProductTypes'])->middleware('checkUserPermission:PRODUCT_TYPES_INDEX');
         });
     });
 
