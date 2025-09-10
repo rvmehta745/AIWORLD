@@ -71,4 +71,6 @@ return [
     'payment_date'             => 'Payment Date',
     'clone'                    => 'Clone',
     'token'                    => 'Token',
+    'product_type'             => 'Product Type',
+    'product_types'            => 'Product Types',
 ];

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\V1\User\StoreDispositionManagerRequest;
-use App\Http\Requests\V1\User\UpdateDispositionManagerRequest;
-use App\Services\V1\UserService;
+use App\Http\Requests\V1\ProductType\StoreProductTypeRequest;
+use App\Http\Requests\V1\ProductType\UpdateProductTypeRequest;
+use App\Services\V1\ProductTypeService;
 use Illuminate\Http\Request;
 use App\Library\General;
 use Illuminate\Support\Facades\DB;
@@ -12,25 +12,25 @@ use Throwable;
 
 /**
  * @OA\Tag(
- *     name="Users",
- *     description="API endpoints for managing Users"
+ *     name="Product Types",
+ *     description="API endpoints for managing Product Types"
  * )
  */
-class UserController extends BaseController
+class ProductTypeController extends BaseController
 {
-    private UserService $userService;
+    private ProductTypeService $productTypeService;
 
-    public function __construct(UserService $userService)
+    public function __construct(ProductTypeService $productTypeService)
     {
-        $this->userService = $userService;
+        $this->productTypeService = $productTypeService;
     }
 
     /**
      * @OA\Post(
-     * path="/users",
-     * tags = {"Users"},
-     * summary = "Get list of Admin Users",
-     * operationId = "user-list",
+     * path="/product-types",
+     * tags = {"Product Types"},
+     * summary = "Get list of Product Types",
+     * operationId = "product-type-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
      *       @OA\MediaType(
@@ -38,22 +38,17 @@ class UserController extends BaseController
      *            @OA\Schema(
      *               type="object",
      *               @OA\Property(property="filter_data", type="object",
-     *                      @OA\Property(property="first_name", type="object",
+     *                      @OA\Property(property="name", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
      *                      ),
-     *                      @OA\Property(property="last_name", type="object",
+     *                      @OA\Property(property="tag_line", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
      *                      ),
-     *                @OA\Property(property="email", type="object",
-     *                               @OA\Property(property="filterType", type="string"),
-     *                               @OA\Property(property="type", type="string"),
-     *                               @OA\Property(property="filter", type="string")
-     *                      ),
-     *                @OA\Property(property="phone_number", type="object",
+     *                @OA\Property(property="status", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
@@ -63,11 +58,6 @@ class UserController extends BaseController
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="dateFrom", type="string"),
      *                               @OA\Property(property="dateTo", type="string"),
-     *                      ),
-     *                 @OA\Property(property="is_active", type="object",
-     *                               @OA\Property(property="filterType", type="string"),
-     *                               @OA\Property(property="type", type="string"),
-     *                               @OA\Property(property="filter", type="string")
      *                      ),
      *                 ),
      *               @OA\Property(property="sort_data", type="array",
@@ -118,7 +108,7 @@ class UserController extends BaseController
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
             $skip       = ($pageNumber - 1) * $pageLimit;
 
-            $listData = $this->userService->list($postData, $skip, $pageLimit);
+            $listData = $this->productTypeService->list($postData, $skip, $pageLimit);
             $count    = 0;
             $rows     = [];
             if (!empty($listData) && isset($listData['count']) && isset($listData['data'])) {
@@ -134,56 +124,46 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/users/create",
-     *    tags={"Users"},
-     *    summary = "Create new User",
+     *    path="/product-types/create",
+     *    tags={"Product Types"},
+     *    summary = "Create new Product Type",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *              required={"first_name","last_name","password","email","role"},
+     *              required={"name"},
      *             @OA\Property(
-     *                property="first_name",
+     *                property="name",
      *                type="string",
-     *                description="Validations: min=3, max=50",
+     *                description="Product Type Name - Validations: required, unique, max:255",
      *             ),
      *             @OA\Property(
-     *                property="last_name",
+     *                property="tag_line",
      *                type="string",
-     *                description="Validations: min=3, max=50",
+     *                description="Tag Line - Validations: nullable, max:255",
      *             ),
      *           @OA\Property(
-     *                property="email",
+     *                property="configuration",
      *                type="string",
-     *                description="Validations: min=3, max=70",
+     *                description="Configuration JSON - Validations: nullable",
      *             ),
      *           @OA\Property(
-     *                property="password",
-     *                type="string",
-     *                description="Validations: min=8, max=20",
+     *                property="sort_order",
+     *                type="integer",
+     *                description="Sort Order - Validations: nullable, integer",
      *             ),
      *           @OA\Property(
-     *                property="role",
+     *                property="status",
      *                type="string",
-     *                description="User role - Valid values: Super Admin, Admin, Users",
-     *             ),
-     *           @OA\Property(
-     *                property="phone_number",
-     *                type="string",
-     *                description="Phone number (optional)",
-     *             ),
-     *           @OA\Property(
-     *                property="country_code",
-     *                type="string",
-     *                description="Country code (optional)",
+     *                description="Status - Valid values: Active, InActive",
      *             ),
      *         ),
      *      ),
      *   ),
      *  @OA\Response(
      *        response=200,
-     *        description="User created successfully",
+     *        description="Product Type created successfully",
      *        @OA\MediaType(
      *            mediaType="multipart/form-data",
      *        )
@@ -202,14 +182,14 @@ class UserController extends BaseController
      *    ),
      * )
      */
-    public function store(StoreDispositionManagerRequest $request)
+    public function store(StoreProductTypeRequest $request)
     {
         try {
             DB::beginTransaction();
-            $this->userService->store($request);
+            $this->productTypeService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS",'User created successfully');
+            return General::setResponse("SUCCESS",'Product Type created successfully');
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -218,9 +198,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/users/{id}/details",
-     *   tags={"Users"},
-     *   summary="Get Admin User details",
+     ** path="/product-types/{id}/details",
+     *   tags={"Product Types"},
+     *   summary="Get Product Type details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -262,9 +242,9 @@ class UserController extends BaseController
     public function show($id)
     {
         try {
-            $data = $this->userService->detailsByID($id);
+            $data = $this->productTypeService->detailsByID($id);
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
             }
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
@@ -274,9 +254,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/users/{id}/update",
-     * tags = {"Users"},
-     * summary = "Update User",
+     * path="/product-types/{id}/update",
+     * tags = {"Product Types"},
+     * summary = "Update Product Type",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -291,36 +271,31 @@ class UserController extends BaseController
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *              required={"first_name","last_name","email","role"},
+     *              required={"name"},
      *             @OA\Property(
-     *                property="first_name",
+     *                property="name",
      *                type="string",
-     *                description="Validations: min=3, max=50",
+     *                description="Product Type Name - Validations: required, max:255",
      *             ),
      *             @OA\Property(
-     *                property="last_name",
+     *                property="tag_line",
      *                type="string",
-     *                description="Validations: min=3, max=50",
+     *                description="Tag Line - Validations: nullable, max:255",
      *             ),
      *           @OA\Property(
-     *                property="email",
+     *                property="configuration",
      *                type="string",
-     *                description="Validations: min=3, max=70",
+     *                description="Configuration JSON - Validations: nullable",
      *             ),
      *           @OA\Property(
-     *                property="role",
-     *                type="string",
-     *                description="User role - Valid values: Super Admin, Admin, Users",
+     *                property="sort_order",
+     *                type="integer",
+     *                description="Sort Order - Validations: nullable, integer",
      *             ),
      *           @OA\Property(
-     *                property="phone_number",
+     *                property="status",
      *                type="string",
-     *                description="Phone number (optional)",
-     *             ),
-     *           @OA\Property(
-     *                property="country_code",
-     *                type="string",
-     *                description="Country code (optional)",
+     *                description="Status - Valid values: Active, InActive",
      *             ),
      *         ),
      *      ),
@@ -354,19 +329,19 @@ class UserController extends BaseController
      *      ),
      * )
      */
-    public function update(UpdateDispositionManagerRequest $request, $id)
+    public function update(UpdateProductTypeRequest $request, $id)
     {
         try {
-            $data = $this->userService->details($id);
+            $data = $this->productTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
             }
 
             DB::beginTransaction();
-            $data = $this->userService->update($id, $request);
+            $data = $this->productTypeService->update($id, $request);
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.user')]));
+            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.product_type')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -375,9 +350,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Delete(
-     ** path="/users/{id}/delete",
-     *   tags={"Users"},
-     *   summary="Delete Admin User",
+     ** path="/product-types/{id}/delete",
+     *   tags={"Product Types"},
+     *   summary="Delete Product Type",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -419,15 +394,15 @@ class UserController extends BaseController
     public function destroy($id)
     {
         try {
-            $data = $this->userService->details($id);
+            $data = $this->productTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
             }
             DB::beginTransaction();
-            $data = $this->userService->destory($id);
+            $data = $this->productTypeService->destroy($id);
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.user')]));
+            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.product_type')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -436,9 +411,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/users/{id}/change-status",
-     * tags = {"Users"},
-     * summary = "Change Admin User status",
+     * path="/product-types/{id}/change-status",
+     * tags = {"Product Types"},
+     * summary = "Change Product Type status",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -450,12 +425,12 @@ class UserController extends BaseController
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name = "is_active",
+     *          name = "status",
      *          in = "query",
      *          required = true,
-     *          description="Validations: 0,1",
+     *          description="Validations: Active, InActive",
      *          @OA\Schema(
-     *              type ="integer"
+     *              type ="string"
      *          )
      *      ),
      *      @OA\Response(
@@ -491,20 +466,16 @@ class UserController extends BaseController
     {
         try {
             DB::beginTransaction();
-            $data = $this->userService->details($id);
+            $data = $this->productTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
             }
 
-            $data = $this->userService->changeStatus($id, $request);
-            if ($data->is_active == 1) {
-                $is_active = 'activated';
-            } else {
-                $is_active = 'deactivated';
-            }
+            $data = $this->productTypeService->changeStatus($id, $request);
+            $status = $data->status == 'Active' ? 'activated' : 'deactivated';
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.user'), 'moduleName' => $is_active]));
+            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.product_type'), 'moduleName' => $status]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -513,9 +484,9 @@ class UserController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/users/active/list",
-     *   tags={"Users"},
-     *   summary="Get all active admin users for dropdown",
+     ** path="/product-types/active/list",
+     *   tags={"Product Types"},
+     *   summary="Get all active product types for dropdown",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Response(
      *      response=200,
@@ -546,10 +517,10 @@ class UserController extends BaseController
      *   )
      *)
      **/
-    public function getActiveUsers()
+    public function getActiveProductTypes()
     {
         try {
-            $data = $this->userService->getAllActiveUsers();
+            $data = $this->productTypeService->getAllActiveProductTypes();
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
