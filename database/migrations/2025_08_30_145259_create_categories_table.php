@@ -22,14 +22,21 @@ return new class extends Migration
             $table->integer('tools_count')->default(0);
             $table->enum('status', ['Active', 'InActive'])->default('InActive');
             $table->integer('sort_order')->nullable();
+            
+            // Laravel-managed timestamps + soft delete
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('product_type_id')
+            
+            // Audit fields for tracking user actions
+            $table->unsignedBigInteger('created_by')->nullable()->comment('ID of the user who created this category');
+            $table->unsignedBigInteger('updated_by')->nullable()->comment('ID of the user who last updated this category');
+            $table->unsignedBigInteger('deleted_by')->nullable()->comment('ID of the user who soft deleted this category');
+            $table->foreign('product_type_id', 'fk_categories_product_type_id')
                 ->references('id')
                 ->on('product_types')
                 ->onDelete('cascade');
 
-            $table->foreign('parent_id')
+            $table->foreign('parent_id', 'fk_categories_parent_id')
                 ->references('id')
                 ->on('categories')
                 ->onDelete('set null');

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\V1;
 
 use App\Library\General;
-use App\Models\Country;
-use App\Models\Industry;
-use App\Models\State;
 use App\Models\ApiLog;
 use App\Services\V1\CommonService;
 use Throwable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 class CommonController extends BaseController
 {

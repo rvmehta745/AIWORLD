@@ -19,8 +19,15 @@ return new class extends Migration
             $table->text('configuration')->nullable(); // text, nullable
             $table->integer('sort_order')->nullable(); // int, nullable
             $table->enum('status', ['Active', 'InActive'])->default('InActive'); // enum, default InActive
+            
+            // Laravel-managed timestamps + soft delete
             $table->softDeletes();
             $table->timestamps();
+            
+            // Audit fields for tracking user actions
+            $table->unsignedBigInteger('created_by')->nullable()->comment('ID of the user who created this product type');
+            $table->unsignedBigInteger('updated_by')->nullable()->comment('ID of the user who last updated this product type');
+            $table->unsignedBigInteger('deleted_by')->nullable()->comment('ID of the user who soft deleted this product type');
         });
     }
 

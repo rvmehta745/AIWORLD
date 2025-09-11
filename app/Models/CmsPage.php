@@ -25,7 +25,7 @@ class CmsPage extends Model
      */
     protected $fillable = [
         'title',
-        'contant_html',
+        'content_html',
         'status',
         'created_by',
         'updated_by',
@@ -44,7 +44,7 @@ class CmsPage extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => 'integer',
+        'status' => 'string',
     ];
 
     /**

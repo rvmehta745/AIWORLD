@@ -19,23 +19,30 @@ class RoleSeeder extends Seeder
 
         $allPrivilegeIds = LovPrivileges::all()->pluck('id')->toArray() ?? [];
 
-        // User-specific limited privileges
+        // User-specific limited privileges (Dashboard + Basic User functions)
         $userPrivilegeIds = LovPrivileges::whereIn('permission_key', [
-
-            // Edit Profile
+            // Dashboard
+            'DASHBOARD',
+            'DASHBOARD_INDEX',
+            
+            // Profile Management
             'PROFILE',
-            'PROFILE_INDEX',
             'PROFILE_UPDATE',
+            
+            // User Details (for viewing own profile)
             'USER_DETAILS',
-
+            
             // Change Password
             'CHANGE_PASSWORD',
-            'CHANGE_PASSWORD_INDEX',
-            'CHANGE_PASSWORD_UPDATE',
-
+            
             // Terms & Conditions
             'TERMS_CONDITIONS',
             'TERMS_CONDITIONS_INDEX'
+        ])->pluck('id')->toArray();
+
+        // Admin privileges (All except Super Admin specific functions)
+        $adminPrivilegeIds = LovPrivileges::whereNotIn('permission_key', [
+            // Super Admin only functions (if any specific ones exist)
         ])->pluck('id')->toArray();
 
         $rolesInsert = [
@@ -43,7 +50,7 @@ class RoleSeeder extends Seeder
                 "id"          => 1,
                 'name'        => config('global.ROLES.SUPER_ADMIN'),
                 'privileges'  => "#" . implode("#", $allPrivilegeIds) . "#", // Super Admin = All privileges
-                'is_editable' => 0,
+                'is_editable' => 0, // Not editable
                 'is_active'   => 1,
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now(),
@@ -51,8 +58,8 @@ class RoleSeeder extends Seeder
             [
                 "id"          => 2,
                 'name'        => config('global.ROLES.ADMIN'),
-                'privileges'  => "#" . implode("#", $allPrivilegeIds) . "#", // Admin also has all privileges
-                'is_editable' => 0,
+                'privileges'  => "#" . implode("#", $adminPrivilegeIds) . "#", // Admin = All privileges but editable
+                'is_editable' => 1, // Editable
                 'is_active'   => 1,
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now(),
@@ -60,8 +67,8 @@ class RoleSeeder extends Seeder
             [
                 "id"          => 3,
                 'name'        => config('global.ROLES.USERS'),
-                'privileges'  => "#" . implode("#", $userPrivilegeIds) . "#", // Limited privileges
-                'is_editable' => 1,
+                'privileges'  => "#" . implode("#", $userPrivilegeIds) . "#", // Users = Dashboard + Basic functions only
+                'is_editable' => 1, // Editable
                 'is_active'   => 1,
                 'created_at'  => Carbon::now(),
                 'updated_at'  => Carbon::now(),
