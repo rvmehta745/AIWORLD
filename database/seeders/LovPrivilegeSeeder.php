@@ -110,6 +110,8 @@ class LovPrivilegeSeeder extends Seeder
             'childData' => [
                 ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/pricing-types', 'permission_key' => 'PRICING_TYPES_INDEX', 'is_active' => 1],
                 ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/pricing-types/create', 'permission_key' => 'PRICING_TYPES_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/pricing-types/{id}/edit', 'permission_key' => 'PRICING_TYPES_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/pricing-types/{id}/delete', 'permission_key' => 'PRICING_TYPES_DELETE', 'is_active' => 1],
             ]
         ];
 

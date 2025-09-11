@@ -9,6 +9,7 @@ use App\Http\Controllers\V1\CmsPageController;
 use App\Http\Controllers\V1\RoleController;
 use App\Http\Controllers\V1\ProductTypeController;
 use App\Http\Controllers\V1\CategoryController;
+use App\Http\Controllers\V1\PriceTypeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -85,6 +86,16 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [CategoryController::class, 'destroy'])->middleware('checkUserPermission:CATEGORIES_DELETE');
             Route::post('{id}/change-status', [CategoryController::class, 'changeStatus'])->middleware('checkUserPermission:CATEGORIES_EDIT');
             Route::get('/active/list', [CategoryController::class, 'getActiveCategories'])->middleware('checkUserPermission:CATEGORIES_INDEX');
+        });
+        Route::group(['prefix' => 'price-types'], function () {
+            Route::post('/', [PriceTypeController::class, 'index'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
+            Route::post('/create', [PriceTypeController::class, 'store'])->middleware('checkUserPermission:PRICING_TYPES_CREATE');
+            Route::get('{id}/details', [PriceTypeController::class, 'show'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
+            Route::post('{id}/update', [PriceTypeController::class, 'update'])->middleware('checkUserPermission:PRICING_TYPES_EDIT');
+            Route::delete('{id}/delete', [PriceTypeController::class, 'destroy'])->middleware('checkUserPermission:PRICING_TYPES_DELETE');
+            Route::post('{id}/change-status', [PriceTypeController::class, 'changeStatus'])->middleware('checkUserPermission:PRICING_TYPES_EDIT');
+            Route::get('/active/list', [PriceTypeController::class, 'getActivePriceTypes'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
+            Route::get('/product-type/{productTypeId}', [PriceTypeController::class, 'getPriceTypesByProductType'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
         });
     });
 
