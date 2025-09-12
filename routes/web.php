@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::get('/api/documentation', function () {
     $swaggerJson = file_get_contents(storage_path('api-docs/api-docs.json'));
     $swaggerData = json_decode($swaggerJson, true);
-    
+
     return view('swagger-ui', compact('swaggerData'));
 });
 

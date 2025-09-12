@@ -3,13 +3,13 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\V1\Admin\LoginController;
-use App\Http\Controllers\V1\UserController;
+use App\Http\Controllers\V1\Admin\UserController;
 use App\Http\Controllers\V1\CommonController;
 use App\Http\Controllers\V1\CmsPageController;
-use App\Http\Controllers\V1\RoleController;
-use App\Http\Controllers\V1\ProductTypeController;
-use App\Http\Controllers\V1\CategoryController;
-use App\Http\Controllers\V1\PriceTypeController;
+use App\Http\Controllers\V1\Admin\RoleController;
+use App\Http\Controllers\V1\Admin\ProductTypeController;
+use App\Http\Controllers\V1\Admin\CategoryController;
+use App\Http\Controllers\V1\Admin\PriceTypeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes

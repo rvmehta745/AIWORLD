@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\V1\Admin;
 
-use App\Http\Requests\V1\Category\StoreCategoryRequest;
-use App\Http\Requests\V1\Category\UpdateCategoryRequest;
-use App\Services\V1\CategoryService;
+use App\Http\Requests\V1\PriceType\StorePriceTypeRequest;
+use App\Http\Requests\V1\PriceType\UpdatePriceTypeRequest;
+use App\Services\V1\PriceTypeService;
 use Illuminate\Http\Request;
 use App\Library\General;
 use Illuminate\Support\Facades\DB;
@@ -12,25 +12,25 @@ use Throwable;
 
 /**
  * @OA\Tag(
- *     name="Categories",
- *     description="API endpoints for managing Categories"
+ *     name="Price Types",
+ *     description="API endpoints for managing Price Types"
  * )
  */
-class CategoryController extends BaseController
+class PriceTypeController extends \App\Http\Controllers\V1\BaseController
 {
-    private CategoryService $categoryService;
+    private PriceTypeService $priceTypeService;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(PriceTypeService $priceTypeService)
     {
-        $this->categoryService = $categoryService;
+        $this->priceTypeService = $priceTypeService;
     }
 
     /**
      * @OA\Post(
-     * path="/categories",
-     * tags = {"Categories"},
-     * summary = "Get list of Categories",
-     * operationId = "category-list",
+     * path="/price-types",
+     * tags = {"Price Types"},
+     * summary = "Get list of Price Types",
+     * operationId = "price-type-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
      *       @OA\MediaType(
@@ -39,6 +39,11 @@ class CategoryController extends BaseController
      *               type="object",
      *               @OA\Property(property="filter_data", type="object",
      *                      @OA\Property(property="name", type="object",
+     *                               @OA\Property(property="filterType", type="string"),
+     *                               @OA\Property(property="type", type="string"),
+     *                               @OA\Property(property="filter", type="string")
+     *                      ),
+     *                      @OA\Property(property="product_type_name", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
@@ -103,7 +108,7 @@ class CategoryController extends BaseController
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
             $skip       = ($pageNumber - 1) * $pageLimit;
 
-            $listData = $this->categoryService->list($postData, $skip, $pageLimit);
+            $listData = $this->priceTypeService->list($postData, $skip, $pageLimit);
             $count    = 0;
             $rows     = [];
             if (!empty($listData) && isset($listData['count']) && isset($listData['data'])) {
@@ -119,58 +124,36 @@ class CategoryController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/categories/create",
-     *    tags={"Categories"},
-     *    summary = "Create new Category",
+     *    path="/price-types/create",
+     *    tags={"Price Types"},
+     *    summary = "Create new Price Type",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
-     *   @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *              required={"name","product_type_id"},
-     *             @OA\Property(
-     *                property="product_type_id",
-     *                type="integer",
-     *             ),
-     *             @OA\Property(
-     *                property="parent_id",
-     *                type="integer",
-     *             ),
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Category Name - Validations: required, unique, max:255",
-     *             ),
-     *             @OA\Property(
-     *                property="logo",
-     *                type="string",
-     *                format="binary",
-     *             ),
-     *             @OA\Property(
-     *                property="description",
-     *                type="string",
-     *             ),
-     *           @OA\Property(
-     *                property="tools_count",
-     *                type="integer",
-     *             ),
-     *           @OA\Property(
-     *                property="sort_order",
-     *                type="integer",
-     *             ),
-     *           @OA\Property(
-     *                property="status",
-     *                type="string",
-     *                description="Status - Valid values: Active, InActive",
-     *             ),
-     *         ),
-     *      ),
-     *   ),
+     *    @OA\Parameter(
+     *        name="product_type_id",
+     *        in="query",
+     *        required=true,
+     *        description="Product Type ID - Validations: required, exists in product_types table",
+     *        @OA\Schema(type="integer")
+     *    ),
+     *    @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        required=true,
+     *        description="Price Type Name - Validations: required, unique, max:255",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="status",
+     *        in="query",
+     *        required=false,
+     *        description="Status - Valid values: Active, InActive (default: InActive)",
+     *        @OA\Schema(type="string", enum={"Active", "InActive"})
+     *    ),
      *  @OA\Response(
      *        response=200,
-     *        description="Category created successfully",
+     *        description="Price Type created successfully",
      *        @OA\MediaType(
-     *            mediaType="multipart/form-data",
+     *            mediaType="application/json",
      *        )
      *    ),
      *    @OA\Response(
@@ -187,14 +170,14 @@ class CategoryController extends BaseController
      *    ),
      * )
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StorePriceTypeRequest $request)
     {
         try {
             DB::beginTransaction();
-            $this->categoryService->store($request);
+            $this->priceTypeService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS",'Category created successfully');
+            return General::setResponse("SUCCESS", __('messages.module_name_created_successfully', ['moduleName' => __('labels.price_type')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -203,9 +186,9 @@ class CategoryController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/categories/{id}/details",
-     *   tags={"Categories"},
-     *   summary="Get Category details",
+     ** path="/price-types/{id}/details",
+     *   tags={"Price Types"},
+     *   summary="Get Price Type details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -242,14 +225,14 @@ class CategoryController extends BaseController
      *      response=500,
      *      description="Server Error"
      *   )
-     * )
-     */
+     *)
+     **/
     public function show($id)
     {
         try {
-            $data = $this->categoryService->detailsByID($id);
+            $data = $this->priceTypeService->detailsByID($id);
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.category')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.price_type')]));
             }
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
@@ -259,9 +242,9 @@ class CategoryController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/categories/{id}/update",
-     * tags = {"Categories"},
-     * summary = "Update Category",
+     * path="/price-types/{id}/update",
+     * tags = {"Price Types"},
+     * summary = "Update Price Type",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -272,48 +255,27 @@ class CategoryController extends BaseController
      *           type="integer"
      *      )
      *     ),
-     *      @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *              required={"name","product_type_id"},
-     *             @OA\Property(
-     *                property="product_type_id",
-     *                type="integer",
-     *             ),
-     *             @OA\Property(
-     *                property="parent_id",
-     *                type="integer",
-     *             ),
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Category Name - Validations: required, max:255",
-     *             ),
-     *             @OA\Property(
-     *                property="logo",
-     *                type="string",
-     *                format="binary",
-     *             ),
-     *             @OA\Property(
-     *                property="description",
-     *                type="string",
-     *             ),
-     *           @OA\Property(
-     *                property="tools_count",
-     *                type="integer",
-     *             ),
-     *           @OA\Property(
-     *                property="sort_order",
-     *                type="integer",
-     *             ),
-     *           @OA\Property(
-     *                property="status",
-     *                type="string",
-     *                description="Status - Valid values: Active, InActive",
-     *             ),
-     *         ),
-     *      ),
+     *    @OA\Parameter(
+     *        name="product_type_id",
+     *        in="query",
+     *        required=true,
+     *        description="Product Type ID - Validations: required, exists in product_types table",
+     *        @OA\Schema(type="integer")
+     *    ),
+     *    @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        required=true,
+     *        description="Price Type Name - Validations: required, max:255",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="status",
+     *        in="query",
+     *        required=false,
+     *        description="Status - Valid values: Active, InActive",
+     *        @OA\Schema(type="string", enum={"Active", "InActive"})
+     *    ),
      *   ),
      *      @OA\Response(
      *          response = 200,
@@ -344,19 +306,19 @@ class CategoryController extends BaseController
      *      ),
      * )
      */
-    public function update(UpdateCategoryRequest $request, $id)
+    public function update(UpdatePriceTypeRequest $request, $id)
     {
         try {
-            $data = $this->categoryService->details($id);
+            $data = $this->priceTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.category')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.price_type')]));
             }
 
             DB::beginTransaction();
-            $data = $this->categoryService->update($id, $request);
+            $data = $this->priceTypeService->update($id, $request);
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.category')]));
+            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.price_type')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -365,9 +327,9 @@ class CategoryController extends BaseController
 
     /**
      * @OA\Delete(
-     ** path="/categories/{id}/delete",
-     *   tags={"Categories"},
-     *   summary="Delete Category",
+     ** path="/price-types/{id}/delete",
+     *   tags={"Price Types"},
+     *   summary="Delete Price Type",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -404,94 +366,93 @@ class CategoryController extends BaseController
      *      response=500,
      *      description="Server Error"
      *   )
-     * )
-     */
+     *)
+     **/
     public function destroy($id)
     {
         try {
-            $data = $this->categoryService->details($id);
+            $data = $this->priceTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.category')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.price_type')]));
             }
-
-            $this->categoryService->destroy($id);
-            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.category')]));
+            DB::beginTransaction();
+            $data = $this->priceTypeService->destroy($id);
+            DB::commit();
+            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.price_type')]));
         } catch (Throwable $e) {
+            DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
 
     /**
      * @OA\Post(
-     ** path="/categories/{id}/change-status",
-     *   tags={"Categories"},
-     *   summary="Change status of Category",
-     *  security={{"bearer_token":{}}, {"x_localization":{}}},
-     *   @OA\Parameter(
-     *      name="id",
-     *      in="path",
-     *      required=true,
-     *      @OA\Schema(
-     *           type="integer"
-     *      )
-     *   ),
-     *   @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *               required={"status"},
-     *               @OA\Property(property="status", type="string", description="Valid values: Active, InActive")
-     *             )
-     *         )
-     *   ),
-     *   @OA\Response(
-     *      response=200,
-     *       description="Success",
-     *      @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
-     *   ),
-     *   @OA\Response(
-     *      response=401,
-     *       description="Unauthenticated"
-     *   ),
-     *   @OA\Response(
-     *      response=400,
-     *      description="Bad Request"
-     *   ),
-     *   @OA\Response(
-     *      response=404,
-     *      description="not found"
-     *   ),
-     *   @OA\Response(
-     *      response=403,
-     *      description="Forbidden"
-     *   ),
-     *   @OA\Response(
-     *      response=500,
-     *      description="Server Error"
-     *   )
+     * path="/price-types/{id}/change-status",
+     * tags = {"Price Types"},
+     * summary = "Change Price Type status",
+     * security={{"bearer_token":{}}, {"x_localization":{}}},
+     *
+     *      @OA\Parameter(
+     *          name = "id",
+     *          in = "path",
+     *          required = false,
+     *          @OA\Schema(
+     *              type ="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name = "status",
+     *          in = "query",
+     *          required = true,
+     *          description="Validations: Active, InActive",
+     *          @OA\Schema(
+     *              type ="string"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response = 200,
+     *          description="Success",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated"
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="not found"
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Server Error"
+     *      ),
      * )
      */
     public function changeStatus(Request $request, $id)
     {
         try {
-            $status = $request->status;
-            if (!in_array($status, ['Active', 'InActive'])) {
-                return General::setResponse("OTHER_ERROR", __('messages.failed_to_change_status', ['moduleName' => __('labels.category')]));
-            }
-
-            $data = $this->categoryService->details($id);
+            DB::beginTransaction();
+            $data = $this->priceTypeService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.category')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.price_type')]));
             }
 
-            DB::beginTransaction();
-            $this->categoryService->changeStatus($id, $request);
+            $data = $this->priceTypeService->changeStatus($id, $request);
+            $status = $data->status == 'Active' ? 'activated' : 'deactivated';
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['moduleName' => __('labels.category')]));
+            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.price_type'), 'moduleName' => $status]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -500,55 +461,99 @@ class CategoryController extends BaseController
 
     /**
      * @OA\Get(
-     * path="/categories/active/list",
-     * tags={"Categories"},
-     * summary="Get active categories",
-     * security={{"bearer_token":{}}, {"x_localization":{}}},
-     * @OA\Parameter(
-     * name="product_type_id",
-     * in="query",
-     * required=false,
-     * @OA\Schema(
-     * type="integer"
-     * )
-     * ),
-     * @OA\Response(
-     * response=200,
-     * description="Success",
-     * @OA\MediaType(
-     * mediaType="application/json"
-     * )
-     * ),
-     * @OA\Response(
-     * response=401,
-     * description="Unauthenticated"
-     * ),
-     * @OA\Response(
-     * response=400,
-     * description="Bad Request"
-     * ),
-     * @OA\Response(
-     * response=404,
-     * description="not found"
-     * ),
-     * @OA\Response(
-     * response=403,
-     * description="Forbidden"
-     * ),
-     * @OA\Response(
-     * response=500,
-     * description="Server Error"
-     * )
-     * )
-     */
-    public function getActiveCategories(Request $request)
+     ** path="/price-types/active/list",
+     *   tags={"Price Types"},
+     *   summary="Get all active price types for dropdown",
+     *  security={{"bearer_token":{}}, {"x_localization":{}}},
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *   @OA\Response(
+     *      response=403,
+     *      description="Forbidden"
+     *   ),
+     *   @OA\Response(
+     *      response=500,
+     *      description="Server Error"
+     *   )
+     *)
+     **/
+    public function getActivePriceTypes()
     {
         try {
-            $productTypeId = $request->get('product_type_id');
-            $data = $this->categoryService->getAllActiveCategories($productTypeId);
+            $data = $this->priceTypeService->getAllActivePriceTypes();
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
-} 
+
+    /**
+     * @OA\Get(
+     ** path="/price-types/product-type/{productTypeId}",
+     *   tags={"Price Types"},
+     *   summary="Get price types by product type",
+     *  security={{"bearer_token":{}}, {"x_localization":{}}},
+     *   @OA\Parameter(
+     *      name="productTypeId",
+     *      in="path",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *   @OA\Response(
+     *      response=403,
+     *      description="Forbidden"
+     *   ),
+     *   @OA\Response(
+     *      response=500,
+     *      description="Server Error"
+     *   )
+     *)
+     **/
+    public function getPriceTypesByProductType($productTypeId)
+    {
+        try {
+            $data = $this->priceTypeService->getPriceTypesByProductType($productTypeId);
+            return General::setResponse("SUCCESS", [], compact('data'));
+        } catch (Throwable $e) {
+            return General::setResponse("EXCEPTION", $e->getMessage());
+        }
+    }
+}

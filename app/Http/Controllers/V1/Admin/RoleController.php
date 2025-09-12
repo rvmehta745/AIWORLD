@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\V1\Admin;
 
 use App\Http\Requests\V1\Role\StoreRoleRequest;
 use App\Http\Requests\V1\Role\UpdateRoleRequest;
@@ -16,7 +16,7 @@ use Throwable;
  *     description="API endpoints for managing Roles"
  * )
  */
-class RoleController extends BaseController
+class RoleController extends \App\Http\Controllers\V1\BaseController
 {
     private RoleService $roleService;
 
@@ -31,35 +31,34 @@ class RoleController extends BaseController
      *    tags={"Role Management"},
      *    summary = "Create new Role",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
-     *   @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *              required={"name"},
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Role name - Validations: min=3, max=50, unique",
-     *             ),
-     *             @OA\Property(
-     *                property="privileges",
-     *                type="array",
-     *                description="Array of privilege IDs",
-     *                @OA\Items(type="integer")
-     *             ),
-     *             @OA\Property(
-     *                property="is_editable",
-     *                type="boolean",
-     *                description="Whether role is editable (default: true)",
-     *             ),
-     *             @OA\Property(
-     *                property="is_active",
-     *                type="boolean",
-     *                description="Whether role is active (default: true)",
-     *             ),
-     *         ),
-     *      ),
-     *   ),
+     *    @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        required=true,
+     *        description="Role name - Validations: min=3, max=50, unique",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="privileges",
+     *        in="query",
+     *        required=false,
+     *        description="Comma-separated list of privilege IDs",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="is_editable",
+     *        in="query",
+     *        required=false,
+     *        description="Whether role is editable (default: true)",
+     *        @OA\Schema(type="boolean")
+     *    ),
+     *    @OA\Parameter(
+     *        name="is_active",
+     *        in="query",
+     *        required=false,
+     *        description="Whether role is active (default: true)",
+     *        @OA\Schema(type="boolean")
+     *    ),
      *  @OA\Response(
      *        response=200,
      *        description="Role created successfully",
@@ -174,34 +173,34 @@ class RoleController extends BaseController
      *           type="integer"
      *      )
      *     ),
-     *      @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *              required={"name"},
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Role name - Validations: min=3, max=50, unique",
-     *             ),
-     *             @OA\Property(
-     *                property="privileges",
-     *                type="array",
-     *                description="Array of privilege IDs",
-     *                @OA\Items(type="integer")
-     *             ),
-     *             @OA\Property(
-     *                property="is_editable",
-     *                type="boolean",
-     *                description="Whether role is editable",
-     *             ),
-     *             @OA\Property(
-     *                property="is_active",
-     *                type="boolean",
-     *                description="Whether role is active",
-     *             ),
-     *         ),
-     *      ),
+     *    @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        required=true,
+     *        description="Role name - Validations: min=3, max=50, unique",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="privileges",
+     *        in="query",
+     *        required=false,
+     *        description="Comma-separated list of privilege IDs",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="is_editable",
+     *        in="query",
+     *        required=false,
+     *        description="Whether role is editable",
+     *        @OA\Schema(type="boolean")
+     *    ),
+     *    @OA\Parameter(
+     *        name="is_active",
+     *        in="query",
+     *        required=false,
+     *        description="Whether role is active",
+     *        @OA\Schema(type="boolean")
+     *    ),
      *   ),
      *      @OA\Response(
      *          response = 200,
