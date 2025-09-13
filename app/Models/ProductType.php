@@ -33,4 +33,8 @@ class ProductType extends Model
     {
         return $this->hasMany(PriceType::class, 'product_type_id');
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'product_id');
+    }
 }
