@@ -16,9 +16,16 @@ return new class extends Migration
             $table->unsignedBigInteger('product_type_id');
             $table->string('name')->unique(); // name column, unique
             $table->enum('status', ['Active', 'InActive'])->default('InActive'); // enum status
+            
+            // Laravel-managed timestamps + soft delete
             $table->softDeletes();
             $table->timestamps();
-            $table->foreign('product_type_id')
+            
+            // Audit fields for tracking user actions
+            $table->unsignedBigInteger('created_by')->nullable()->comment('ID of the user who created this price type');
+            $table->unsignedBigInteger('updated_by')->nullable()->comment('ID of the user who last updated this price type');
+            $table->unsignedBigInteger('deleted_by')->nullable()->comment('ID of the user who soft deleted this price type');
+            $table->foreign('product_type_id', 'fk_price_types_product_type_id')
                 ->references('id')
                 ->on('product_types')
                 ->onDelete('cascade');

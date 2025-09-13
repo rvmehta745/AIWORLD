@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -24,25 +25,30 @@ return new class extends Migration
             $table->integer('duration_ms')->nullable()->comment('Duration of the API call in milliseconds');
             $table->boolean('is_error')->default(false)->comment('Flag indicating if the API call resulted in an error (status >= 400)');
             $table->text('error_message')->nullable()->comment('Specific error message if an error occurred');
-            
-            $table->timestamp('created_at')->useCurrent()->comment('Timestamp when the API log entry was created');
+
+            // Laravel-managed timestamps + soft delete
+            $table->timestamps();   // creates created_at & updated_at (nullable by default)
+            $table->softDeletes();  // creates deleted_at (nullable)
+
+            // Extra audit fields for tracking user actions
             $table->unsignedBigInteger('created_by')->nullable()->comment('ID of the user who initiated the action that led to this log');
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate()->comment('Timestamp when the log record was last updated');
             $table->unsignedBigInteger('updated_by')->nullable()->comment('ID of the user who updated this log record');
-            $table->timestamp('deleted_at')->nullable()->comment('Timestamp when the log record was soft deleted');
             $table->unsignedBigInteger('deleted_by')->nullable()->comment('ID of the user who soft deleted this log record');
-            
+
             // Indexes
             $table->index('user_id', 'idx_user_id_api_log');
             $table->index('api_endpoint', 'idx_api_endpoint');
             $table->index('created_at', 'idx_created_at_api_log');
             $table->index('response_status_code', 'idx_response_status_code');
             $table->index('is_error', 'idx_is_error');
-            
+
             // Foreign key constraint
-            $table->foreign('user_id', 'fk_api_logs_user_id')->references('id')->on('mst_users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('user_id', 'fk_api_logs_user_id')
+                ->references('id')->on('mst_users')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
-        
+
         DB::statement("ALTER TABLE `api_logs` COMMENT = 'Table to record all API calls within the system, including client platform details'");
     }
 

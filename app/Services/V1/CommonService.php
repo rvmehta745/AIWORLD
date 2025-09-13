@@ -31,15 +31,6 @@ class CommonService extends BaseService
         return $this->commonRepository->privilegesList($request);
     }
 
-    /**
-     * Get all industries for dropdown
-     *
-     * @return array
-     */
-    public function industries()
-    {
-        return $this->commonRepository->industries();
-    }
 
     /**
      * Get categories by industry for dropdown
@@ -57,37 +48,6 @@ class CommonService extends BaseService
     }
 
     /**
-     * Get all countries for dropdown
-     *
-     * @return array
-     */
-    public function countries()
-    {
-        return $this->commonRepository->countries();
-    }
-
-    /**
-     * Get states by country for dropdown
-     *
-     * @param int $countryId
-     * @return array
-     */
-    public function states($countryId)
-    {
-        return $this->commonRepository->states($countryId);
-    }
-
-    /**
-     * Get cities by state for dropdown
-     *
-     * @param int $stateId
-     * @return array
-     */
-    public function cities($stateId)
-    {
-        return $this->commonRepository->cities($stateId);
-    }
-    /**
      * Get combined counts for dashboard
      *
      * @return array
@@ -95,52 +55,13 @@ class CommonService extends BaseService
     public function getCombinedCounts()
     {
         $userService = new UserService();
-        $myPurchaseListService = new MyPurchaseListService();
         
         return [
             'total_users' => $userService->getTotalUserCount(),
             'active_users' => $userService->getActiveUserCount(),
-            'total_purchase_lists' => $myPurchaseListService->getTotalCount()
+            'total_purchase_lists' => 0 // Placeholder - service not available
         ];
     }
     
-    /**
-     * Get all cities for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allCities()
-    {
-        return $this->commonRepository->allCities();
-    }
     
-    /**
-     * Get all employee range for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allEmpRange()
-    {
-        return $this->commonRepository->allEmpRange();
-    }
-
-    /**
-     * Get all sales volumes for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allSalesVolumes()
-    {
-        return $this->commonRepository->allSalesVolumes();
-    }
-
-    /**
-     * Get all job titles for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allJobTitles()
-    {
-        return $this->commonRepository->allJobTitles();
-    }
 }

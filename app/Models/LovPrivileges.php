@@ -10,8 +10,7 @@ class LovPrivileges extends Model
     use HasFactory;
     protected $table = 'lov_privileges';
 
-    protected $fillable =
-    [
+    protected $fillable = [
         'sequence',
         'group_id',
         'parent_id',
@@ -19,8 +18,6 @@ class LovPrivileges extends Model
         'path',
         'permission_key',
         'is_active',
-        'created_at',
-        'updated_at',
     ];
     public function group()
     {

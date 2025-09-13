@@ -3,17 +3,11 @@
 namespace App\Repositories\V1;
 
 use App\Models\Category;
-use App\Models\City;
-use App\Models\Country;
-use App\Models\EmpRange;
-use App\Models\Industry;
-use App\Models\JobTitle;
 use App\Models\LovPrivileges;
 use App\Models\Role;
-use App\Models\SalesVolume;
-use App\Models\State;
 use App\Repositories\BaseRepository;
 use App\Traits\CommonTrait;
+use Illuminate\Support\Facades\DB;
 
 class CommonRepository extends BaseRepository
 {
@@ -97,18 +91,6 @@ class CommonRepository extends BaseRepository
         return $query->get()->toArray();
     }
 
-    /**
-     * Get all industries for dropdown
-     *
-     * @return array
-     */
-    public function industries()
-    {
-        return Industry::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-    }
 
     /**
      * Get categories by industry for dropdown
@@ -163,13 +145,6 @@ class CommonRepository extends BaseRepository
      *
      * @return array
      */
-    public function countries()
-    {
-        return Country::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-    }
 
     /**
      * Get states by country for dropdown
@@ -177,14 +152,6 @@ class CommonRepository extends BaseRepository
      * @param int $countryId
      * @return array
      */
-    public function states($countryId)
-    {
-        return State::select('id', 'name')
-            ->where('country_id', $countryId)
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-    }
 
     /**
      * Get cities by state for dropdown
@@ -192,67 +159,11 @@ class CommonRepository extends BaseRepository
      * @param int $stateId
      * @return array
      */
-    public function cities($stateId)
-    {
-        return City::select('id', 'name', 'state_id', 'country_id')
-            ->where('state_id', $stateId)
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-    }
 
     /**
      * Get all cities for dropdown (only id and name)
      *
      * @return array
      */
-    public function allCities()
-    {
-        return City::select('id', 'name')
-            ->orderBy('name')
-            ->get()
-            ->toArray();
-    }
 
-    /**
-     * Get all employee range for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allEmpRange()
-    {
-        return EmpRange::select('id', \DB::raw("emp_range.range as name"))
-            ->where('status', 1)
-            ->orderBy('id')
-            ->get()
-            ->toArray();
-    }
-
-    /**
-     * Get all sales volumes for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allSalesVolumes()
-    {
-        return SalesVolume::select('id', 'name')
-            ->where('status', 1)
-            ->orderBy('id')
-            ->get()
-            ->toArray();
-    }
-
-    /**
-     * Get all job titles for dropdown (only id and name)
-     *
-     * @return array
-     */
-    public function allJobTitles()
-    {
-        return JobTitle::select('id', 'name')
-            ->where('status', 1)
-            ->orderBy('id')
-            ->get()
-            ->toArray();
-    }
 }

@@ -8,31 +8,27 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('lov_privileges', function (Blueprint $table) {
             $table->bigInteger('group_id')->unsigned()->change();
             $table->bigInteger('parent_id')->unsigned()->change();
-            $table->foreign('group_id')->references('id')->on('lov_privilege_groups')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('parent_id')->references('id')->on('lov_privileges')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('group_id', 'fk_lov_privileges_group_id')->references('id')->on('lov_privilege_groups')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('parent_id', 'fk_lov_privileges_parent_id')->references('id')->on('lov_privileges')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('lov_privileges', function (Blueprint $table) {
-            $table->dropForeign(['group_id']);
-            $table->dropForeign(['parent_id']);
-            // $table->bigInteger('group_id')->change();
-            // $table->bigInteger('parent_id')->change();
+            $table->dropForeign('fk_lov_privileges_group_id');
+            $table->dropForeign('fk_lov_privileges_parent_id');
+            $table->bigInteger('group_id')->change();
+            $table->bigInteger('parent_id')->change();
         });
     }
 };

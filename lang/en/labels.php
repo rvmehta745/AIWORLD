@@ -75,8 +75,6 @@ return [
     'product_types'            => 'Product Types',
     'price_type'               => 'Price Type',
     'price_types'              => 'Price Types',
-    'pricing_type'             => 'Pricing Type',
-    'pricing_types'            => 'Pricing Types',
     'category'                 => 'Category',
     'categories'               => 'Categories',
 ];

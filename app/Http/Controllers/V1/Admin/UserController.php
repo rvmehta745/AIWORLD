@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\V1;
+namespace App\Http\Controllers\V1\Admin;
 
-use App\Http\Requests\V1\ProductType\StoreProductTypeRequest;
-use App\Http\Requests\V1\ProductType\UpdateProductTypeRequest;
-use App\Services\V1\ProductTypeService;
+use App\Http\Requests\V1\User\StoreDispositionManagerRequest;
+use App\Http\Requests\V1\User\UpdateDispositionManagerRequest;
+use App\Services\V1\UserService;
 use Illuminate\Http\Request;
 use App\Library\General;
 use Illuminate\Support\Facades\DB;
@@ -12,25 +12,25 @@ use Throwable;
 
 /**
  * @OA\Tag(
- *     name="Product Types",
- *     description="API endpoints for managing Product Types"
+ *     name="Users",
+ *     description="API endpoints for managing Users"
  * )
  */
-class ProductTypeController extends BaseController
+class UserController extends \App\Http\Controllers\V1\BaseController
 {
-    private ProductTypeService $productTypeService;
+    private UserService $userService;
 
-    public function __construct(ProductTypeService $productTypeService)
+    public function __construct(UserService $userService)
     {
-        $this->productTypeService = $productTypeService;
+        $this->userService = $userService;
     }
 
     /**
      * @OA\Post(
-     * path="/product-types",
-     * tags = {"Product Types"},
-     * summary = "Get list of Product Types",
-     * operationId = "product-type-list",
+     * path="/users",
+     * tags = {"Users"},
+     * summary = "Get list of Admin Users",
+     * operationId = "user-list",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\RequestBody(
      *       @OA\MediaType(
@@ -38,17 +38,22 @@ class ProductTypeController extends BaseController
      *            @OA\Schema(
      *               type="object",
      *               @OA\Property(property="filter_data", type="object",
-     *                      @OA\Property(property="name", type="object",
+     *                      @OA\Property(property="first_name", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
      *                      ),
-     *                      @OA\Property(property="tag_line", type="object",
+     *                      @OA\Property(property="last_name", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
      *                      ),
-     *                @OA\Property(property="status", type="object",
+     *                @OA\Property(property="email", type="object",
+     *                               @OA\Property(property="filterType", type="string"),
+     *                               @OA\Property(property="type", type="string"),
+     *                               @OA\Property(property="filter", type="string")
+     *                      ),
+     *                @OA\Property(property="phone_number", type="object",
      *                               @OA\Property(property="filterType", type="string"),
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="filter", type="string")
@@ -58,6 +63,11 @@ class ProductTypeController extends BaseController
      *                               @OA\Property(property="type", type="string"),
      *                               @OA\Property(property="dateFrom", type="string"),
      *                               @OA\Property(property="dateTo", type="string"),
+     *                      ),
+     *                 @OA\Property(property="is_active", type="object",
+     *                               @OA\Property(property="filterType", type="string"),
+     *                               @OA\Property(property="type", type="string"),
+     *                               @OA\Property(property="filter", type="string")
      *                      ),
      *                 ),
      *               @OA\Property(property="sort_data", type="array",
@@ -108,7 +118,7 @@ class ProductTypeController extends BaseController
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
             $skip       = ($pageNumber - 1) * $pageLimit;
 
-            $listData = $this->productTypeService->list($postData, $skip, $pageLimit);
+            $listData = $this->userService->list($postData, $skip, $pageLimit);
             $count    = 0;
             $rows     = [];
             if (!empty($listData) && isset($listData['count']) && isset($listData['data'])) {
@@ -124,46 +134,62 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Post(
-     *    path="/product-types/create",
-     *    tags={"Product Types"},
-     *    summary = "Create new Product Type",
+     *    path="/users/create",
+     *    tags={"Users"},
+     *    summary = "Create new User",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
-     *   @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *              required={"name"},
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Product Type Name - Validations: required, unique, max:255",
-     *             ),
-     *             @OA\Property(
-     *                property="tag_line",
-     *                type="string",
-     *                description="Tag Line - Validations: nullable, max:255",
-     *             ),
-     *           @OA\Property(
-     *                property="configuration",
-     *                type="string",
-     *                description="Configuration JSON - Validations: nullable",
-     *             ),
-     *           @OA\Property(
-     *                property="sort_order",
-     *                type="integer",
-     *                description="Sort Order - Validations: nullable, integer",
-     *             ),
-     *           @OA\Property(
-     *                property="status",
-     *                type="string",
-     *                description="Status - Valid values: Active, InActive",
-     *             ),
-     *         ),
-     *      ),
-     *   ),
+     *    @OA\Parameter(
+     *        name="first_name",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=50",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="last_name",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=50",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="email",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=70",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="password",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=8, max=20",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="role",
+     *        in="query",
+     *        required=true,
+     *        description="User role - Valid values: Super Admin, Admin, Users",
+     *        @OA\Schema(type="string", enum={"Super Admin", "Admin", "Users"})
+     *    ),
+     *    @OA\Parameter(
+     *        name="phone_number",
+     *        in="query",
+     *        required=false,
+     *        description="Phone number (optional)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="country_code",
+     *        in="query",
+     *        required=false,
+     *        description="Country code (optional)",
+     *        @OA\Schema(type="string")
+     *    ),
      *  @OA\Response(
      *        response=200,
-     *        description="Product Type created successfully",
+     *        description="User created successfully",
      *        @OA\MediaType(
      *            mediaType="multipart/form-data",
      *        )
@@ -182,14 +208,14 @@ class ProductTypeController extends BaseController
      *    ),
      * )
      */
-    public function store(StoreProductTypeRequest $request)
+    public function store(StoreDispositionManagerRequest $request)
     {
         try {
             DB::beginTransaction();
-            $this->productTypeService->store($request);
+            $this->userService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS",'Product Type created successfully');
+            return General::setResponse("SUCCESS",'User created successfully');
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -198,9 +224,9 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/product-types/{id}/details",
-     *   tags={"Product Types"},
-     *   summary="Get Product Type details",
+     ** path="/users/{id}/details",
+     *   tags={"Users"},
+     *   summary="Get Admin User details",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -242,9 +268,9 @@ class ProductTypeController extends BaseController
     public function show($id)
     {
         try {
-            $data = $this->productTypeService->detailsByID($id);
+            $data = $this->userService->detailsByID($id);
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
@@ -254,9 +280,9 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/product-types/{id}/update",
-     * tags = {"Product Types"},
-     * summary = "Update Product Type",
+     * path="/users/{id}/update",
+     * tags = {"Users"},
+     * summary = "Update User",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -267,39 +293,48 @@ class ProductTypeController extends BaseController
      *           type="integer"
      *      )
      *     ),
-     *      @OA\RequestBody(
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *              required={"name"},
-     *             @OA\Property(
-     *                property="name",
-     *                type="string",
-     *                description="Product Type Name - Validations: required, max:255",
-     *             ),
-     *             @OA\Property(
-     *                property="tag_line",
-     *                type="string",
-     *                description="Tag Line - Validations: nullable, max:255",
-     *             ),
-     *           @OA\Property(
-     *                property="configuration",
-     *                type="string",
-     *                description="Configuration JSON - Validations: nullable",
-     *             ),
-     *           @OA\Property(
-     *                property="sort_order",
-     *                type="integer",
-     *                description="Sort Order - Validations: nullable, integer",
-     *             ),
-     *           @OA\Property(
-     *                property="status",
-     *                type="string",
-     *                description="Status - Valid values: Active, InActive",
-     *             ),
-     *         ),
-     *      ),
-     *   ),
+     *    @OA\Parameter(
+     *        name="first_name",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=50",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="last_name",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=50",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="email",
+     *        in="query",
+     *        required=true,
+     *        description="Validations: min=3, max=70",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="role",
+     *        in="query",
+     *        required=true,
+     *        description="User role - Valid values: Super Admin, Admin, Users",
+     *        @OA\Schema(type="string", enum={"Super Admin", "Admin", "Users"})
+     *    ),
+     *    @OA\Parameter(
+     *        name="phone_number",
+     *        in="query",
+     *        required=false,
+     *        description="Phone number (optional)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="country_code",
+     *        in="query",
+     *        required=false,
+     *        description="Country code (optional)",
+     *        @OA\Schema(type="string")
+     *    ),
      *      @OA\Response(
      *          response = 200,
      *          description="Success",
@@ -329,19 +364,19 @@ class ProductTypeController extends BaseController
      *      ),
      * )
      */
-    public function update(UpdateProductTypeRequest $request, $id)
+    public function update(UpdateDispositionManagerRequest $request, $id)
     {
         try {
-            $data = $this->productTypeService->details($id);
+            $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
 
             DB::beginTransaction();
-            $data = $this->productTypeService->update($id, $request);
+            $data = $this->userService->update($id, $request);
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.product_type')]));
+            return General::setResponse("SUCCESS", __('messages.module_name_updated_successfully', ['moduleName' => __('labels.user')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -350,9 +385,9 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Delete(
-     ** path="/product-types/{id}/delete",
-     *   tags={"Product Types"},
-     *   summary="Delete Product Type",
+     ** path="/users/{id}/delete",
+     *   tags={"Users"},
+     *   summary="Delete Admin User",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Parameter(
      *      name="id",
@@ -394,15 +429,15 @@ class ProductTypeController extends BaseController
     public function destroy($id)
     {
         try {
-            $data = $this->productTypeService->details($id);
+            $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
             DB::beginTransaction();
-            $data = $this->productTypeService->destroy($id);
+            $data = $this->userService->destory($id);
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.product_type')]));
+            return General::setResponse("SUCCESS", __('messages.module_name_deleted_successfully', ['moduleName' => __('labels.user')]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -411,9 +446,9 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Post(
-     * path="/product-types/{id}/change-status",
-     * tags = {"Product Types"},
-     * summary = "Change Product Type status",
+     * path="/users/{id}/change-status",
+     * tags = {"Users"},
+     * summary = "Change Admin User status",
      * security={{"bearer_token":{}}, {"x_localization":{}}},
      *
      *      @OA\Parameter(
@@ -425,12 +460,12 @@ class ProductTypeController extends BaseController
      *          )
      *      ),
      *      @OA\Parameter(
-     *          name = "status",
+     *          name = "is_active",
      *          in = "query",
      *          required = true,
-     *          description="Validations: Active, InActive",
+     *          description="Validations: 0,1",
      *          @OA\Schema(
-     *              type ="string"
+     *              type ="integer"
      *          )
      *      ),
      *      @OA\Response(
@@ -466,16 +501,20 @@ class ProductTypeController extends BaseController
     {
         try {
             DB::beginTransaction();
-            $data = $this->productTypeService->details($id);
+            $data = $this->userService->details($id);
 
             if (empty($data)) {
-                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
+                return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.user')]));
             }
 
-            $data = $this->productTypeService->changeStatus($id, $request);
-            $status = $data->status == 'Active' ? 'activated' : 'deactivated';
+            $data = $this->userService->changeStatus($id, $request);
+            if ($data->is_active == 1) {
+                $is_active = 'activated';
+            } else {
+                $is_active = 'deactivated';
+            }
             DB::commit();
-            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.product_type'), 'moduleName' => $status]));
+            return General::setResponse("SUCCESS", __('messages.module_status_changed_successfully', ['module' => __('labels.user'), 'moduleName' => $is_active]));
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -484,9 +523,9 @@ class ProductTypeController extends BaseController
 
     /**
      * @OA\Get(
-     ** path="/product-types/active/list",
-     *   tags={"Product Types"},
-     *   summary="Get all active product types for dropdown",
+     ** path="/users/active/list",
+     *   tags={"Users"},
+     *   summary="Get all active admin users for dropdown",
      *  security={{"bearer_token":{}}, {"x_localization":{}}},
      *   @OA\Response(
      *      response=200,
@@ -517,10 +556,10 @@ class ProductTypeController extends BaseController
      *   )
      *)
      **/
-    public function getActiveProductTypes()
+    public function getActiveUsers()
     {
         try {
-            $data = $this->productTypeService->getAllActiveProductTypes();
+            $data = $this->userService->getAllActiveUsers();
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());

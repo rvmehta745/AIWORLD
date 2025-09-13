@@ -10,12 +10,9 @@ class LovPrivilegeGroups extends Model
     use HasFactory;
     protected $table = 'lov_privilege_groups';
 
-    protected $fillable =
-    [
+    protected $fillable = [
         'name',
         'is_default',
         'is_active',
-        'created_at',
-        'updated_at',
     ];
 }

@@ -34,8 +34,13 @@ class CheckUserPermission
 
         $user = \DB::table('mst_users')->find($loggedInUser->id);
         
-        // Admin and Super Admin roles have all permissions
-        if (in_array($user->role, ['Admin', 'Super Admin'])) {
+        // Super Admin has all permissions - bypass all checks
+        if ($user->role === 'Super Admin') {
+            return $next($request);
+        }
+        
+        // Admin has all permissions but can be updated
+        if ($user->role === 'Admin') {
             return $next($request);
         }
         
