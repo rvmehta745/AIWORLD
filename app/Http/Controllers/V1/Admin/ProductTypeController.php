@@ -102,7 +102,7 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $postData   = $request->all();
             $pageNumber = !empty($postData['page']) ? $postData['page'] : 1;
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
@@ -191,7 +191,7 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
             $this->productTypeService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS",'Product Type created successfully');
+            return General::setResponse("SUCCESS", 'Product Type created successfully');
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -304,7 +304,6 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      *        description="Status - Valid values: Active, InActive",
      *        @OA\Schema(type="string", enum={"Active", "InActive"})
      *    ),
-     *   ),
      *      @OA\Response(
      *          response = 200,
      *          description="Success",

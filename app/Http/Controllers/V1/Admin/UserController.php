@@ -335,7 +335,6 @@ class UserController extends \App\Http\Controllers\V1\BaseController
      *        description="Country code (optional)",
      *        @OA\Schema(type="string")
      *    ),
-     *   ),
      *      @OA\Response(
      *          response = 200,
      *          description="Success",

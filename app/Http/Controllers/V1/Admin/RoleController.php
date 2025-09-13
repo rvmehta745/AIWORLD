@@ -201,7 +201,6 @@ class RoleController extends \App\Http\Controllers\V1\BaseController
      *        description="Whether role is active",
      *        @OA\Schema(type="boolean")
      *    ),
-     *   ),
      *      @OA\Response(
      *          response = 200,
      *          description="Success",

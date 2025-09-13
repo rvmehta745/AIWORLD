@@ -102,7 +102,7 @@ class PriceTypeController extends \App\Http\Controllers\V1\BaseController
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $postData   = $request->all();
             $pageNumber = !empty($postData['page']) ? $postData['page'] : 1;
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
@@ -276,7 +276,6 @@ class PriceTypeController extends \App\Http\Controllers\V1\BaseController
      *        description="Status - Valid values: Active, InActive",
      *        @OA\Schema(type="string", enum={"Active", "InActive"})
      *    ),
-     *   ),
      *      @OA\Response(
      *          response = 200,
      *          description="Success",
