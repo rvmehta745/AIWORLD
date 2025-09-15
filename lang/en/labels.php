@@ -73,6 +73,8 @@ return [
     'token'                    => 'Token',
     'product_type'             => 'Product Type',
     'product_types'            => 'Product Types',
+    'product'                  => 'Product',
+    'products'                 => 'Products',
     'price_type'               => 'Price Type',
     'price_types'              => 'Price Types',
     'category'                 => 'Category',
