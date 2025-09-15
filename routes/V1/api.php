@@ -10,6 +10,7 @@ use App\Http\Controllers\V1\Admin\RoleController;
 use App\Http\Controllers\V1\Admin\ProductTypeController;
 use App\Http\Controllers\V1\Admin\CategoryController;
 use App\Http\Controllers\V1\Admin\PriceTypeController;
+use App\Http\Controllers\V1\Admin\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -96,6 +97,16 @@ Route::group(['middleware' => ['api']], function () {
             Route::post('{id}/change-status', [PriceTypeController::class, 'changeStatus'])->middleware('checkUserPermission:PRICING_TYPES_EDIT');
             Route::get('/active/list', [PriceTypeController::class, 'getActivePriceTypes'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
             Route::get('/product-type/{productTypeId}', [PriceTypeController::class, 'getPriceTypesByProductType'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
+        });
+
+        Route::group(['prefix' => 'products'], function () {
+            Route::post('/', [ProductController::class, 'index'])->middleware('checkUserPermission:PRODUCTS_INDEX');
+            Route::post('/create', [ProductController::class, 'store'])->middleware('checkUserPermission:PRODUCTS_CREATE');
+            Route::get('{id}/details', [ProductController::class, 'show'])->middleware('checkUserPermission:PRODUCTS_INDEX');
+            Route::post('{id}/update', [ProductController::class, 'update'])->middleware('checkUserPermission:PRODUCTS_EDIT');
+            Route::delete('{id}/delete', [ProductController::class, 'destroy'])->middleware('checkUserPermission:PRODUCTS_DELETE');
+            Route::post('{id}/change-status', [ProductController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCTS_EDIT');
+            Route::get('/active/list', [ProductController::class, 'getActiveProducts'])->middleware('checkUserPermission:PRODUCTS_INDEX');
         });
     });
 

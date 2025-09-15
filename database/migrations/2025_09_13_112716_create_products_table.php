@@ -44,6 +44,9 @@ return new class extends Migration
             $table->boolean('is_human_verified')->default(0);
             $table->timestamps();
             $table->softDeletes();
+            $table->unsignedBigInteger('created_by')->nullable()->comment('ID of the user who created this product');
+            $table->unsignedBigInteger('updated_by')->nullable()->comment('ID of the user who last updated this product');
+            $table->unsignedBigInteger('deleted_by')->nullable()->comment('ID of the user who soft deleted this product');
             $table->foreign('product_type_id')
                 ->references('id')->on('product_types')
                 ->onDelete('cascade');

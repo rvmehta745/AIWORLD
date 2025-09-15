@@ -56,6 +56,14 @@ class Product extends Model
         'is_human_verified',
     ];
 
+    protected $casts = [
+        'is_token_used' => 'boolean',
+        'is_verified' => 'boolean',
+        'is_gold' => 'boolean',
+        'is_human_verified' => 'boolean',
+        'published_at' => 'datetime',
+    ];
+
     public function sluggable(): array
     {
         return [
