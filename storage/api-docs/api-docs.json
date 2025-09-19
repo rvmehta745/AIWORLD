@@ -15,6 +15,597 @@
         }
     ],
     "paths": {
+        "/categories": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get list of Categories",
+                "operationId": "category-list",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "filter_data": {
+                                        "properties": {
+                                            "name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "status": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "sort_data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "colId": {
+                                                    "type": "string"
+                                                },
+                                                "sort": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/create": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Create new Category",
+                "operationId": "ce542fa61da144ad784bbcd0216d43e2",
+                "parameters": [
+                    {
+                        "name": "product_type_id",
+                        "in": "query",
+                        "description": "Product Type ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "parent_id",
+                        "in": "query",
+                        "description": "Parent Category ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Category Name - Validations: required, unique, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Category Description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tools_count",
+                        "in": "query",
+                        "description": "Tools Count",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort Order",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "logo": {
+                                        "description": "Category Logo Image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Category created successfully",
+                        "content": {
+                            "multipart/form-data": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/{id}/details": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get Category details",
+                "operationId": "52f389831334a2a2d537b892f8c0bf41",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/{id}/update": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Update Category",
+                "operationId": "3288dbae204ab52071e8c6fd7e3b1387",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "product_type_id",
+                        "in": "query",
+                        "description": "Product Type ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "parent_id",
+                        "in": "query",
+                        "description": "Parent Category ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Category Name - Validations: required, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Category Description",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tools_count",
+                        "in": "query",
+                        "description": "Tools Count",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort Order",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "logo": {
+                                        "description": "Category Logo Image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Delete Category",
+                "operationId": "61ffd6aaf623f7fb92c0587101085790",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Change status of Category",
+                "operationId": "8c29f7c87acdd86efce5e2e8e2ea9bdb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "description": "Valid values: Active, InActive",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/categories/active/list": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Get active categories",
+                "operationId": "fa65a081cb23c2012703a4aa39f82f18",
+                "parameters": [
+                    {
+                        "name": "product_type_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
         "/login": {
             "post": {
                 "tags": [
@@ -455,6 +1046,1988 @@
                 }
             }
         },
+        "/price-types": {
+            "post": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Get list of Price Types",
+                "operationId": "price-type-list",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "filter_data": {
+                                        "properties": {
+                                            "name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "product_type_name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "status": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "sort_data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "colId": {
+                                                    "type": "string"
+                                                },
+                                                "sort": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/create": {
+            "post": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Create new Price Type",
+                "operationId": "5c47e8fc475e404aebc2db1bed42bb27",
+                "parameters": [
+                    {
+                        "name": "product_type_id",
+                        "in": "query",
+                        "description": "Product Type ID - Validations: required, exists in product_types table",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Price Type Name - Validations: required, unique, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive (default: InActive)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Price Type created successfully",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/{id}/details": {
+            "get": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Get Price Type details",
+                "operationId": "ad6e81c2cab95f9fd1b293ca3c0270a2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/{id}/update": {
+            "post": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Update Price Type",
+                "operationId": "cb7b1a8158dc4cbfed50244e62d3a463",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "product_type_id",
+                        "in": "query",
+                        "description": "Product Type ID - Validations: required, exists in product_types table",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Price Type Name - Validations: required, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Delete Price Type",
+                "operationId": "c5d1150901bed4438a76f0682750afd6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Change Price Type status",
+                "operationId": "bd50432478e87e8434113ed38c8609bb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Validations: Active, InActive",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/active/list": {
+            "get": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Get all active price types for dropdown",
+                "operationId": "f69ffb6917f51d1fa5d823858afa1228",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/price-types/product-type/{productTypeId}": {
+            "get": {
+                "tags": [
+                    "Price Types"
+                ],
+                "summary": "Get price types by product type",
+                "operationId": "0dfbfc98996876e4f9ac240e6a8d7780",
+                "parameters": [
+                    {
+                        "name": "productTypeId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types": {
+            "post": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Get list of Product Types",
+                "operationId": "product-type-list",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "filter_data": {
+                                        "properties": {
+                                            "name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "tag_line": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "status": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "sort_data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "colId": {
+                                                    "type": "string"
+                                                },
+                                                "sort": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/create": {
+            "post": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Create new Product Type",
+                "operationId": "278eb18928e720c65dca6e863698c981",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Product Type Name - Validations: required, unique, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tag_line",
+                        "in": "query",
+                        "description": "Tag Line - Validations: nullable, max:255",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "configuration",
+                        "in": "query",
+                        "description": "Configuration JSON - Validations: nullable",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort Order - Validations: nullable, integer",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product Type created successfully",
+                        "content": {
+                            "multipart/form-data": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/{id}/details": {
+            "get": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Get Product Type details",
+                "operationId": "eb481074b6c7da833641230fe6d1720f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/{id}/update": {
+            "post": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Update Product Type",
+                "operationId": "d0187a75be9c97c14c9bed205b4b8da2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Product Type Name - Validations: required, max:255",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tag_line",
+                        "in": "query",
+                        "description": "Tag Line - Validations: nullable, max:255",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "configuration",
+                        "in": "query",
+                        "description": "Configuration JSON - Validations: nullable",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_order",
+                        "in": "query",
+                        "description": "Sort Order - Validations: nullable, integer",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Status - Valid values: Active, InActive",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Active",
+                                "InActive"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Delete Product Type",
+                "operationId": "44e9199814c1ef900ad216fdce5c3740",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Change Product Type status",
+                "operationId": "57c7732a749e7ff1ac6c71beccf54ff1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Validations: Active, InActive",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/product-types/active/list": {
+            "get": {
+                "tags": [
+                    "Product Types"
+                ],
+                "summary": "Get all active product types for dropdown",
+                "operationId": "2b019ff624262309ca686225af305f66",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/create": {
+            "post": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Create new Role",
+                "operationId": "f6669ecc65e1f7883f4cb6dfae6ed33a",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Role name - Validations: min=3, max=50, unique",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "privileges",
+                        "in": "query",
+                        "description": "Comma-separated list of privilege IDs",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_editable",
+                        "in": "query",
+                        "description": "Whether role is editable (default: true)",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Whether role is active (default: true)",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role created successfully",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/{id}/details": {
+            "get": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Get Role details by ID",
+                "operationId": "1c0308ce2205f46cba2c26cf291b3806",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/{id}/update": {
+            "post": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Update Role",
+                "operationId": "b43d3c5388f04155a4925b06b9dc0388",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Role name - Validations: min=3, max=50, unique",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "privileges",
+                        "in": "query",
+                        "description": "Comma-separated list of privilege IDs",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "is_editable",
+                        "in": "query",
+                        "description": "Whether role is editable",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Whether role is active",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Delete Role",
+                "operationId": "cbf45476d20dbe8ea12d46b2d02c9ec4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Change Role status",
+                "operationId": "cdc6f85fb2572e08af5c2109d66239dd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Validations: 0,1",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/roles/active/list": {
+            "get": {
+                "tags": [
+                    "Role Management"
+                ],
+                "summary": "Get all active roles for dropdown",
+                "operationId": "c65aeb77f495943565e72304bb69e3d3",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of Admin Users",
+                "operationId": "user-list",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "filter_data": {
+                                        "properties": {
+                                            "first_name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "last_name": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "email": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "phone_number": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "created_at": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateFrom": {
+                                                        "type": "string"
+                                                    },
+                                                    "dateTo": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "is_active": {
+                                                "properties": {
+                                                    "filterType": {
+                                                        "type": "string"
+                                                    },
+                                                    "type": {
+                                                        "type": "string"
+                                                    },
+                                                    "filter": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "sort_data": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "colId": {
+                                                    "type": "string"
+                                                },
+                                                "sort": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "per_page": {
+                                        "type": "integer"
+                                    },
+                                    "page": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create new User",
+                "operationId": "3d24f61f713347bee2c33c4acd769fa3",
+                "parameters": [
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "description": "Validations: min=3, max=50",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "description": "Validations: min=3, max=50",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Validations: min=3, max=70",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "Validations: min=8, max=20",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "User role - Valid values: Super Admin, Admin, Users",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Super Admin",
+                                "Admin",
+                                "Users"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "phone_number",
+                        "in": "query",
+                        "description": "Phone number (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country_code",
+                        "in": "query",
+                        "description": "Country code (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "content": {
+                            "multipart/form-data": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}/details": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get Admin User details",
+                "operationId": "bc6623bb4c46cab26fdb0136775cf4fe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}/update": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update User",
+                "operationId": "a91dc6d8d6a424cc5d280b8d730992d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "first_name",
+                        "in": "query",
+                        "description": "Validations: min=3, max=50",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "query",
+                        "description": "Validations: min=3, max=50",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Validations: min=3, max=70",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "User role - Valid values: Super Admin, Admin, Users",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "Super Admin",
+                                "Admin",
+                                "Users"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "phone_number",
+                        "in": "query",
+                        "description": "Phone number (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country_code",
+                        "in": "query",
+                        "description": "Country code (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete Admin User",
+                "operationId": "32f5fa95085f7642b0cbf5c6eae73171",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}/change-status": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Change Admin User status",
+                "operationId": "3f36291b128a346bf23fde58432f3c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Validations: 0,1",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
+        "/users/active/list": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all active admin users for dropdown",
+                "operationId": "fc04af51ae92a773b4789427d4c1a46b",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    },
+                    {
+                        "x_localization": []
+                    }
+                ]
+            }
+        },
         "/cms-page/{slug}": {
             "get": {
                 "tags": [
@@ -796,888 +3369,6 @@
                     }
                 ]
             }
-        },
-        "/roles/create": {
-            "post": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Create new Role",
-                "operationId": "3b1e91e5f753915dde5425115bf4662b",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "description": "Role name - Validations: min=3, max=50, unique",
-                                        "type": "string"
-                                    },
-                                    "privileges": {
-                                        "description": "Array of privilege IDs",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "is_editable": {
-                                        "description": "Whether role is editable (default: true)",
-                                        "type": "boolean"
-                                    },
-                                    "is_active": {
-                                        "description": "Whether role is active (default: true)",
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Role created successfully",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/roles/{id}/details": {
-            "get": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Get Role details by ID",
-                "operationId": "d94ae89106273f672ad00b3a2aa8fe7b",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/roles/{id}/update": {
-            "post": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Update Role",
-                "operationId": "789ddc6e11524107002ec595073d0fd6",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name"
-                                ],
-                                "properties": {
-                                    "name": {
-                                        "description": "Role name - Validations: min=3, max=50, unique",
-                                        "type": "string"
-                                    },
-                                    "privileges": {
-                                        "description": "Array of privilege IDs",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "is_editable": {
-                                        "description": "Whether role is editable",
-                                        "type": "boolean"
-                                    },
-                                    "is_active": {
-                                        "description": "Whether role is active",
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/roles/{id}/delete": {
-            "delete": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Delete Role",
-                "operationId": "6888d06dda39ed35d49d4d7a546834b4",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/roles/{id}/change-status": {
-            "post": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Change Role status",
-                "operationId": "d54c131672b851e77f9205ee4b4a89dc",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "is_active",
-                        "in": "query",
-                        "description": "Validations: 0,1",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/roles/active/list": {
-            "get": {
-                "tags": [
-                    "Role Management"
-                ],
-                "summary": "Get all active roles for dropdown",
-                "operationId": "666372461a2eb649db9c7b4d9ff6fc08",
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users": {
-            "post": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Get list of Admin Users",
-                "operationId": "user-list",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "filter_data": {
-                                        "properties": {
-                                            "first_name": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "filter": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "last_name": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "filter": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "email": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "filter": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "phone_number": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "filter": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "created_at": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "dateFrom": {
-                                                        "type": "string"
-                                                    },
-                                                    "dateTo": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            },
-                                            "is_active": {
-                                                "properties": {
-                                                    "filterType": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": {
-                                                        "type": "string"
-                                                    },
-                                                    "filter": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "sort_data": {
-                                        "type": "array",
-                                        "items": {
-                                            "properties": {
-                                                "colId": {
-                                                    "type": "string"
-                                                },
-                                                "sort": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "per_page": {
-                                        "type": "integer"
-                                    },
-                                    "page": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/create": {
-            "post": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Create new User",
-                "operationId": "42604ce6d3675842a3bc3866978468f9",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "first_name",
-                                    "last_name",
-                                    "password",
-                                    "email",
-                                    "role"
-                                ],
-                                "properties": {
-                                    "first_name": {
-                                        "description": "Validations: min=3, max=50",
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "description": "Validations: min=3, max=50",
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "description": "Validations: min=3, max=70",
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "description": "Validations: min=8, max=20",
-                                        "type": "string"
-                                    },
-                                    "role": {
-                                        "description": "User role - Valid values: Super Admin, Admin, Users",
-                                        "type": "string"
-                                    },
-                                    "phone_number": {
-                                        "description": "Phone number (optional)",
-                                        "type": "string"
-                                    },
-                                    "country_code": {
-                                        "description": "Country code (optional)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User created successfully",
-                        "content": {
-                            "multipart/form-data": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "400": {
-                        "description": "Invalid request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/{id}/details": {
-            "get": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Get Admin User details",
-                "operationId": "86ca1511697244e6b315e106d6222adc",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/{id}/update": {
-            "post": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Update User",
-                "operationId": "6489c87d6a762f1db66bd9d4cd2986d6",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "first_name",
-                                    "last_name",
-                                    "email",
-                                    "role"
-                                ],
-                                "properties": {
-                                    "first_name": {
-                                        "description": "Validations: min=3, max=50",
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "description": "Validations: min=3, max=50",
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "description": "Validations: min=3, max=70",
-                                        "type": "string"
-                                    },
-                                    "role": {
-                                        "description": "User role - Valid values: Super Admin, Admin, Users",
-                                        "type": "string"
-                                    },
-                                    "phone_number": {
-                                        "description": "Phone number (optional)",
-                                        "type": "string"
-                                    },
-                                    "country_code": {
-                                        "description": "Country code (optional)",
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/{id}/delete": {
-            "delete": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Delete Admin User",
-                "operationId": "9908e79ae692c0ad7b8730966325d660",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/{id}/change-status": {
-            "post": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Change Admin User status",
-                "operationId": "2a1b00219da2279b2d054952b1b66f4a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": false,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "is_active",
-                        "in": "query",
-                        "description": "Validations: 0,1",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
-        },
-        "/admin-users/active/list": {
-            "get": {
-                "tags": [
-                    "Admin Users Management"
-                ],
-                "summary": "Get all active admin users for dropdown",
-                "operationId": "d5dfdc81c499662f4454ac411cfbf79d",
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "500": {
-                        "description": "Server Error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    },
-                    {
-                        "x_localization": []
-                    }
-                ]
-            }
         }
     },
     "components": {
@@ -1694,12 +3385,24 @@
     },
     "tags": [
         {
+            "name": "Categories",
+            "description": "API endpoints for managing Categories"
+        },
+        {
+            "name": "Price Types",
+            "description": "API endpoints for managing Price Types"
+        },
+        {
+            "name": "Product Types",
+            "description": "API endpoints for managing Product Types"
+        },
+        {
             "name": "Role Management",
             "description": "API endpoints for managing Roles"
         },
         {
-            "name": "Admin Users Management",
-            "description": "API endpoints for managing Admin Users"
+            "name": "Users",
+            "description": "API endpoints for managing Users"
         },
         {
             "name": "Login",
