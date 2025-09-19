@@ -39,7 +39,7 @@ class UpdateProductRequest extends FormRequest
             'is_verified' => 'nullable|boolean',
             'is_gold' => 'nullable|boolean',
             'is_human_verified' => 'nullable|boolean',
-            'one_time_token' => 'nullable|string|size:36|unique:products,one_time_token,' . $id . ',id,deleted_at,NULL',
+            'one_time_token' => 'nullable|string|max:255|unique:products,one_time_token,' . $id . ',id,deleted_at,NULL',
             'is_token_used' => 'nullable|boolean',
             'logo_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
             'product_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
