@@ -165,6 +165,11 @@ class UserRepository extends BaseRepository
                     continue;
                 }
 
+                // Exclude privileges with empty paths from menu
+                if (empty(trim($privileges->path))) {
+                    continue;
+                }
+
                 if ($privileges->parent_id == 0) {
                     $groupId = $privileges->group_id;
                     if (empty($groupId)) {

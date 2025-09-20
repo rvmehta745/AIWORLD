@@ -228,6 +228,19 @@ class LovPrivilegeSeeder extends Seeder
             'childData' => []
         ];
 
+        // Menu Generate privilege
+        $parentData[] = [
+            'id'        => $id += 1,
+            'sequence'  => 16,
+            'group_id'  => 0,
+            'parent_id' => 0,
+            'name'      => 'Generate Menu',
+            'path' => '', // Empty path to prevent appearing in menu
+            'permission_key' => 'MENU_GENERATE',
+            'is_active' => 1,
+            'childData' => []
+        ];
+
         // --------------------------
         // Save into DB
         // --------------------------
