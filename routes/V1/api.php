@@ -108,6 +108,10 @@ Route::group(['middleware' => ['api']], function () {
             Route::post('{id}/change-status', [ProductController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCTS_EDIT');
             Route::get('/active/list', [ProductController::class, 'getActiveProducts'])->middleware('checkUserPermission:PRODUCTS_INDEX');
         });
+
+        // Menu generation for admin
+        Route::post('admin/generate-menu', [App\Http\Controllers\V1\Admin\MenuController::class, 'generateMenu'])
+            ->middleware('checkUserPermission:MENU_GENERATE');
     });
 
     Route::group(['prefix' => ''], function () {
@@ -117,3 +121,6 @@ Route::group(['middleware' => ['api']], function () {
         Route::get('/roles-list', [CommonController::class, 'rolesList']);
     });
 });
+
+// Menu retrieval for frontend
+Route::get('menu', [App\Http\Controllers\V1\CommonController::class, 'getMenu']);
