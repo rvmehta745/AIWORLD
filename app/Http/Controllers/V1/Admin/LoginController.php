@@ -616,7 +616,7 @@ class LoginController extends BaseController
 
             // Get max sales volume from manage_contact table
             // Add max sales volume to the response
-            return General::setResponse("SUCCESS", ["User data fetched successfully"], [
+            return General::setResponse("SUCCESS", [], [
                 'user' => $user
             ]);
         } catch (Throwable $e) {
