@@ -159,6 +159,10 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *                @OA\Property(property="category_ids", type="array", 
      *                    @OA\Items(type="integer"),
      *                    description="Array of category IDs to associate with the product"
+     *                ),
+     *                @OA\Property(property="price_type_ids", type="array", 
+     *                    @OA\Items(type="integer"),
+     *                    description="Array of price type IDs to associate with the product"
      *                )
      *            )
      *        )
@@ -307,6 +311,10 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *                @OA\Property(property="category_ids", type="array", 
      *                    @OA\Items(type="integer"),
      *                    description="Array of category IDs to associate with the product"
+     *                ),
+     *                @OA\Property(property="price_type_ids", type="array", 
+     *                    @OA\Items(type="integer"),
+     *                    description="Array of price type IDs to associate with the product"
      *                )
      *            )
      *        )

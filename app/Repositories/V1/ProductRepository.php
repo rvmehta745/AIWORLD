@@ -153,6 +153,11 @@ class ProductRepository extends BaseRepository
             $product->categories()->sync($categoryData);
         }
 
+        // Handle price type assignments
+        if ($request->has('price_type_ids') && is_array($request->price_type_ids)) {
+            $product->priceTypes()->sync($request->price_type_ids);
+        }
+
         return $product;
     }
 
@@ -170,6 +175,7 @@ class ProductRepository extends BaseRepository
                 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at',
                 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified'
             )
+            ->with('productType:id,name')
             ->where('id', $id)
             ->first();
 
@@ -179,6 +185,13 @@ class ProductRepository extends BaseRepository
             }
             if (!empty($data->product_image)) {
                 $data->product_image = asset('storage/' . $data->product_image);
+            }
+            
+            // Add product type name
+            if ($data->productType) {
+                $data->product_type_name = $data->productType->name;
+                // Remove the productType relationship from response
+                unset($data->productType);
             }
         }
 
@@ -192,13 +205,39 @@ class ProductRepository extends BaseRepository
     {
         $product = $this->product
             ->select('id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image', 'short_description', 'long_description', 'product_url', 'video_url', 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3', 'use_case1', 'use_case2', 'use_case3', 'additional_info', 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at', 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified')
-            ->with(['categories:id,name'])
+            ->with([
+                'productType:id,name',
+                'categories' => function($query) {
+                    $query->select('id', 'name');
+                },
+                'priceTypes' => function($query) {
+                    $query->select('id', 'name');
+                }
+            ])
             ->where('id', $id)
             ->first();
 
         if ($product) {
-            // Add category_ids array for easier frontend handling
-            $product->category_ids = $product->categories->pluck('id')->toArray();
+            // Add product type name
+            if ($product->productType) {
+                $product->product_type_name = $product->productType->name;
+                // Remove the productType relationship from response
+                unset($product->productType);
+            }
+
+            // Transform categories to remove pivot data
+            if ($product->categories) {
+                $product->categories->each(function($category) {
+                    $category->makeHidden(['pivot']);
+                });
+            }
+
+            // Transform priceTypes to remove pivot data
+            if ($product->priceTypes) {
+                $product->priceTypes->each(function($priceType) {
+                    $priceType->makeHidden(['pivot']);
+                });
+            }
         }
 
         return $product;
@@ -266,6 +305,11 @@ class ProductRepository extends BaseRepository
                 ];
             }
             $data->categories()->sync($categoryData);
+        }
+
+        // Handle price type assignments
+        if ($request->has('price_type_ids') && is_array($request->price_type_ids)) {
+            $data->priceTypes()->sync($request->price_type_ids);
         }
 
         return $data;

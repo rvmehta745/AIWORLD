@@ -87,4 +87,12 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'categories_products', 'product_id', 'category_id');
     }
+
+    /**
+     * The price types that belong to the product.
+     */
+    public function priceTypes()
+    {
+        return $this->belongsToMany(PriceType::class, 'products_price_types', 'product_id', 'price_type_id');
+    }
 }

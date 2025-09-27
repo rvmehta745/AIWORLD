@@ -45,6 +45,8 @@ class UpdateProductRequest extends FormRequest
             'product_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
             'category_ids' => 'nullable|array',
             'category_ids.*' => 'exists:categories,id',
+            'price_type_ids' => 'nullable|array',
+            'price_type_ids.*' => 'exists:price_types,id',
         ];
     }
 }
