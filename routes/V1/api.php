@@ -78,6 +78,7 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [ProductTypeController::class, 'destroy'])->middleware('checkUserPermission:PRODUCT_TYPES_DELETE');
             Route::post('{id}/change-status', [ProductTypeController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCT_TYPES_EDIT');
             Route::get('/active/list', [ProductTypeController::class, 'getActiveProductTypes'])->middleware('checkUserPermission:PRODUCT_TYPES_INDEX');
+            Route::post('/reorder', [ProductTypeController::class, 'reorder'])->middleware('checkUserPermission:PRODUCT_TYPES_EDIT');
         });
         Route::group(['prefix' => 'categories'], function () {
             Route::post('/', [CategoryController::class, 'index'])->middleware('checkUserPermission:CATEGORIES_INDEX');
@@ -87,6 +88,7 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [CategoryController::class, 'destroy'])->middleware('checkUserPermission:CATEGORIES_DELETE');
             Route::post('{id}/change-status', [CategoryController::class, 'changeStatus'])->middleware('checkUserPermission:CATEGORIES_EDIT');
             Route::get('/active/list', [CategoryController::class, 'getActiveCategories'])->middleware('checkUserPermission:CATEGORIES_INDEX');
+            Route::post('/reorder', [CategoryController::class, 'reorder'])->middleware('checkUserPermission:CATEGORIES_EDIT');
         });
         Route::group(['prefix' => 'price-types'], function () {
             Route::post('/', [PriceTypeController::class, 'index'])->middleware('checkUserPermission:PRICING_TYPES_INDEX');
@@ -107,6 +109,7 @@ Route::group(['middleware' => ['api']], function () {
             Route::delete('{id}/delete', [ProductController::class, 'destroy'])->middleware('checkUserPermission:PRODUCTS_DELETE');
             Route::post('{id}/change-status', [ProductController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCTS_EDIT');
             Route::get('/active/list', [ProductController::class, 'getActiveProducts'])->middleware('checkUserPermission:PRODUCTS_INDEX');
+            Route::post('/reorder', [ProductController::class, 'reorder'])->middleware('checkUserPermission:PRODUCTS_EDIT');
         });
 
         // Menu generation for admin

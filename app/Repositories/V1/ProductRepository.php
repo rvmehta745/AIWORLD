@@ -140,7 +140,20 @@ class ProductRepository extends BaseRepository
             $storeData['product_image'] = $path;
         }
 
-        return Product::create($storeData);
+        $product = Product::create($storeData);
+
+        // Handle category assignments
+        if ($request->has('category_ids') && is_array($request->category_ids)) {
+            $categoryData = [];
+            foreach ($request->category_ids as $categoryId) {
+                $categoryData[$categoryId] = [
+                    'product_type_id' => $request->product_type_id
+                ];
+            }
+            $product->categories()->sync($categoryData);
+        }
+
+        return $product;
     }
 
     /**
@@ -177,10 +190,18 @@ class ProductRepository extends BaseRepository
      */
     public function detailsByID($id)
     {
-        return $this->product
+        $product = $this->product
             ->select('id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image', 'short_description', 'long_description', 'product_url', 'video_url', 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3', 'use_case1', 'use_case2', 'use_case3', 'additional_info', 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at', 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified')
+            ->with(['categories:id,name'])
             ->where('id', $id)
             ->first();
+
+        if ($product) {
+            // Add category_ids array for easier frontend handling
+            $product->category_ids = $product->categories->pluck('id')->toArray();
+        }
+
+        return $product;
     }
 
     /**
@@ -235,6 +256,18 @@ class ProductRepository extends BaseRepository
         }
 
         $data->update($updateData);
+
+        // Handle category assignments
+        if ($request->has('category_ids') && is_array($request->category_ids)) {
+            $categoryData = [];
+            foreach ($request->category_ids as $categoryId) {
+                $categoryData[$categoryId] = [
+                    'product_type_id' => $request->product_type_id
+                ];
+            }
+            $data->categories()->sync($categoryData);
+        }
+
         return $data;
     }
 
