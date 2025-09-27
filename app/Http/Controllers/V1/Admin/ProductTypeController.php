@@ -530,4 +530,98 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
+
+    /**
+     * @OA\Post(
+     * path="/product-types/reorder",
+     * tags = {"Product Types"},
+     * summary = "Reorder product types based on drag and drop",
+     * security={{"bearer_token":{}}, {"x_localization":{}}},
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             required={"product_type_id", "old_position", "new_position"},
+     *             @OA\Property(property="product_type_id", type="integer", description="ID of the product type to reorder"),
+     *             @OA\Property(property="old_position", type="integer", minimum=1, description="Current position of the product type"),
+     *             @OA\Property(property="new_position", type="integer", minimum=1, description="New position for the product type")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(
+     *     response=200,
+     *     description="Product type reordered successfully",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad Request - No change needed",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="no_change")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(response=401, description="Unauthenticated"),
+     * @OA\Response(response=403, description="Forbidden"),
+     * @OA\Response(response=404, description="Product type not found"),
+     * @OA\Response(response=500, description="Server Error")
+     * )
+     */
+    public function reorder(Request $request)
+    {
+        try {
+            $request->validate([
+                'product_type_id' => 'required|integer|exists:product_types,id',
+                'old_position'    => 'required|integer|min:1',
+                'new_position'    => 'required|integer|min:1',
+            ]);
+
+            $productTypeId = $request->product_type_id;
+            $oldPosition   = $request->old_position;
+            $newPosition   = $request->new_position;
+
+            if ($oldPosition == $newPosition) {
+                return response()->json(['status' => 'no_change']);
+            }
+
+            DB::beginTransaction();
+
+            // Get product type
+            $productType = \App\Models\ProductType::where('id', $productTypeId)->firstOrFail();
+
+            if ($oldPosition < $newPosition) {
+                // Shift UP (dragging downwards)
+                // Move product types between old_position+1 and new_position down by 1
+                \App\Models\ProductType::whereBetween('sort_order', [$oldPosition + 1, $newPosition])
+                    ->decrement('sort_order');
+            } else {
+                // Shift DOWN (dragging upwards)
+                // Move product types between new_position and old_position-1 up by 1
+                \App\Models\ProductType::whereBetween('sort_order', [$newPosition, $oldPosition - 1])
+                    ->increment('sort_order');
+            }
+
+            // Set new position for dragged product type
+            $productType->sort_order = $newPosition;
+            $productType->save();
+
+            DB::commit();
+            return response()->json(['status' => 'success']);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return General::setResponse("EXCEPTION", $e->getMessage());
+        }
+    }
 }

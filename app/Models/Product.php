@@ -51,6 +51,7 @@ class Product extends Model
         'published_at',
         'payment_status',
         'status',
+        'sort_order',
         'is_verified',
         'is_gold',
         'is_human_verified',
@@ -77,5 +78,13 @@ class Product extends Model
     public function productType()
     {
         return $this->belongsTo(ProductType::class);
+    }
+
+    /**
+     * The categories that belong to the product.
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'categories_products', 'product_id', 'category_id');
     }
 }

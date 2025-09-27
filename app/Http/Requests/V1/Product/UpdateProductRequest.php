@@ -43,6 +43,8 @@ class UpdateProductRequest extends FormRequest
             'is_token_used' => 'nullable|boolean',
             'logo_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
             'product_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'exists:categories,id',
         ];
     }
 }
