@@ -41,4 +41,13 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    /**
+     * The products that belong to the category.
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'categories_products', 'category_id', 'product_id')
+                    ->withPivot('product_type_id');
+    }
 }

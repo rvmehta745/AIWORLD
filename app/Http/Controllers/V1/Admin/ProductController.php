@@ -155,7 +155,11 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *                @OA\Property(property="is_gold", type="boolean"),
      *                @OA\Property(property="is_human_verified", type="boolean"),
      *                @OA\Property(property="one_time_token", type="string"),
-     *                @OA\Property(property="is_token_used", type="boolean")
+     *                @OA\Property(property="is_token_used", type="boolean"),
+     *                @OA\Property(property="category_ids", type="array", 
+     *                    @OA\Items(type="integer"),
+     *                    description="Array of category IDs to associate with the product"
+     *                )
      *            )
      *        )
      *    ),
@@ -299,7 +303,11 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *                @OA\Property(property="is_gold", type="boolean"),
      *                @OA\Property(property="is_human_verified", type="boolean"),
      *                @OA\Property(property="one_time_token", type="string"),
-     *                @OA\Property(property="is_token_used", type="boolean")
+     *                @OA\Property(property="is_token_used", type="boolean"),
+     *                @OA\Property(property="category_ids", type="array", 
+     *                    @OA\Items(type="integer"),
+     *                    description="Array of category IDs to associate with the product"
+     *                )
      *            )
      *        )
      *   ),
@@ -530,6 +538,100 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
             $data = $this->productService->getAllActiveProducts($productTypeId);
             return General::setResponse("SUCCESS", [], compact('data'));
         } catch (Throwable $e) {
+            return General::setResponse("EXCEPTION", $e->getMessage());
+        }
+    }
+
+    /**
+     * @OA\Post(
+     * path="/products/reorder",
+     * tags = {"Products"},
+     * summary = "Reorder products based on drag and drop",
+     * security={{"bearer_token":{}}, {"x_localization":{}}},
+     * @OA\RequestBody(
+     *     required=true,
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             required={"product_id", "old_position", "new_position"},
+     *             @OA\Property(property="product_id", type="integer", description="ID of the product to reorder"),
+     *             @OA\Property(property="old_position", type="integer", minimum=1, description="Current position of the product"),
+     *             @OA\Property(property="new_position", type="integer", minimum=1, description="New position for the product")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(
+     *     response=200,
+     *     description="Product reordered successfully",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(
+     *     response=400,
+     *     description="Bad Request - No change needed",
+     *     @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="no_change")
+     *         )
+     *     )
+     * ),
+     * @OA\Response(response=401, description="Unauthenticated"),
+     * @OA\Response(response=403, description="Forbidden"),
+     * @OA\Response(response=404, description="Product not found"),
+     * @OA\Response(response=500, description="Server Error")
+     * )
+     */
+    public function reorder(Request $request)
+    {
+        try {
+            $request->validate([
+                'product_id'    => 'required|integer|exists:products,id',
+                'old_position'  => 'required|integer|min:1',
+                'new_position'  => 'required|integer|min:1',
+            ]);
+
+            $productId   = $request->product_id;
+            $oldPosition = $request->old_position;
+            $newPosition = $request->new_position;
+
+            if ($oldPosition == $newPosition) {
+                return response()->json(['status' => 'no_change']);
+            }
+
+            DB::beginTransaction();
+
+            // Get product
+            $product = \App\Models\Product::where('id', $productId)->firstOrFail();
+
+            if ($oldPosition < $newPosition) {
+                // Shift UP (dragging downwards)
+                // Move products between old_position+1 and new_position down by 1
+                \App\Models\Product::whereBetween('sort_order', [$oldPosition + 1, $newPosition])
+                    ->decrement('sort_order');
+            } else {
+                // Shift DOWN (dragging upwards)
+                // Move products between new_position and old_position-1 up by 1
+                \App\Models\Product::whereBetween('sort_order', [$newPosition, $oldPosition - 1])
+                    ->increment('sort_order');
+            }
+
+            // Set new position for dragged product
+            $product->sort_order = $newPosition;
+            $product->save();
+
+            DB::commit();
+            return response()->json(['status' => 'success']);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
