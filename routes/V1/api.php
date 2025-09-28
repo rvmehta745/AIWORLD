@@ -11,6 +11,7 @@ use App\Http\Controllers\V1\Admin\ProductTypeController;
 use App\Http\Controllers\V1\Admin\CategoryController;
 use App\Http\Controllers\V1\Admin\PriceTypeController;
 use App\Http\Controllers\V1\Admin\ProductController;
+use App\Http\Controllers\V1\Admin\FeaturedProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -110,6 +111,16 @@ Route::group(['middleware' => ['api']], function () {
             Route::post('{id}/change-status', [ProductController::class, 'changeStatus'])->middleware('checkUserPermission:PRODUCTS_EDIT');
             Route::get('/active/list', [ProductController::class, 'getActiveProducts'])->middleware('checkUserPermission:PRODUCTS_INDEX');
             Route::post('/reorder', [ProductController::class, 'reorder'])->middleware('checkUserPermission:PRODUCTS_EDIT');
+        });
+
+        Route::group(['prefix' => 'featured-products'], function () {
+            Route::post('/', [FeaturedProductController::class, 'index'])->middleware('checkUserPermission:FEATURED_PRODUCTS_INDEX');
+            Route::post('/create', [FeaturedProductController::class, 'store'])->middleware('checkUserPermission:FEATURED_PRODUCTS_CREATE');
+            Route::get('{id}/details', [FeaturedProductController::class, 'show'])->middleware('checkUserPermission:FEATURED_PRODUCTS_INDEX');
+            Route::post('{id}/update', [FeaturedProductController::class, 'update'])->middleware('checkUserPermission:FEATURED_PRODUCTS_EDIT');
+            Route::delete('{id}/delete', [FeaturedProductController::class, 'destroy'])->middleware('checkUserPermission:FEATURED_PRODUCTS_DELETE');
+            Route::get('/active/list', [FeaturedProductController::class, 'getActiveFeaturedProducts'])->middleware('checkUserPermission:FEATURED_PRODUCTS_INDEX');
+            Route::post('/reorder', [FeaturedProductController::class, 'reorder'])->middleware('checkUserPermission:FEATURED_PRODUCTS_EDIT');
         });
 
         // Menu generation for admin

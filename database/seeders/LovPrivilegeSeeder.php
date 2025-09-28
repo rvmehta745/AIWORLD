@@ -115,18 +115,21 @@ class LovPrivilegeSeeder extends Seeder
             ]
         ];
 
-        // Featured
+        // Featured Products
         $parentData[] = [
             'id'        => $id += 1,
             'sequence'  => 9,
             'group_id'  => 0,
             'parent_id' => 0,
-            'name'      => 'Featured',
-            'path' => '/featured',
-            'permission_key' => 'FEATURED',
+            'name'      => 'Featured Products',
+            'path' => '/featured-products',
+            'permission_key' => 'FEATURED_PRODUCTS',
             'is_active' => 1,
             'childData' => [
-                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/featured', 'permission_key' => 'FEATURED_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 1, 'group_id' => 0, 'parent_id' => $id - 1, 'name' => 'List', 'path' => '/featured-products', 'permission_key' => 'FEATURED_PRODUCTS_INDEX', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 2, 'group_id' => 0, 'parent_id' => $id - 2, 'name' => 'Create', 'path' => '/featured-products/create', 'permission_key' => 'FEATURED_PRODUCTS_CREATE', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 3, 'group_id' => 0, 'parent_id' => $id - 3, 'name' => 'Edit', 'path' => '/featured-products/{id}/edit', 'permission_key' => 'FEATURED_PRODUCTS_EDIT', 'is_active' => 1],
+                ['id' => $id += 1, 'sequence' => 4, 'group_id' => 0, 'parent_id' => $id - 4, 'name' => 'Delete', 'path' => '/featured-products/{id}/delete', 'permission_key' => 'FEATURED_PRODUCTS_DELETE', 'is_active' => 1],
             ]
         ];
 
