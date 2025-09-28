@@ -123,46 +123,84 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *    tags={"Products"},
      *    summary = "Create new Product",
      *    security={{"bearer_token":{}}, {"x_localization":{}}},
-     *    @OA\RequestBody(
+     *    @OA\Parameter(
+     *        name="product_type_id",
+     *        in="query",
      *        required=true,
+     *        description="Product Type ID",
+     *        @OA\Schema(type="integer")
+     *    ),
+     *    @OA\Parameter(
+     *        name="name",
+     *        in="query",
+     *        required=true,
+     *        description="Product Name (3-100 chars)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="short_description",
+     *        in="query",
+     *        required=true,
+     *        description="Short Description (10-150 chars)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="long_description",
+     *        in="query",
+     *        required=false,
+     *        description="Long Description (20-2000 chars)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="product_url",
+     *        in="query",
+     *        required=true,
+     *        description="Product URL (max 300 chars)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="video_url",
+     *        in="query",
+     *        required=false,
+     *        description="Video URL (max 300 chars)",
+     *        @OA\Schema(type="string")
+     *    ),
+     *    @OA\Parameter(
+     *        name="category_ids[]",
+     *        in="query",
+     *        required=true,
+     *        description="Category IDs (1-5 selections)",
+     *        @OA\Schema(type="array", @OA\Items(type="integer"))
+     *    ),
+     *    @OA\Parameter(
+     *        name="price_type_ids[]",
+     *        in="query",
+     *        required=true,
+     *        description="Price Type IDs (1-2 selections)",
+     *        @OA\Schema(type="array", @OA\Items(type="integer"))
+     *    ),
+     *    @OA\Parameter(
+     *        name="status",
+     *        in="query",
+     *        required=true,
+     *        description="Product Status",
+     *        @OA\Schema(type="string", enum={"Active","Inactive","Draft"})
+     *    ),
+     *    @OA\RequestBody(
      *        @OA\MediaType(
-     *            mediaType="application/json",
+     *            mediaType="multipart/form-data",
      *            @OA\Schema(
-     *                type="object",
-     *                required={"product_type_id","name"},
-     *                @OA\Property(property="product_type_id", type="integer"),
-     *                @OA\Property(property="name", type="string"),
-     *                @OA\Property(property="short_description", type="string"),
-     *                @OA\Property(property="long_description", type="string"),
-     *                @OA\Property(property="product_url", type="string"),
-     *                @OA\Property(property="video_url", type="string"),
-     *                @OA\Property(property="seo_text", type="string"),
-     *                @OA\Property(property="extra_link1", type="string"),
-     *                @OA\Property(property="extra_link2", type="string"),
-     *                @OA\Property(property="extra_link3", type="string"),
-     *                @OA\Property(property="use_case1", type="string"),
-     *                @OA\Property(property="use_case2", type="string"),
-     *                @OA\Property(property="use_case3", type="string"),
-     *                @OA\Property(property="additional_info", type="string"),
-     *                @OA\Property(property="twitter", type="string"),
-     *                @OA\Property(property="facebook", type="string"),
-     *                @OA\Property(property="linkedin", type="string"),
-     *                @OA\Property(property="telegram", type="string"),
-     *                @OA\Property(property="published_at", type="string", format="date-time"),
-     *                @OA\Property(property="payment_status", type="string", enum={"Pending","Success","Failed","ReadyForRefund"}),
-     *                @OA\Property(property="status", type="string", enum={"Pending","OneTimeLinkPending","OneTimeLinkUsed"}),
-     *                @OA\Property(property="is_verified", type="boolean"),
-     *                @OA\Property(property="is_gold", type="boolean"),
-     *                @OA\Property(property="is_human_verified", type="boolean"),
-     *                @OA\Property(property="one_time_token", type="string"),
-     *                @OA\Property(property="is_token_used", type="boolean"),
-     *                @OA\Property(property="category_ids", type="array", 
-     *                    @OA\Items(type="integer"),
-     *                    description="Array of category IDs to associate with the product"
+     *                @OA\Property(
+     *                    property="logo_image",
+     *                    type="string",
+     *                    format="binary",
+     *                    description="Product Logo Image (required, max 2MB)"
      *                ),
-     *                @OA\Property(property="price_type_ids", type="array", 
-     *                    @OA\Items(type="integer"),
-     *                    description="Array of price type IDs to associate with the product"
+     *                @OA\Property(
+     *                    property="product_image[]",
+     *                    type="array",
+     *                    @OA\Items(type="string", format="binary"),
+     *                    description="Product Images (multiple, max 5MB each)"
      *                )
      *            )
      *        )

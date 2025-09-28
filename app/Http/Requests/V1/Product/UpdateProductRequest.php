@@ -15,38 +15,69 @@ class UpdateProductRequest extends FormRequest
     {
         $id = $this->route('id');
         return [
+            // Basic Information
             'product_type_id' => 'required|exists:product_types,id',
-            'name' => 'required|string|max:255|unique:products,name,' . $id . ',id,deleted_at,NULL',
-            'short_description' => 'nullable|string',
-            'long_description' => 'nullable|string',
-            'product_url' => 'nullable|url|max:2048',
-            'video_url' => 'nullable|url|max:2048',
-            'seo_text' => 'nullable|string',
-            'extra_link1' => 'nullable|url|max:2048',
-            'extra_link2' => 'nullable|url|max:2048',
-            'extra_link3' => 'nullable|url|max:2048',
+            'name' => 'required|string|min:3|max:100|unique:products,name,' . $id . ',id,deleted_at,NULL',
+            'short_description' => 'required|string|min:10|max:150',
+            'long_description' => 'nullable|string|min:20|max:2000',
+            
+            // Media Information
+            'logo_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048', // 2MB max
+            'product_image' => 'nullable|array', // Multiple images as JSON array
+            'product_image.*' => 'image|mimes:jpeg,jpg,png,webp|max:5120', // 5MB max per image
+            'video_url' => 'nullable|url|max:300',
+            
+            // Links & Social Media
+            'product_url' => 'required|url|max:300',
+            'extra_link1' => 'nullable|url|max:300',
+            'extra_link2' => 'nullable|url|max:300',
+            'extra_link3' => 'nullable|url|max:300',
+            'twitter' => 'nullable|url|max:200',
+            'facebook' => 'nullable|url|max:200',
+            'linkedin' => 'nullable|url|max:200',
+            'telegram' => 'nullable|url|max:200',
+            
+            // Categorization
+            'category_ids' => 'required|array|min:1|max:5',
+            'category_ids.*' => 'exists:categories,id',
+            'price_type_ids' => 'required|array|min:1|max:2',
+            'price_type_ids.*' => 'exists:price_types,id',
+            
+            // Status & Badges
+            'status' => 'required|in:Active,Inactive,Draft',
+            'payment_status' => 'nullable|in:Paid,Unpaid',
+            'is_verified' => 'nullable|boolean',
+            'is_gold' => 'nullable|boolean',
+            
+            // SEO & Additional Info
+            'seo_text' => 'nullable|string|min:10|max:160',
+            'additional_info' => 'nullable|string|max:500',
+            
+            // Use cases (optional)
             'use_case1' => 'nullable|string',
             'use_case2' => 'nullable|string',
             'use_case3' => 'nullable|string',
-            'additional_info' => 'nullable|string|max:255',
-            'twitter' => 'nullable|string|max:255',
-            'facebook' => 'nullable|string|max:255',
-            'linkedin' => 'nullable|string|max:255',
-            'telegram' => 'nullable|string|max:255',
+            
+            // Other fields
             'published_at' => 'nullable|date',
-            'payment_status' => 'nullable|in:Pending,Success,Failed,ReadyForRefund',
-            'status' => 'nullable|in:Pending,OneTimeLinkPending,OneTimeLinkUsed',
-            'is_verified' => 'nullable|boolean',
-            'is_gold' => 'nullable|boolean',
-            'is_human_verified' => 'nullable|boolean',
-            'one_time_token' => 'nullable|string|max:255|unique:products,one_time_token,' . $id . ',id,deleted_at,NULL',
-            'is_token_used' => 'nullable|boolean',
-            'logo_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
-            'product_image' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:4096',
-            'category_ids' => 'nullable|array',
-            'category_ids.*' => 'exists:categories,id',
-            'price_type_ids' => 'nullable|array',
-            'price_type_ids.*' => 'exists:price_types,id',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.min' => 'Product name must be at least 3 characters.',
+            'name.max' => 'Product name cannot exceed 100 characters.',
+            'short_description.min' => 'Short description must be at least 10 characters.',
+            'short_description.max' => 'Short description cannot exceed 150 characters.',
+            'long_description.min' => 'Long description must be at least 20 characters.',
+            'long_description.max' => 'Long description cannot exceed 2000 characters.',
+            'category_ids.min' => 'At least 1 category must be selected.',
+            'category_ids.max' => 'Maximum 5 categories can be selected.',
+            'price_type_ids.min' => 'At least 1 price type must be selected.',
+            'price_type_ids.max' => 'Maximum 2 price types can be selected.',
+            'product_url.required' => 'Product URL is required.',
+            'status.required' => 'Product status is required.',
         ];
     }
 }

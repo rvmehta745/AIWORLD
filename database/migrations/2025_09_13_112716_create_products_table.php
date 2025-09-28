@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_type_id');
-            $table->char('one_time_token', 36)->nullable()->unique();
+            $table->string('one_time_token', 255)->nullable()->unique();
             $table->boolean('is_token_used')->default(0);
             $table->string('name', 255);
             $table->string('slug', 150)->unique();
             $table->string('logo_image', 191)->nullable();
-            $table->string('product_image', 191)->nullable();
+            $table->json('product_image')->nullable(); // Changed to JSON for multiple images
             $table->text('short_description')->nullable();
             $table->text('long_description')->nullable();
             $table->string('product_url', 2048)->nullable();
@@ -39,6 +39,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable();
             $table->string('payment_status', 50)->default('Pending');
             $table->string('status', 50)->default('Pending');
+            $table->integer('sort_order')->nullable(); // Added sort_order field
             $table->boolean('is_verified')->default(0);
             $table->boolean('is_gold')->default(0);
             $table->boolean('is_human_verified')->default(0);

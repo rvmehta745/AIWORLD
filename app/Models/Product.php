@@ -63,6 +63,7 @@ class Product extends Model
         'is_gold' => 'boolean',
         'is_human_verified' => 'boolean',
         'published_at' => 'datetime',
+        'product_image' => 'array', // Cast JSON to array
     ];
 
     public function sluggable(): array
