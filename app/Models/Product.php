@@ -63,6 +63,7 @@ class Product extends Model
         'is_gold' => 'boolean',
         'is_human_verified' => 'boolean',
         'published_at' => 'datetime',
+        'product_image' => 'array', // Cast JSON to array
     ];
 
     public function sluggable(): array
@@ -86,5 +87,13 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'categories_products', 'product_id', 'category_id');
+    }
+
+    /**
+     * The price types that belong to the product.
+     */
+    public function priceTypes()
+    {
+        return $this->belongsToMany(PriceType::class, 'products_price_types', 'product_id', 'price_type_id');
     }
 }

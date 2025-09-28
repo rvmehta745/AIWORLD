@@ -90,7 +90,19 @@ class ProductRepository extends BaseRepository
                 $row->logo_image = asset('storage/' . $row->logo_image);
             }
             if (!empty($row->product_image)) {
-                $row->product_image = asset('storage/' . $row->product_image);
+                // Handle JSON array of product images
+                if (is_string($row->product_image)) {
+                    $productImages = json_decode($row->product_image, true);
+                    if (is_array($productImages)) {
+                        $row->product_image = array_map(function($image) {
+                            return asset('storage/' . $image);
+                        }, $productImages);
+                    }
+                } elseif (is_array($row->product_image)) {
+                    $row->product_image = array_map(function($image) {
+                        return asset('storage/' . $image);
+                    }, $row->product_image);
+                }
             }
         }
 
@@ -131,13 +143,20 @@ class ProductRepository extends BaseRepository
             'is_human_verified' => $request->is_human_verified ?? 0,
         ];
 
+        // Handle logo image upload (single image)
         if ($request->hasFile('logo_image')) {
-            $path = $request->file('logo_image')->store('product_image', 'public');
+            $path = $request->file('logo_image')->store('product_images', 'public');
             $storeData['logo_image'] = $path;
         }
+        
+        // Handle product images upload (multiple images)
         if ($request->hasFile('product_image')) {
-            $path = $request->file('product_image')->store('product_image', 'public');
-            $storeData['product_image'] = $path;
+            $productImages = [];
+            foreach ($request->file('product_image') as $image) {
+                $path = $image->store('product_images', 'public');
+                $productImages[] = $path;
+            }
+            $storeData['product_image'] = $productImages; // Store as JSON array
         }
 
         $product = Product::create($storeData);
@@ -151,6 +170,11 @@ class ProductRepository extends BaseRepository
                 ];
             }
             $product->categories()->sync($categoryData);
+        }
+
+        // Handle price type assignments
+        if ($request->has('price_type_ids') && is_array($request->price_type_ids)) {
+            $product->priceTypes()->sync($request->price_type_ids);
         }
 
         return $product;
@@ -170,6 +194,7 @@ class ProductRepository extends BaseRepository
                 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at',
                 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified'
             )
+            ->with('productType:id,name')
             ->where('id', $id)
             ->first();
 
@@ -178,7 +203,19 @@ class ProductRepository extends BaseRepository
                 $data->logo_image = asset('storage/' . $data->logo_image);
             }
             if (!empty($data->product_image)) {
-                $data->product_image = asset('storage/' . $data->product_image);
+                // Handle JSON array of product images
+                if (is_array($data->product_image)) {
+                    $data->product_image = array_map(function($image) {
+                        return asset('storage/' . $image);
+                    }, $data->product_image);
+                }
+            }
+            
+            // Add product type name
+            if ($data->productType) {
+                $data->product_type_name = $data->productType->name;
+                // Remove the productType relationship from response
+                unset($data->productType);
             }
         }
 
@@ -192,13 +229,52 @@ class ProductRepository extends BaseRepository
     {
         $product = $this->product
             ->select('id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image', 'short_description', 'long_description', 'product_url', 'video_url', 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3', 'use_case1', 'use_case2', 'use_case3', 'additional_info', 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at', 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified')
-            ->with(['categories:id,name'])
+            ->with([
+                'productType:id,name',
+                'categories' => function($query) {
+                    $query->select('id', 'name');
+                },
+                'priceTypes' => function($query) {
+                    $query->select('id', 'name');
+                }
+            ])
             ->where('id', $id)
             ->first();
 
         if ($product) {
-            // Add category_ids array for easier frontend handling
-            $product->category_ids = $product->categories->pluck('id')->toArray();
+            // Handle image URLs
+            if (!empty($product->logo_image)) {
+                $product->logo_image = asset('storage/' . $product->logo_image);
+            }
+            if (!empty($product->product_image)) {
+                // Handle JSON array of product images
+                if (is_array($product->product_image)) {
+                    $product->product_image = array_map(function($image) {
+                        return asset('storage/' . $image);
+                    }, $product->product_image);
+                }
+            }
+
+            // Add product type name
+            if ($product->productType) {
+                $product->product_type_name = $product->productType->name;
+                // Remove the productType relationship from response
+                unset($product->productType);
+            }
+
+            // Transform categories to remove pivot data
+            if ($product->categories) {
+                $product->categories->each(function($category) {
+                    $category->makeHidden(['pivot']);
+                });
+            }
+
+            // Transform priceTypes to remove pivot data
+            if ($product->priceTypes) {
+                $product->priceTypes->each(function($priceType) {
+                    $priceType->makeHidden(['pivot']);
+                });
+            }
         }
 
         return $product;
@@ -240,19 +316,33 @@ class ProductRepository extends BaseRepository
             'is_human_verified' => $request->is_human_verified ?? $data->is_human_verified,
         ];
 
+        // Handle logo image upload (single image)
         if ($request->hasFile('logo_image')) {
             if (!empty($data->logo_image) && Storage::disk('public')->exists($data->logo_image)) {
                 Storage::disk('public')->delete($data->logo_image);
             }
-            $path = $request->file('logo_image')->store('product_image', 'public');
+            $path = $request->file('logo_image')->store('product_images', 'public');
             $updateData['logo_image'] = $path;
         }
+        
+        // Handle product images upload (multiple images)
         if ($request->hasFile('product_image')) {
-            if (!empty($data->product_image) && Storage::disk('public')->exists($data->product_image)) {
-                Storage::disk('public')->delete($data->product_image);
+            // Delete existing product images
+            if (!empty($data->product_image) && is_array($data->product_image)) {
+                foreach ($data->product_image as $existingImage) {
+                    if (Storage::disk('public')->exists($existingImage)) {
+                        Storage::disk('public')->delete($existingImage);
+                    }
+                }
             }
-            $path = $request->file('product_image')->store('product_image', 'public');
-            $updateData['product_image'] = $path;
+            
+            // Upload new product images
+            $productImages = [];
+            foreach ($request->file('product_image') as $image) {
+                $path = $image->store('product_images', 'public');
+                $productImages[] = $path;
+            }
+            $updateData['product_image'] = $productImages; // Store as JSON array
         }
 
         $data->update($updateData);
@@ -266,6 +356,11 @@ class ProductRepository extends BaseRepository
                 ];
             }
             $data->categories()->sync($categoryData);
+        }
+
+        // Handle price type assignments
+        if ($request->has('price_type_ids') && is_array($request->price_type_ids)) {
+            $data->priceTypes()->sync($request->price_type_ids);
         }
 
         return $data;
