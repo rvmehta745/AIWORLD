@@ -19,4 +19,12 @@ class PriceType extends Model
     {
         return $this->belongsTo(ProductType::class, 'product_type_id');
     }
+
+    /**
+     * The products that belong to the price type.
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'products_price_types', 'price_type_id', 'product_id');
+    }
 }
