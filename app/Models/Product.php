@@ -96,4 +96,12 @@ class Product extends Model
     {
         return $this->belongsToMany(PriceType::class, 'products_price_types', 'product_id', 'price_type_id');
     }
+
+    /**
+     * The featured products that belong to the product.
+     */
+    public function featuredProducts()
+    {
+        return $this->belongsToMany(FeaturedProduct::class, 'featured_products_products', 'product_id', 'featured_product_id');
+    }
 }

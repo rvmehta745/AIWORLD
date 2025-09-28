@@ -79,4 +79,6 @@ return [
     'price_types'              => 'Price Types',
     'category'                 => 'Category',
     'categories'               => 'Categories',
+    'featured_product'         => 'Featured Product',
+    'featured_products'        => 'Featured Products',
 ];
