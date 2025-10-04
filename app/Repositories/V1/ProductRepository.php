@@ -130,6 +130,8 @@ class ProductRepository extends BaseRepository
             'use_case1' => $request->use_case1 ?? null,
             'use_case2' => $request->use_case2 ?? null,
             'use_case3' => $request->use_case3 ?? null,
+            'use_cases' => $request->use_cases ?? null,
+            'features_and_highlights' => $request->features_and_highlights ?? null,
             'additional_info' => $request->additional_info ?? null,
             'twitter' => $request->twitter ?? null,
             'facebook' => $request->facebook ?? null,
@@ -190,7 +192,7 @@ class ProductRepository extends BaseRepository
                 'id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image',
                 'short_description', 'long_description', 'product_url', 'video_url',
                 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3',
-                'use_case1', 'use_case2', 'use_case3', 'additional_info',
+                'use_case1', 'use_case2', 'use_case3', 'use_cases', 'features_and_highlights', 'additional_info',
                 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at',
                 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified'
             )
@@ -228,7 +230,7 @@ class ProductRepository extends BaseRepository
     public function detailsByID($id)
     {
         $product = $this->product
-            ->select('id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image', 'short_description', 'long_description', 'product_url', 'video_url', 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3', 'use_case1', 'use_case2', 'use_case3', 'additional_info', 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at', 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified')
+            ->select('id', 'product_type_id', 'name', 'slug', 'logo_image', 'product_image', 'short_description', 'long_description', 'product_url', 'video_url', 'seo_text', 'extra_link1', 'extra_link2', 'extra_link3', 'use_case1', 'use_case2', 'use_case3', 'use_cases', 'features_and_highlights', 'additional_info', 'twitter', 'facebook', 'linkedin', 'telegram', 'published_at', 'payment_status', 'status', 'is_verified', 'is_gold', 'is_human_verified')
             ->with([
                 'productType:id,name',
                 'categories' => function($query) {
@@ -303,6 +305,8 @@ class ProductRepository extends BaseRepository
             'use_case1' => $request->use_case1 ?? null,
             'use_case2' => $request->use_case2 ?? null,
             'use_case3' => $request->use_case3 ?? null,
+            'use_cases' => $request->use_cases ?? null,
+            'features_and_highlights' => $request->features_and_highlights ?? null,
             'additional_info' => $request->additional_info ?? null,
             'twitter' => $request->twitter ?? null,
             'facebook' => $request->facebook ?? null,

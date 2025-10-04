@@ -43,6 +43,8 @@ class Product extends Model
         'use_case1',
         'use_case2',
         'use_case3',
+        'use_cases',
+        'features_and_highlights',
         'additional_info',
         'twitter',
         'facebook',
