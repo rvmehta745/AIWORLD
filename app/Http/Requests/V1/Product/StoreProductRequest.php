@@ -56,6 +56,8 @@ class StoreProductRequest extends FormRequest
             'use_case1' => 'nullable|string',
             'use_case2' => 'nullable|string',
             'use_case3' => 'nullable|string',
+            'use_cases' => 'nullable|string|max:2000',
+            'features_and_highlights' => 'nullable|string|max:2000',
             
             // Other fields
             'published_at' => 'nullable|date',
@@ -78,6 +80,8 @@ class StoreProductRequest extends FormRequest
             'logo_image.required' => 'Logo image is required.',
             'product_url.required' => 'Product URL is required.',
             'status.required' => 'Product status is required.',
+            'use_cases.max' => 'Use cases cannot exceed 2000 characters.',
+            'features_and_highlights.max' => 'Features and highlights cannot exceed 2000 characters.',
         ];
     }
 }
