@@ -35,7 +35,55 @@ class LoginController extends BaseController
         $this->userService = $userService;
     }
 
-    public function register(RegisterRequest $request)
+    /**
+     * @OA\Post(
+     *   path="/register",
+     *   tags={"Registration"},
+     *   summary="Register a new user",
+     *   operationId="register",
+     *   
+     *   @OA\RequestBody(
+     *     required=true,
+     *     description="User registration data",
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(
+     *         @OA\Property(property="first_name", type="string", example="John", description="First name (2-50 characters)"),
+     *         @OA\Property(property="last_name", type="string", example="Doe", description="Last name (2-50 characters)"),
+     *         @OA\Property(property="email", type="string", format="email", example="john.doe@example.com", description="Email address (unique)"),
+     *         @OA\Property(property="password", type="string", format="password", example="Password123", description="Password (min 8 characters)"),
+     *         @OA\Property(property="phone_number", type="string", example="1234567890", description="Phone number (optional)"),
+     *         @OA\Property(property="country_code", type="string", example="+1", description="Country code (optional)")
+     *       )
+     *     )
+     *   ),
+     *   
+     *   @OA\Response(
+     *     response=201,
+     *     description="User registered successfully",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="status", type="string", example="SUCCESS"),
+     *       @OA\Property(property="message", type="string", example="Registration successful. Please verify your email."),
+     *       @OA\Property(
+     *         property="data",
+     *         type="object",
+     *         @OA\Property(
+     *           property="user",
+     *           type="object",
+     *           @OA\Property(property="id", type="integer", example=1),
+     *           @OA\Property(property="first_name", type="string", example="John"),
+     *           @OA\Property(property="last_name", type="string", example="Doe"),
+     *           @OA\Property(property="email", type="string", example="john.doe@example.com")
+     *         )
+     *       )
+     *     )
+     *   ),
+     *   @OA\Response(response=400, description="Validation error"),
+     *   @OA\Response(response=422, description="Validation error"),
+     *   @OA\Response(response=500, description="Server error")
+     * )
+     */
+public function register(RegisterRequest $request)
     {
         try {
 
@@ -56,7 +104,6 @@ class LoginController extends BaseController
                     'first_name' => $validated['first_name'],
                     'last_name' => $validated['last_name'],
                     'password' => bcrypt($validated['password']),
-                    'role' => $validated['role'],
                     'phone_number' => $validated['phone_number'] ?? null,
                     'country_code' => $validated['country_code'] ?? null,
                     'address' => $validated['address'] ?? null,
@@ -72,7 +119,6 @@ class LoginController extends BaseController
                     'last_name' => $validated['last_name'],
                     'email' => $validated['email'],
                     'password' => bcrypt($validated['password']),
-                    'role' => $validated['role'],
                     'phone_number' => $validated['phone_number'] ?? null,
                     'country_code' => $validated['country_code'] ?? null,
                     'address' => $validated['address'] ?? null,
