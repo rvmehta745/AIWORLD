@@ -25,8 +25,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|string|email|max:100|unique:mst_users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|string|min:8',
             'phone_number' => 'nullable|string|max:20',
-            'country_code' => 'nullable|string|max:10',
-            'role' => 'required|in:Admin,Disposition Manager,Buyer|not_in:Admin'
+            'country_code' => 'nullable|string|max:10'
         ];
     }
 
@@ -51,8 +50,6 @@ class RegisterRequest extends FormRequest
             'password.min' => 'The password must be at least 8 characters',
             'phone_number.max' => 'The phone number cannot exceed 20 characters',
             'country_code.max' => 'The country code cannot exceed 10 characters',
-            'role.required' => 'The role is required',
-            'role.not_in' => 'Admin can not be registered',
         ];
     }
 
