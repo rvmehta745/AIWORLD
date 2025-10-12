@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class WelcomeEmailNotification extends Notification
@@ -22,10 +23,13 @@ class WelcomeEmailNotification extends Notification
 
     public function toMail($notifiable)
     {
+        Log::info('Preparing welcome email', ['email' => $notifiable->email]);
         // $verificationUrl = url('/v1/admin/verify-email/' . $this->token);
+        Log::info('Verification URL generated', ['url' => env('WEB_URL'). 'verify-email/' . $this->token]);
         $verificationUrl = env('WEB_URL'). 'verify-email/' . $this->token;
+        Log::info('Using verification URL', ['url' => $verificationUrl]);
         $userName = $notifiable->name ?? 'User';
-
+        Log::info('User name determined', ['name' => $userName]);
         return (new MailMessage)
             ->view('email.register_mail', [
                 'userName' => $userName,

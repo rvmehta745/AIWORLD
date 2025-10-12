@@ -19,6 +19,8 @@ use App\Notifications\LoginWelcomeNotification;
 use App\Traits\CommonTrait;
 use Illuminate\Http\Request;
 use App\Services\V1\UserService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
@@ -83,10 +85,10 @@ class LoginController extends BaseController
      *   @OA\Response(response=500, description="Server error")
      * )
      */
-public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request)
     {
+        Log::info('Register request received', ['request' => $request->all()]);
         try {
-
             // Get validated data
             $validated = $request->validated();
 
@@ -95,7 +97,7 @@ public function register(RegisterRequest $request)
 
             // Check if a soft-deleted user with the same email exists
             $existingUser = User::withTrashed()->where('email', $validated['email'])->first();
-
+            Log::info('Existing user check', ['existingUser' => $existingUser]);
             if ($existingUser && $existingUser->trashed()) {
                 // Restore the soft-deleted user and update their information
                 $existingUser->restore();
@@ -110,7 +112,7 @@ public function register(RegisterRequest $request)
                     'is_active' => false, // Set as inactive until email is verified
                     'email_verified_at' => null, // Reset email verification
                 ]);
-
+                Log::info('Restored user', ['user' => $existingUser]);
                 $user = $existingUser;
             } else {
                 // Create a new user with inactive status
@@ -125,10 +127,10 @@ public function register(RegisterRequest $request)
                     'is_active' => false, // Set as inactive until email is verified
                 ]);
             }
-
+            Log::info('New user created', ['user' => $user]);
 
             // Store verification token with 24-hour expiration
-            \DB::table('password_reset_tokens')->updateOrInsert(
+            DB::table('password_reset_tokens')->updateOrInsert(
                 ['email' => $user->email],
                 [
                     'token' => $verificationToken,
@@ -136,11 +138,9 @@ public function register(RegisterRequest $request)
                     'expires_at' => now()->addHours(24)
                 ]
             );
-
+            Log::info('Verification token stored', ['email' => $user->email, 'token' => $verificationToken]);
             // Send welcome email with verification link
             $user->notify(new WelcomeEmailNotification($verificationToken));
-
-
 
             return General::setResponse("SUCCESS", __('messages.registration_successful_please_verify_email'), [
                 'user' => [
@@ -154,7 +154,6 @@ public function register(RegisterRequest $request)
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
-
 
     /**
      * @OA\Post(
