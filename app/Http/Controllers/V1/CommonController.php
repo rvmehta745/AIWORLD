@@ -463,28 +463,4 @@ class CommonController extends BaseController
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/menu",
-     *     summary="Get menu JSON for frontend",
-     *     tags={"Common"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Menu JSON",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="menu", type="array", @OA\Items(type="object"))
-     *         )
-     *     ),
-     *     @OA\Response(response=404, description="Menu not found")
-     * )
-     */
-    public function getMenu()
-    {
-        $setting = \App\Models\Setting::where('key', 'menu')->first();
-        if (!$setting) {
-            return response()->json(['message' => 'Menu not found'], 404);
-        }
-        return response()->json(['menu' => $setting->value], 200);
-    }
 }

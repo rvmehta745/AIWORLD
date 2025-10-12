@@ -13,6 +13,7 @@ class ProductType extends Model
     protected $fillable = [
         'name',
         'tag_line',
+        'logo',
         'configuration',
         'sort_order',
         'status',

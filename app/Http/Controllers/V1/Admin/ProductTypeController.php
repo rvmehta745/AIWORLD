@@ -163,6 +163,19 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      *        description="Status - Valid values: Active, InActive",
      *        @OA\Schema(type="string", enum={"Active", "InActive"})
      *    ),
+     *    @OA\RequestBody(
+     *        @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *                @OA\Property(
+     *                    property="logo",
+     *                    type="string",
+     *                    format="binary",
+     *                    description="Product Type Logo Image"
+     *                )
+     *            )
+     *        )
+     *    ),
      *  @OA\Response(
      *        response=200,
      *        description="Product Type created successfully",
@@ -303,6 +316,19 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      *        required=false,
      *        description="Status - Valid values: Active, InActive",
      *        @OA\Schema(type="string", enum={"Active", "InActive"})
+     *    ),
+     *    @OA\RequestBody(
+     *        @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *                @OA\Property(
+     *                    property="logo",
+     *                    type="string",
+     *                    format="binary",
+     *                    description="Product Type Logo Image"
+     *                )
+     *            )
+     *        )
      *    ),
      *      @OA\Response(
      *          response = 200,
