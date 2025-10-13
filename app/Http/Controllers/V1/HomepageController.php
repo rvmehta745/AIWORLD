@@ -74,174 +74,27 @@ class HomepageController extends BaseController
     {
         try {
             // Find product type by ID or slug
-            $productType = is_numeric($identifier) 
+            $productType = is_numeric($identifier)
                 ? ProductType::find($identifier)
                 : ProductType::where('slug', $identifier)->first();
-            
+
             if (!$productType) {
                 return response()->json(['message' => 'Product type not found'], 404);
             }
-            
+
             // Get parent categories (with no parent_id) for this product type
             $categories = Category::where('product_type_id', $productType->id)
                 ->where('parent_id', null)
                 ->where('status', 1)
                 ->orderBy('sort_order', 'asc')
-                ->with(['children' => function($query) {
+                ->with(['children' => function ($query) {
                     $query->where('status', 1)->orderBy('sort_order', 'asc');
                 }])
                 ->get();
-            
+
             return response()->json(['categories' => $categories], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error retrieving categories: ' . $e->getMessage()], 500);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/parent-categories",
-     *     summary="Get all parent categories",
-     *     tags={"HomePage"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of all parent categories",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="categories", 
-     *                 type="array", 
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="product_type_id", type="integer"),
-     *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="logo", type="string", nullable=true),
-     *                     @OA\Property(property="description", type="string", nullable=true)
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=500, description="Server error")
-     * )
-     */
-    public function getParentCategories()
-    {
-        try {
-            // Get all parent categories (with no parent_id)
-            $categories = Category::where('parent_id', null)
-                ->where('status', 1)
-                ->orderBy('sort_order', 'asc')
-                ->get();
-            
-            return response()->json(['categories' => $categories], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error retrieving parent categories: ' . $e->getMessage()], 500);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/trending-product-types",
-     *     summary="Get latest trending product types",
-     *     tags={"HomePage"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of trending product types",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="product_types", 
-     *                 type="array", 
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="tag_line", type="string", nullable=true),
-     *                     @OA\Property(property="logo", type="string", nullable=true),
-     *                     @OA\Property(property="configuration", type="string", nullable=true),
-     *                     @OA\Property(property="sort_order", type="integer"),
-     *                     @OA\Property(property="created_at", type="string", format="date-time"),
-     *                     @OA\Property(property="updated_at", type="string", format="date-time")
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=500, description="Server error")
-     * )
-     */
-    public function getTrendingProductTypes()
-    {
-        try {
-            // Get latest 10 active product types ordered by created_at
-            $productTypes = ProductType::where('status', 'Active')
-                ->orderBy('created_at', 'desc')
-                ->limit(10)
-                ->get();
-            
-            // Add full URL for logo
-            foreach ($productTypes as $productType) {
-                if (!empty($productType->logo)) {
-                    $productType->logo = asset('storage/' . $productType->logo);
-                }
-            }
-            
-            return response()->json(['product_types' => $productTypes], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error retrieving trending product types: ' . $e->getMessage()], 500);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/trending-categories",
-     *     summary="Get trending parent categories",
-     *     tags={"HomePage"},
-     *     @OA\Response(
-     *         response=200,
-     *         description="List of trending parent categories",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="categories", 
-     *                 type="array", 
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="product_type_id", type="integer"),
-     *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="logo", type="string", nullable=true),
-     *                     @OA\Property(property="description", type="string", nullable=true)
-     *                 )
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=500, description="Server error")
-     * )
-     */
-    public function getTrendingCategories()
-    {
-        try {
-            // Get 12 parent categories ordered by created_at (newest first)
-            $categories = Category::where('parent_id', null)
-                ->where('status', 'Active')
-                ->orderBy('created_at', 'desc')
-                ->limit(12)
-                ->get();
-            
-            // Add full URL for logo
-            foreach ($categories as $category) {
-                if (!empty($category->logo)) {
-                    $category->logo = asset('storage/' . $category->logo);
-                }
-            }
-            
-            return response()->json(['categories' => $categories], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error retrieving trending categories: ' . $e->getMessage()], 500);
         }
     }
 
@@ -261,11 +114,8 @@ class HomepageController extends BaseController
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="product_type_id", type="integer"),
      *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="logo", type="string", nullable=true),
-     *                     @OA\Property(property="description", type="string", nullable=true)
+     *                     @OA\Property(property="slug", type="string")
      *                 )
      *             ),
      *             @OA\Property(
@@ -275,9 +125,7 @@ class HomepageController extends BaseController
      *                     type="object",
      *                     @OA\Property(property="id", type="integer"),
      *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="tag_line", type="string", nullable=true),
-     *                     @OA\Property(property="logo", type="string", nullable=true)
+     *                     @OA\Property(property="slug", type="string")
      *                 )
      *             ),
      *             @OA\Property(
@@ -286,12 +134,8 @@ class HomepageController extends BaseController
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="id", type="integer"),
-     *                     @OA\Property(property="product_type_id", type="integer"),
      *                     @OA\Property(property="name", type="string"),
-     *                     @OA\Property(property="slug", type="string"),
-     *                     @OA\Property(property="logo", type="string", nullable=true),
-     *                     @OA\Property(property="description", type="string", nullable=true),
-     *                     @OA\Property(property="children", type="array", @OA\Items(type="object"))
+     *                     @OA\Property(property="slug", type="string")
      *                 )
      *             )
      *         )
@@ -303,63 +147,33 @@ class HomepageController extends BaseController
     {
         try {
             // Top categories: 12 parent categories
-            $topCategories = Category::where('parent_id', null)
+            $topCategories = Category::whereNull('parent_id')
                 ->where('status', 'Active')
                 ->orderBy('sort_order', 'asc')
                 ->limit(12)
-                ->get();
-            
-            // Add full URL for logo
-            foreach ($topCategories as $category) {
-                if (!empty($category->logo)) {
-                    $category->logo = asset('storage/' . $category->logo);
-                }
-            }
-            
+                ->get(['id', 'name', 'slug']);
+
             // Best Resources: 12 product types
             $bestResources = ProductType::where('status', 'Active')
                 ->orderBy('sort_order', 'asc')
                 ->limit(12)
-                ->get(['id', 'name', 'slug', 'tag_line', 'logo']);
-                
-            // Add full URL for logo
-            foreach ($bestResources as $resource) {
-                if (!empty($resource->logo)) {
-                    $resource->logo = asset('storage/' . $resource->logo);
-                }
-            }
-            
-            // Free AI Tools: Categories from "AI Tools" product type with children
+                ->get(['id', 'name', 'slug']);
+
+            // Free AI Tools: Parent categories from "AI Tools" product type
+            $freeAiTools = [];
             $aiToolsProductType = ProductType::where('slug', 'ai-tools')
                 ->orWhere('name', 'AI Tools')
                 ->first();
-                
-            $freeAiTools = [];
+
             if ($aiToolsProductType) {
                 $freeAiTools = Category::where('product_type_id', $aiToolsProductType->id)
-                    ->where('parent_id', null)
+                    ->whereNull('parent_id')
                     ->where('status', 'Active')
                     ->orderBy('sort_order', 'asc')
-                    ->with(['children' => function($query) {
-                        $query->where('status', 'Active')->orderBy('sort_order', 'asc');
-                    }])
                     ->limit(12)
-                    ->get();
-                    
-                // Add full URL for logo
-                foreach ($freeAiTools as $tool) {
-                    if (!empty($tool->logo)) {
-                        $tool->logo = asset('storage/' . $tool->logo);
-                    }
-                    
-                    foreach ($tool->children as $child) {
-                        if (!empty($child->logo)) {
-                            $child->logo = asset('storage/' . $child->logo);
-                        }
-                    }
-                }
+                    ->get(['id', 'name', 'slug']);
             }
-            
+
             return response()->json([
                 'top_categories' => $topCategories,
                 'best_resources' => $bestResources,
@@ -367,6 +181,115 @@ class HomepageController extends BaseController
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error retrieving footer data: ' . $e->getMessage()], 500);
+        }
+    }
+    /**
+     * @OA\Get(
+     *     path="/master-home",
+     *     summary="Get master homepage data (product types with categories)",
+     *     tags={"HomePage"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="List of product types with their categories and children",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="product_types", 
+     *                 type="array", 
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="name", type="string"),
+     *                     @OA\Property(property="slug", type="string"),
+     *                     @OA\Property(property="tag_line", type="string", nullable=true),
+     *                     @OA\Property(property="logo", type="string", nullable=true),
+     *                     @OA\Property(
+     *                         property="categories",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer"),
+     *                             @OA\Property(property="product_type_id", type="integer"),
+     *                             @OA\Property(property="product_type_name", type="string"),
+     *                             @OA\Property(property="parent_id", type="integer", nullable=true),
+     *                             @OA\Property(property="name", type="string"),
+     *                             @OA\Property(property="slug", type="string"),
+     *                             @OA\Property(property="logo", type="string", nullable=true),
+     *                             @OA\Property(property="description", type="string", nullable=true),
+     *                             @OA\Property(
+     *                                 property="children",
+     *                                 type="array",
+     *                                 @OA\Items(
+     *                                     type="object",
+     *                                     @OA\Property(property="id", type="integer"),
+     *                                     @OA\Property(property="product_type_id", type="integer"),
+     *                                     @OA\Property(property="product_type_name", type="string"),
+     *                                     @OA\Property(property="parent_id", type="integer", nullable=true),
+     *                                     @OA\Property(property="name", type="string"),
+     *                                     @OA\Property(property="slug", type="string"),
+     *                                     @OA\Property(property="logo", type="string", nullable=true),
+     *                                     @OA\Property(property="description", type="string", nullable=true)
+     *                                 )
+     *                             )
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
+    public function getMasterHome()
+    {
+        try {
+            // Fetch all active product types
+            $productTypes = ProductType::where('status', 'Active')
+                ->orderBy('sort_order', 'asc')
+                ->get(['id', 'name', 'slug', 'tag_line', 'logo']);
+
+            foreach ($productTypes as $productType) {
+                // Add full logo URL if exists
+                if (!empty($productType->logo)) {
+                    $productType->logo = asset('storage/' . $productType->logo);
+                }
+
+                // Fetch all parent categories for this product type
+                $categories = Category::where('product_type_id', $productType->id)
+                    ->whereNull('parent_id')
+                    ->where('status', 'Active')
+                    ->orderBy('sort_order', 'asc')
+                    ->get(['id', 'product_type_id', 'name', 'slug', 'logo', 'description', 'parent_id']);
+
+                // Add full logo URL + product type name
+                foreach ($categories as $category) {
+                    $category->product_type_name = $productType->name;
+                    if (!empty($category->logo)) {
+                        $category->logo = asset('storage/' . $category->logo);
+                    }
+
+                    // Fetch active children for this category
+                    $children = Category::where('parent_id', $category->id)
+                        ->where('status', 'Active')
+                        ->orderBy('sort_order', 'asc')
+                        ->get(['id', 'product_type_id', 'name', 'slug', 'logo', 'description', 'parent_id']);
+
+                    foreach ($children as $child) {
+                        $child->product_type_name = $productType->name;
+                        if (!empty($child->logo)) {
+                            $child->logo = asset('storage/' . $child->logo);
+                        }
+                    }
+
+                    $category->children = $children;
+                }
+
+                $productType->categories = $categories;
+            }
+
+            return response()->json(['product_types' => $productTypes], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error retrieving master home data: ' . $e->getMessage()], 500);
         }
     }
 }
