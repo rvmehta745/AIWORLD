@@ -66,6 +66,8 @@ class Product extends Model
         'is_human_verified' => 'boolean',
         'published_at' => 'datetime',
         'product_image' => 'array', // Cast JSON to array
+        'use_cases' => 'array', // new: JSON cast
+        'features_and_highlights' => 'array', // new: JSON cast
     ];
 
     public function sluggable(): array
