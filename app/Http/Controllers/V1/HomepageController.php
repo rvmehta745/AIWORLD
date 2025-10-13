@@ -316,7 +316,7 @@ class HomepageController extends BaseController
      */
     /**
      * @OA\Post(
-     *     path="/homepage/products-by-type-filter",
+     *     path="/products-by-type-filter",
      *     summary="Get all products by product type and either price type or category",
      *     tags={"HomePage"},
      *     @OA\RequestBody(
@@ -345,11 +345,7 @@ class HomepageController extends BaseController
      *                     @OA\Property(property="name", type="string"),
      *                     @OA\Property(property="slug", type="string"),
      *                     @OA\Property(property="logo_image", type="string", nullable=true),
-     *                     @OA\Property(property="product_image", type="string", nullable=true),
      *                     @OA\Property(property="short_description", type="string", nullable=true),
-     *                     @OA\Property(property="status", type="string"),
-     *                     @OA\Property(property="category_ids", type="array", @OA\Items(type="integer")),
-     *                     @OA\Property(property="price_type_ids", type="array", @OA\Items(type="integer")),
      *                 )
      *             )
      *         )
@@ -393,11 +389,7 @@ class HomepageController extends BaseController
                 'name' => $p->name,
                 'slug' => $p->slug,
                 'logo_image' => $p->logo_image ? asset('storage/' . $p->logo_image) : null,
-                'product_image' => $p->product_image,
                 'short_description' => $p->short_description,
-                'status' => $p->status,
-                'category_ids' => $p->categories()->pluck('id')->toArray(),
-                'price_type_ids' => $p->priceTypes()->pluck('id')->toArray(),
             ];
         });
 
@@ -406,7 +398,7 @@ class HomepageController extends BaseController
 
     /**
      * @OA\Post(
-     *     path="/homepage/products-by-type-featured",
+     *     path="/products-by-type-featured",
      *     summary="Get featured/special products by type and feature",
      *     tags={"HomePage"},
      *     @OA\RequestBody(
@@ -433,9 +425,7 @@ class HomepageController extends BaseController
      *                     @OA\Property(property="name", type="string"),
      *                     @OA\Property(property="slug", type="string"),
      *                     @OA\Property(property="logo_image", type="string", nullable=true),
-     *                     @OA\Property(property="product_image", type="string", nullable=true),
      *                     @OA\Property(property="short_description", type="string", nullable=true),
-     *                     @OA\Property(property="status", type="string"),
      *                 )
      *             )
      *         )
@@ -474,11 +464,100 @@ class HomepageController extends BaseController
                 'name' => $p->name,
                 'slug' => $p->slug,
                 'logo_image' => $p->logo_image ? asset('storage/' . $p->logo_image) : null,
-                'product_image' => $p->product_image,
                 'short_description' => $p->short_description,
-                'status' => $p->status,
             ];
         });
         return response()->json(['products' => $productsArr], 200);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/product-details/{identifier}",
+     *     summary="Get complete details for a product by ID or slug (with type, price types, categories, sub-categories)",
+     *     tags={"HomePage"},
+     *     @OA\Parameter(
+     *         name="identifier",
+     *         in="path",
+     *         required=true,
+     *         description="Product ID or unique slug",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product details",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="product", type="object",
+     *                 @OA\Property(property="id", type="integer"),
+     *                 @OA\Property(property="name", type="string"),
+     *                 @OA\Property(property="slug", type="string"),
+     *                 @OA\Property(property="logo_image", type="string", nullable=true),
+     *                 @OA\Property(property="product_image", type="string", nullable=true),
+     *                 @OA\Property(property="short_description", type="string"),
+     *                 @OA\Property(property="long_description", type="string"),
+     *                 @OA\Property(property="product_url", type="string"),
+     *                 @OA\Property(property="video_url", type="string", nullable=true),
+     *                 @OA\Property(property="seo_text", type="string", nullable=true),
+     *                 @OA\Property(property="features_and_highlights", type="string", nullable=true),
+     *                 @OA\Property(property="use_cases", type="string", nullable=true),
+     *                 @OA\Property(property="status", type="string"),
+     *                 @OA\Property(property="sort_order", type="integer"),
+     *                 @OA\Property(property="published_at", type="string", format="date-time", nullable=true),
+     *                 @OA\Property(property="product_type_id", type="integer"),
+     *                 @OA\Property(property="productType", type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="name", type="string"),
+     *                     @OA\Property(property="slug", type="string")
+     *                 ),
+     *                 @OA\Property(property="priceTypes", type="array",
+     *                     @OA\Items(type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string")
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="categories", type="array",
+     *                     @OA\Items(type="object",
+     *                         @OA\Property(property="id", type="integer"),
+     *                         @OA\Property(property="name", type="string"),
+     *                         @OA\Property(property="slug", type="string"),
+     *                         @OA\Property(property="logo", type="string", nullable=true),
+     *                         @OA\Property(property="description", type="string", nullable=true),
+     *                         @OA\Property(property="parent_id", type="integer", nullable=true),
+     *                         @OA\Property(property="children", type="array",
+     *                             @OA\Items(type="object",
+     *                                 @OA\Property(property="id", type="integer"),
+     *                                 @OA\Property(property="name", type="string"),
+     *                                 @OA\Property(property="slug", type="string"),
+     *                                 @OA\Property(property="logo", type="string", nullable=true),
+     *                                 @OA\Property(property="description", type="string", nullable=true),
+     *                                 @OA\Property(property="parent_id", type="integer", nullable=true)
+     *                             )
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found or invalid identifier"
+     *     ),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
+    public function productDetails($identifier)
+    {
+        $product = is_numeric($identifier)
+            ? \App\Models\Product::with(['productType', 'priceTypes', 'categories.children'])->find($identifier)
+            : \App\Models\Product::with(['productType', 'priceTypes', 'categories.children'])->where('slug', $identifier)->first();
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+        // Add logo/product image URL if necessary
+        if ($product->logo_image) {
+            $product->logo_image = asset('storage/' . $product->logo_image);
+        }
+        // You can continue to add/transform any other fields here if needed
+        return response()->json(['product' => $product], 200);
     }
 }
