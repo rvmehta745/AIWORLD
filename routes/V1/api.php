@@ -138,8 +138,7 @@ Route::group(['middleware' => ['api']], function () {
 
 // Homepage APIs for frontend
 Route::get('menu', [App\Http\Controllers\V1\HomepageController::class, 'getMenu']);
-Route::get('categories/{identifier}', [App\Http\Controllers\V1\HomepageController::class, 'getCategories']);
-Route::get('parent-categories', [App\Http\Controllers\V1\HomepageController::class, 'getParentCategories']);
-Route::get('trending-product-types', [App\Http\Controllers\V1\HomepageController::class, 'getTrendingProductTypes']);
-Route::get('trending-categories', [App\Http\Controllers\V1\HomepageController::class, 'getTrendingCategories']);
 Route::get('footer', [App\Http\Controllers\V1\HomepageController::class, 'getFooter']);
+Route::get('categories/{identifier}', [App\Http\Controllers\V1\HomepageController::class, 'getCategories']);
+Route::get('masterhome', [App\Http\Controllers\V1\HomepageController::class, 'getMasterHome']);
+
