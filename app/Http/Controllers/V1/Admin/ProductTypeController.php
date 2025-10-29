@@ -308,8 +308,8 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      *                    property="configuration",
      *                    type="string",
      *                    nullable=true,
-     *                    description="Configuration JSON",
-     *                    example="{\"key\": \"value\"}"
+     *                    description="Configuration JSON string",
+     *                    example="{}"
      *                ),
      *                @OA\Property(
      *                    property="sort_order",
