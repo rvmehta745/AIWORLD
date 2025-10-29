@@ -116,7 +116,7 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
                 $count = (int) $listData['count'];
             }
 
-            return General::setResponse("SUCCESS", [], compact('count', 'rows'));
+            return General::setResponse("SUCCESS", ["Product Type Fetch Successfully"], compact('count', 'rows'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
@@ -204,7 +204,7 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
             $this->productTypeService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS", 'Product Type created successfully');
+            return General::setResponse("CREATED", 'Product Type created successfully');
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -261,7 +261,7 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
             if (empty($data)) {
                 return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.product_type')]));
             }
-            return General::setResponse("SUCCESS", [], compact('data'));
+            return General::setResponse("SUCCESS", ['Product Type Details Fetched Successfully'], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }

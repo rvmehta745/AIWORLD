@@ -7,6 +7,7 @@ use App\Repositories\BaseRepository;
 use App\Traits\CommonTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CategoryRepository extends BaseRepository
 {
@@ -26,6 +27,7 @@ class CategoryRepository extends BaseRepository
     {
         $query = DB::table('categories')
             ->join('product_types', 'product_types.id', '=', 'categories.product_type_id')
+            ->leftJoin('categories as parent_categories', 'parent_categories.id', '=', 'categories.parent_id')
             ->whereNull('categories.deleted_at');
 
         if (!empty($postData['filter_data'])) {
@@ -59,6 +61,7 @@ class CategoryRepository extends BaseRepository
             'categories.product_type_id',
             'product_types.name as product_type_name',
             'categories.parent_id',
+            DB::raw('parent_categories.name as parent_category_name'),
             'categories.name',
             'categories.slug',
             'categories.logo',
@@ -104,7 +107,18 @@ class CategoryRepository extends BaseRepository
             'status' => $request->status ?? 'InActive',
         ];
 
-        if ($request->hasFile('logo')) {
+        // Handle base64 logo image (like ProductType update)
+        if (!empty($request->logo) && Str::startsWith($request->logo, 'data:image')) {
+            $imageParts = explode(';base64,', $request->logo);
+            $imageTypeAux = explode('image/', $imageParts[0]);
+            $imageType = $imageTypeAux[1] ?? 'png';
+            $imageBase64 = base64_decode($imageParts[1]);
+
+            $fileName = 'category_image/' . uniqid() . '.' . $imageType;
+            Storage::disk('public')->put($fileName, $imageBase64);
+            $storeData['logo'] = $fileName;
+        } elseif ($request->hasFile('logo')) {
+            // Support traditional file upload as well
             $path = $request->file('logo')->store('category_image', 'public');
             $storeData['logo'] = $path; // e.g. category_image/filename.jpg
         }
@@ -118,8 +132,21 @@ class CategoryRepository extends BaseRepository
     public function details($id)
     {
         $data = $this->category
-            ->select('id', 'product_type_id', 'parent_id', 'name', 'slug', 'logo', 'description', 'tools_count', 'sort_order', 'status')
-            ->where('id', $id)
+            ->leftJoin('categories as parent_categories', 'parent_categories.id', '=', 'categories.parent_id')
+            ->select(
+                'categories.id',
+                'categories.product_type_id',
+                'categories.parent_id',
+                'categories.name',
+                'categories.slug',
+                'categories.logo',
+                'categories.description',
+                'categories.tools_count',
+                'categories.sort_order',
+                'categories.status',
+                DB::raw('parent_categories.name as parent_category_name')
+            )
+            ->where('categories.id', $id)
             ->first();
 
         if ($data && !empty($data->logo)) {
@@ -134,8 +161,21 @@ class CategoryRepository extends BaseRepository
     public function detailsByID($id)
     {
         $data = $this->category
-            ->select('id', 'product_type_id', 'parent_id', 'name', 'slug', 'logo', 'description', 'tools_count', 'sort_order', 'status')
-            ->where('id', $id)
+            ->leftJoin('categories as parent_categories', 'parent_categories.id', '=', 'categories.parent_id')
+            ->select(
+                'categories.id',
+                'categories.product_type_id',
+                'categories.parent_id',
+                'categories.name',
+                'categories.slug',
+                'categories.logo',
+                'categories.description',
+                'categories.tools_count',
+                'categories.sort_order',
+                'categories.status',
+                DB::raw('parent_categories.name as parent_category_name')
+            )
+            ->where('categories.id', $id)
             ->first();
 
         if ($data && !empty($data->logo)) {
@@ -161,8 +201,22 @@ class CategoryRepository extends BaseRepository
             'status' => $request->status ?? 'InActive',
         ];
 
-        if ($request->hasFile('logo')) {
-            // delete old if exists
+        // Handle base64 logo image (like ProductType update)
+        if (!empty($request->logo) && Str::startsWith($request->logo, 'data:image')) {
+            if (!empty($data->logo) && Storage::disk('public')->exists($data->logo)) {
+                Storage::disk('public')->delete($data->logo);
+            }
+
+            $imageParts = explode(';base64,', $request->logo);
+            $imageTypeAux = explode('image/', $imageParts[0]);
+            $imageType = $imageTypeAux[1] ?? 'png';
+            $imageBase64 = base64_decode($imageParts[1]);
+
+            $fileName = 'category_image/' . uniqid() . '.' . $imageType;
+            Storage::disk('public')->put($fileName, $imageBase64);
+            $updateData['logo'] = $fileName;
+        } elseif ($request->hasFile('logo')) {
+            // Support traditional file upload as well
             if (!empty($data->logo) && Storage::disk('public')->exists($data->logo)) {
                 Storage::disk('public')->delete($data->logo);
             }
@@ -207,17 +261,44 @@ class CategoryRepository extends BaseRepository
      */
     public function getAllActiveCategories($productTypeId = null)
     {
-        $query = $this->category
-            ->select('id', 'name', 'slug', 'parent_id', 'product_type_id')
-            ->whereNull('deleted_at')
-            ->where('status', 'Active')
-            ->orderBy('sort_order', 'asc')
-            ->orderBy('name', 'asc');
+        $query = DB::table('categories')
+            ->join('product_types', 'product_types.id', '=', 'categories.product_type_id')
+            ->leftJoin('categories as parent_categories', 'parent_categories.id', '=', 'categories.parent_id')
+            ->whereNull('categories.deleted_at')
+            ->where('categories.status', 'Active');
 
         if (!empty($productTypeId)) {
-            $query->where('product_type_id', $productTypeId);
+            $query->where('categories.product_type_id', $productTypeId);
         }
 
-        return $query->get();
+        $query->select(
+            'categories.id',
+            'categories.product_type_id',
+            'product_types.name as product_type_name',
+            'categories.parent_id',
+            DB::raw('parent_categories.name as parent_category_name'),
+            'categories.name',
+            'categories.slug',
+            'categories.logo',
+            'categories.description',
+            'categories.tools_count',
+            'categories.sort_order',
+            'categories.status',
+            'categories.created_at',
+            'categories.updated_at'
+        )
+        ->orderBy('categories.sort_order', 'asc')
+        ->orderBy('categories.name', 'asc');
+
+        $data = $query->get();
+
+        // Map logo to full URL
+        foreach ($data as $row) {
+            if (!empty($row->logo)) {
+                $row->logo = asset('storage/' . $row->logo);
+            }
+        }
+
+        return $data;
     }
-} 
+}

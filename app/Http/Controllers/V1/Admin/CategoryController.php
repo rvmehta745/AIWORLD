@@ -97,7 +97,7 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $postData   = $request->all();
             $pageNumber = !empty($postData['page']) ? $postData['page'] : 1;
             $pageLimit  = !empty($postData['per_page']) ? $postData['per_page'] : 50;
@@ -111,7 +111,7 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
                 $count = (int) $listData['count'];
             }
 
-            return General::setResponse("SUCCESS", [], compact('count', 'rows'));
+            return General::setResponse("SUCCESS", ["Categories Fetch Successfully"], compact('count', 'rows'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
@@ -213,7 +213,7 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
             $this->categoryService->store($request);
 
             DB::commit();
-            return General::setResponse("SUCCESS",'Category created successfully');
+            return General::setResponse("CREATED", 'Category created successfully');
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
@@ -270,7 +270,7 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
             if (empty($data)) {
                 return General::setResponse("OTHER_ERROR", __('messages.module_name_not_found', ['moduleName' => __('labels.category')]));
             }
-            return General::setResponse("SUCCESS", [], compact('data'));
+            return General::setResponse("SUCCESS", ["Category details fetched successfully"], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
@@ -584,7 +584,7 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
         try {
             $productTypeId = $request->get('product_type_id');
             $data = $this->categoryService->getAllActiveCategories($productTypeId);
-            return General::setResponse("SUCCESS", [], compact('data'));
+            return General::setResponse("SUCCESS", ["Active Categories fetched successfully"], compact('data'));
         } catch (Throwable $e) {
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
@@ -677,10 +677,9 @@ class CategoryController extends \App\Http\Controllers\V1\BaseController
 
             DB::commit();
             return response()->json(['status' => 'success']);
-
         } catch (Throwable $e) {
             DB::rollBack();
             return General::setResponse("EXCEPTION", $e->getMessage());
         }
     }
-} 
+}

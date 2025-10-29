@@ -13,15 +13,25 @@ class StoreCategoryRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'product_type_id' => 'required|exists:product_types,id',
             'parent_id' => 'nullable|exists:categories,id',
             'name' => 'required|string|max:255|unique:categories,name,NULL,id,deleted_at,NULL',
-            'logo' => 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048',
             'description' => 'nullable|string',
             'tools_count' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer',
             'status' => 'nullable|in:Active,InActive',
         ];
+
+        // Logo can be either a file upload or base64 string
+        if ($this->hasFile('logo')) {
+            // If logo is a file, validate as image
+            $rules['logo'] = 'nullable|image|mimes:jpeg,jpg,png,webp|max:2048';
+        } else {
+            // If logo is not a file, allow string (for base64)
+            $rules['logo'] = 'nullable|string';
+        }
+
+        return $rules;
     }
 } 

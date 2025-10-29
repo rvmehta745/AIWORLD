@@ -32,7 +32,10 @@ class MenuController extends Controller
     {
         // Privilege check removed; handled by middleware
 
-        $productTypes = ProductType::where('status', 1)
+        $productTypes = ProductType::where('status', 'Active')
+            ->whereHas('categories', function ($query) {
+                $query->where('status', 'Active');
+            })
             ->orderBy('sort_order')
             ->get();
 
