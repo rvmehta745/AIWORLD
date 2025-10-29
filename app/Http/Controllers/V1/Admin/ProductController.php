@@ -183,15 +183,15 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *        name="use_cases",
      *        in="query",
      *        required=false,
-     *        description="Detailed use cases (max 2000 chars)",
-     *        @OA\Schema(type="string")
+     *        description="Detailed use cases (max 20 items, max 1000 chars each)",
+     *        @OA\Schema(type="array", @OA\Items(type="string", maxLength=1000), maxItems=20)
      *    ),
      *    @OA\Parameter(
      *        name="features_and_highlights",
      *        in="query",
      *        required=false,
-     *        description="Features and highlights (max 2000 chars)",
-     *        @OA\Schema(type="string")
+     *        description="Features and highlights (max 20 items, max 1000 chars each)",
+     *        @OA\Schema(type="array", @OA\Items(type="string", maxLength=1000), maxItems=20)
      *    ),
      *    @OA\Parameter(
      *        name="status",
@@ -347,8 +347,8 @@ class ProductController extends \App\Http\Controllers\V1\BaseController
      *                @OA\Property(property="use_case1", type="string"),
      *                @OA\Property(property="use_case2", type="string"),
      *                @OA\Property(property="use_case3", type="string"),
-     *                @OA\Property(property="use_cases", type="string", description="Detailed use cases (max 2000 chars)"),
-     *                @OA\Property(property="features_and_highlights", type="string", description="Features and highlights (max 2000 chars)"),
+     *                @OA\Property(property="use_cases", type="array", @OA\Items(type="string", maxLength=1000), maxItems=20, description="Detailed use cases"),
+     *                @OA\Property(property="features_and_highlights", type="array", @OA\Items(type="string", maxLength=1000), maxItems=20, description="Features and highlights"),
      *                @OA\Property(property="additional_info", type="string"),
      *                @OA\Property(property="twitter", type="string"),
      *                @OA\Property(property="facebook", type="string"),
