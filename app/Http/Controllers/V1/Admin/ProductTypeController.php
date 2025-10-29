@@ -282,50 +282,56 @@ class ProductTypeController extends \App\Http\Controllers\V1\BaseController
      *           type="integer"
      *      )
      *     ),
-     *    @OA\Parameter(
-     *        name="name",
-     *        in="query",
-     *        required=true,
-     *        description="Product Type Name - Validations: required, max:255",
-     *        @OA\Schema(type="string")
-     *    ),
-     *    @OA\Parameter(
-     *        name="tag_line",
-     *        in="query",
-     *        required=false,
-     *        description="Tag Line - Validations: nullable, max:255",
-     *        @OA\Schema(type="string")
-     *    ),
-     *    @OA\Parameter(
-     *        name="configuration",
-     *        in="query",
-     *        required=false,
-     *        description="Configuration JSON - Validations: nullable",
-     *        @OA\Schema(type="string")
-     *    ),
-     *    @OA\Parameter(
-     *        name="sort_order",
-     *        in="query",
-     *        required=false,
-     *        description="Sort Order - Validations: nullable, integer",
-     *        @OA\Schema(type="integer")
-     *    ),
-     *    @OA\Parameter(
-     *        name="status",
-     *        in="query",
-     *        required=false,
-     *        description="Status - Valid values: Active, InActive",
-     *        @OA\Schema(type="string", enum={"Active", "InActive"})
-     *    ),
      *    @OA\RequestBody(
+     *        required=true,
      *        @OA\MediaType(
-     *            mediaType="multipart/form-data",
+     *            mediaType="application/json",
      *            @OA\Schema(
+     *                type="object",
+     *                required={"name"},
+     *                @OA\Property(
+     *                    property="name",
+     *                    type="string",
+     *                    maxLength=255,
+     *                    description="Product Type Name",
+     *                    example="AI Tools"
+     *                ),
+     *                @OA\Property(
+     *                    property="tag_line",
+     *                    type="string",
+     *                    nullable=true,
+     *                    maxLength=255,
+     *                    description="Tag Line",
+     *                    example="Advanced AI Solutions"
+     *                ),
+     *                @OA\Property(
+     *                    property="configuration",
+     *                    type="string",
+     *                    nullable=true,
+     *                    description="Configuration JSON",
+     *                    example="{\"key\": \"value\"}"
+     *                ),
+     *                @OA\Property(
+     *                    property="sort_order",
+     *                    type="integer",
+     *                    nullable=true,
+     *                    description="Sort Order",
+     *                    example=1
+     *                ),
+     *                @OA\Property(
+     *                    property="status",
+     *                    type="string",
+     *                    nullable=true,
+     *                    enum={"Active", "InActive"},
+     *                    description="Status",
+     *                    example="Active"
+     *                ),
      *                @OA\Property(
      *                    property="logo",
      *                    type="string",
-     *                    format="binary",
-     *                    description="Product Type Logo Image"
+     *                    nullable=true,
+     *                    description="Product Type Logo Image as base64 string (data:image/png;base64,...) or can be omitted",
+     *                    example="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
      *                )
      *            )
      *        )
