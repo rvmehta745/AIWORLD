@@ -7,6 +7,7 @@ use App\Repositories\BaseRepository;
 use App\Traits\CommonTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductTypeRepository extends BaseRepository
 {
@@ -69,14 +70,14 @@ class ProductTypeRepository extends BaseRepository
         $query       = $query->orderBy($orderBy, $orderType);
         $count       = $query->count();
         $dataPerPage = $query->skip($page)->take($perPage)->get()->toArray();
-        
+
         // Map logo to full URL
         foreach ($dataPerPage as $row) {
             if (!empty($row->logo)) {
                 $row->logo = asset('storage/' . $row->logo);
             }
         }
-        
+
         return ['data' => $dataPerPage, 'count' => $count];
     }
 
@@ -110,7 +111,7 @@ class ProductTypeRepository extends BaseRepository
             ->select('id', 'name', 'slug', 'tag_line', 'logo', 'configuration', 'sort_order', 'status')
             ->where('id', $id)
             ->first();
-            
+
         if ($data && !empty($data->logo)) {
             $data->logo = asset('storage/' . $data->logo);
         }
@@ -126,7 +127,7 @@ class ProductTypeRepository extends BaseRepository
             ->select('id', 'name', 'slug', 'tag_line', 'logo', 'configuration', 'sort_order', 'status')
             ->where('id', $id)
             ->first();
-            
+
         if ($data && !empty($data->logo)) {
             $data->logo = asset('storage/' . $data->logo);
         }
@@ -148,16 +149,31 @@ class ProductTypeRepository extends BaseRepository
             'status' => $request->status ?? 'InActive',
         ];
 
-        if ($request->hasFile('logo')) {
-            // delete old if exists
+        // ✅ Handle base64 logo image
+        if (!empty($request->logo) && Str::startsWith($request->logo, 'data:image')) {
+
+            // delete old image if exists
             if (!empty($data->logo) && Storage::disk('public')->exists($data->logo)) {
                 Storage::disk('public')->delete($data->logo);
             }
-            $path = $request->file('logo')->store('product_type_image', 'public');
-            $updateData['logo'] = $path;
+
+            // extract base64 data
+            $imageParts = explode(";base64,", $request->logo);
+            $imageTypeAux = explode("image/", $imageParts[0]);
+            $imageType = $imageTypeAux[1] ?? 'png';
+            $imageBase64 = base64_decode($imageParts[1]);
+
+            // generate unique filename
+            $fileName = 'product_type_image/' . uniqid() . '.' . $imageType;
+
+            // store in public disk
+            Storage::disk('public')->put($fileName, $imageBase64);
+
+            $updateData['logo'] = $fileName;
         }
 
         $data->update($updateData);
+
         return $data;
     }
 
@@ -203,14 +219,14 @@ class ProductTypeRepository extends BaseRepository
             ->orderBy('sort_order', 'asc')
             ->orderBy('name', 'asc')
             ->get();
-            
+
         // Add full URL for logo
         foreach ($productTypes as $productType) {
             if (!empty($productType->logo)) {
                 $productType->logo = asset('storage/' . $productType->logo);
             }
         }
-        
+
         return $productTypes;
     }
 }

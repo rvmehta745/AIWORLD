@@ -16,7 +16,7 @@ class General
     public static int    $nameMax = 50;
     public static int    $firstnameMin = 2;
     public static int    $firstnameMax = 50;
-    
+
     public static int    $lastnameMin = 2;
     public static int    $lastnameMax = 50;
 
@@ -53,81 +53,119 @@ class General
         switch (strtoupper($type)) {
             case 'SUCCESS':
                 $code = 200;
-                $default_message['NOTIFICATION'] = $message;
+                $default_message['NOTIFICATION'] = array_map(function ($msg) use ($code) {
+                    return [
+                        'message' => $msg,
+                        'status' => $code
+                    ];
+                }, $message);
                 break;
-//            case 'INVALID_API_KEY':
-//                $code = 403;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.INVALID_API_KEY')];
-//                break;
-//            case 'INVALID_PLATFORM':
-//                $code = 403;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.INVALID_PLATFORM')];
-//                break;
-//            case 'INVALID_APP_ID':
-//                $code = 403;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.INVALID_APP_ID')];
-//                break;
-//            case 'DEVICE_NOT_AUTHORIZED':
-//                $code = 403;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.DEVICE_NOT_AUTHORIZED')];
-//                break;
+
+            case 'CREATED':
+                $code = 201;
+                $default_message['NOTIFICATION'] = array_map(function ($msg) use ($code) {
+                    return [
+                        'message' => $msg,
+                        'status' => $code
+                    ];
+                }, $message);
+                break;
+
             case 'UNAUTHORIZED_LOGIN':
                 $code = 423;
-                $default_message['NOTIFICATION'] = [__('messages.unauthorized_login')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.unauthorized_login'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'SESSION_EXPIRED':
                 $code = 401;
-                $default_message['NOTIFICATION'] = [__('messages.your_session_has_been_expired_kindly_login_again')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.your_session_has_been_expired_kindly_login_again'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'NOT_LOGGED_IN':
                 $code = 401;
-                $default_message['NOTIFICATION'] = [__('messages.you_are_not_logged_in')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.you_are_not_logged_in'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'USER_DEACTIVATED':
                 $code = 512;
-                $default_message['NOTIFICATION'] = [__('messages.your_account_is_in_active_please_contact_admin')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.your_account_is_in_active_please_contact_admin'),
+                    'status' => $code
+                ]];
                 break;
-//            case 'USER_ARCHIVED':
-//                $code = 513;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.USER_ARCHIVED')];
-//                break;
-//            case 'LICENSE_EXPIRED':
-//                $code = 514;
-//                $default_message['NOTIFICATION'] = [__('api.notifications.LICENSE_EXPIRED')];
-//                break;
+
             case 'VALIDATION_ERROR':
                 $code = 422;
-                $default_message = $message;
+                $default_message['NOTIFICATION'] = array_map(function ($msg) use ($code) {
+                    return [
+                        'message' => $msg,
+                        'status' => $code
+                    ];
+                }, (array)$message);
                 break;
+
             case 'OTHER_ERROR':
                 $code = 423;
-                $default_message['NOTIFICATION'] = $message;
+                $default_message['NOTIFICATION'] = array_map(function ($msg) use ($code) {
+                    return [
+                        'message' => $msg,
+                        'status' => $code
+                    ];
+                }, $message);
                 break;
+
             case 'INVALID_URL':
                 $code = 404;
-                $default_message['NOTIFICATION'] = [__('messages.invalid_url')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.invalid_url'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'INVALID_USER':
                 $code = 401;
-                $default_message['NOTIFICATION'] = [__('messages.invalid_user')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.invalid_user'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'NO_PERMISSION':
                 $code = 423;
-                $default_message['NOTIFICATION'] = [__('messages.you_do_not_have_the_permission_to_use_this_resource')];
+                $default_message['NOTIFICATION'] = [[
+                    'message' => __('messages.you_do_not_have_the_permission_to_use_this_resource'),
+                    'status' => $code
+                ]];
                 break;
+
             case 'EXCEPTION':
                 $code = 500;
                 if (env('APP_ENV') != 'local' || env('APP_DEBUG') != true) {
-                    $message = "Something went wrong.";
+                    $message = ["Something went wrong."];
                 }
-                $default_message['NOTIFICATION'] = $message;
+                $default_message['NOTIFICATION'] = array_map(function ($msg) use ($code) {
+                    return [
+                        'message' => $msg,
+                        'status' => $code
+                    ];
+                }, $message);
                 break;
+
             default:
                 break;
         }
 
-        $data = [];
-        $data['STATUS'] = $default_message;
+        $data = ['STATUS' => $default_message];
+
         if (!empty($result)) {
             $data = array_merge($data, $result);
         }

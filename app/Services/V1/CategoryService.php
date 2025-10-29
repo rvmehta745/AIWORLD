@@ -9,7 +9,7 @@ class CategoryService extends BaseService
 {
 
     private CategoryRepository $categoryRepository;
-    
+
     public function __construct()
     {
         $this->categoryRepository = new CategoryRepository;
@@ -78,4 +78,4 @@ class CategoryService extends BaseService
     {
         return $this->categoryRepository->getAllActiveCategories($productTypeId);
     }
-} 
+}
